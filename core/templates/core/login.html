@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="d-flex form-signin text-center">
+    <form action="pages/teacher/index.html">
+        <img class="logo-img-singnin mb-5" src="{% static 'core/img/logo_universidad.png' %}">
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="text" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <button class="btn btn-lg btn-secondary btn-block mt-4" type="submit">Entrar</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2018-2019</p>
+    </form>
+</div>
+{% endblock content %}

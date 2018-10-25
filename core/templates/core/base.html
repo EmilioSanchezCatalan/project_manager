@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/vendor/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
+
+    <title>Projectos Uja</title>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'core/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'core/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  </head>
+  <body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+      <a class="navbar-brand" href="{% url 'home' %}">
+          <img class="logo-img" src="{% static 'core/img/logo_uja_negativo.png' %}" alt="logo ujaen">
+      </a>
+      <a class="btn btn-outline-light ml-auto" href="{% url 'login' %}">Login</a>
+    </nav>
+
+    <!-- Title -->
+    {% block title %}{% endblock title %}
+    
+    <!-- Content -->
+    {% block content %}{% endblock content %}
+  </body>
+</html>
