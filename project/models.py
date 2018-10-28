@@ -1,0 +1,44 @@
+from django.db import models
+from core.models import Carrers, Itineraries, Mentions, Skills
+
+# Create your models here.
+class Tutor2(models.Model):
+    name = models.CharField(max_length=45)
+    departament = models.CharField(max_length=45)
+    area = models.CharField(max_length=45)
+    createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
+    updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
+
+
+class Students(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    dni = models.CharField(max_length=45)
+    phone = models.CharField(max_length=45)
+    email = models.EmailField(max_length=100)
+    createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
+    updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
+
+
+class Projects(models.Model):
+    title = models.CharField(max_length=255)
+    type = models.PositiveSmallIntegerField()
+    mode = models.PositiveSmallIntegerField()
+    is_team = models.BooleanField()
+    objectives = models.TextField()
+    methodology = models.TextField()
+    docs_and_forms = models.TextField()
+    language = models.CharField(max_length=45, null=True)
+    knowledge = models.TextField(null=True)
+    type_projects = models.PositiveSmallIntegerField()
+    departament_validation = models.BooleanField()
+    center_validation = models.BooleanField()
+    tutor1 = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    tutor2 = models.ForeignKey(Tutor2, on_delete=models.CASCADE, null=True)
+    carrers = models.ForeignKey(Carrers, on_delete=models.CASCADE)
+    itineraries = models.ForeignKey(Itineraries, on_delete=models.CASCADE, null=True)
+    mentions = models.ForeignKey(Mentions, on_delete=models.CASCADE, null=True)
+    skills = models.ManyToManyField(Skills)
+    students = models.ManyToManyField(Students)
+    createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
+    updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
