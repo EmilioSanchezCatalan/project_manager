@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Departaments(models.Model):
-    name =  models.CharField(max_length=45)
+    name = models.CharField(max_length=45)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
@@ -31,8 +31,7 @@ class Itineraries(models.Model):
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
 class Skills(models.Model):
-    text = models.CharField(max_length=45)
-    carrers = models.ForeignKey(Carrers, on_delete=models.CASCADE)
+    text = models.TextField()
+    itineraries = models.ForeignKey(Itineraries, on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
-
