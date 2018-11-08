@@ -1,12 +1,8 @@
 from django.views.generic.base import TemplateView
-from django.shortcuts import render
 
-# Create your views here.
+
 class ProjectDetailView(TemplateView):
     template_name = "project/project_detail.html"
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
 
 
 class ProjecTeachertDetailView(TemplateView):

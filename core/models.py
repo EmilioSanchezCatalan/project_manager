@@ -65,3 +65,13 @@ class Skills(models.Model):
     itineraries = models.ForeignKey(Itineraries, on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
+
+
+class Tutor2(models.Model):
+
+    # Campos del modelo
+    name = models.CharField(max_length=150)
+    departament = models.ForeignKey(Departaments, on_delete=models.CASCADE)
+    area = models.ForeignKey(Areas, on_delete=models.CASCADE)
+    createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
+    updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
