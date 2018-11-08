@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 from core.models import Masters, Carrers, Itineraries, Mentions, Skills
+from core.models import Departaments, Areas
 from project.models import Tfgs, Tfms, Students, Tutor2
 
 class Command(BaseCommand):
@@ -372,9 +373,8 @@ class Command(BaseCommand):
             if tfm["tutor2"] is not None:
                 tutor2 = Tutor2.objects.create(
                     name=tfm["tutor2"]["name"],
-                    center=tfm["tutor2"]["center"],
-                    departament=tfm["tutor2"]["departament"],
-                    area=tfm["tutor2"]["area"]
+                    departament=Departaments.objects.get(name=tfm["tutor2"]["departament"]).id,
+                    area=Areas.objects.get(name=tfm["tutor2"]["area"]).id
                 )
             tfm_item = Tfms.objects.create(
                 title=tfm["title"],

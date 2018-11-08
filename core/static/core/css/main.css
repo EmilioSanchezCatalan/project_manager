@@ -5,7 +5,23 @@
 .fa-plus, .fa-search {
     font-size: 15px;
 }
-
+#container-button-init {
+  display: flex;
+  justify-content: space-around;
+}
+#tfg-button, #tfm-button {
+  padding: 0;
+  flex-basis: 300px;
+  padding: 50px;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer
+}
+#tfg-button { background-color: #ae1a34e0; }
+#tfg-button:hover { background-color: #ae1a34; }
+#tfm-button { background-color: #007972e0; }
+#tfm-button:hover { background-color: #007972; }
 .button-validate-abs {
   position: absolute;
   right: 24px;

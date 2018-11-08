@@ -21,7 +21,10 @@ class Command(BaseCommand):
     ]
 
     DEPARTAMENTS = [
-        "Telecomunicaciones"
+        "Telecomunicaciones",
+        "Electrónica",
+        "Informatica",
+        "Otro",
     ]
 
     AREAS = [
@@ -32,6 +35,10 @@ class Command(BaseCommand):
         {
             "name": "Telemática",
             "departament": "Telecomunicaciones"
+        },
+        {
+            "name": "Otro",
+            "departament": "Otro"
         }
     ]
 
@@ -39,7 +46,10 @@ class Command(BaseCommand):
         {
             "name": "Máster Universitario en Ingeniería de Telecomunicación",
             "center": "CA Telecomunicaciones",
-            "departament": "Telecomunicaciones"
+            "departaments": [
+                "Telecomunicaciones",
+                "Electrónica"
+            ],
         },
     ]
 
@@ -47,7 +57,11 @@ class Command(BaseCommand):
         {
             "name": "Grado en Ingeniería de Tecnologías de Telecomunicación",
             "center": "EPSL",
-            "departament": "Telecomunicaciones",
+            "departaments": [
+                "Telecomunicaciones",
+                "Electrónica",
+                "Informatica",
+            ],
             "itineraries": {
                 "Sistemas de telecomunicación": [
                     {
@@ -131,7 +145,11 @@ class Command(BaseCommand):
         {
             "name": "Grado en Ingeniería Telemática",
             "center": "EPSL",
-            "departament": "Telecomunicaciones",
+            "departaments": [
+                "Telecomunicaciones",
+                "Electrónica",
+                "Informatica",
+            ],
             "itineraries": {
                 "General": [
                     {
@@ -267,24 +285,30 @@ class Command(BaseCommand):
     def __create_masters(masters):
         masters_id = 1
         for master in masters:
-            Masters.objects.create(
+            master_object = Masters.objects.create(
                 id=masters_id,
                 name=master["name"],
-                departaments_id=Departaments.objects.get(name=master["departament"]).id,
                 centers_id=Centers.objects.get(name=master["center"]).id
             )
+            for masters_has_departament in master["departaments"]:
+                master_object.departaments.add(
+                    Departaments.objects.get(name=masters_has_departament)
+                )
             masters_id += 1
 
     @staticmethod
     def __create_carrers(carrers):
         carrers_id, itineraries_id, mentions_id, skills_id = 1, 1, 1, 1
         for carrer in carrers:
-            Carrers.objects.create(
+            carrer_object = Carrers.objects.create(
                 id=carrers_id,
                 name=carrer["name"],
-                departaments_id=Departaments.objects.get(name=carrer["departament"]).id,
                 centers_id=Centers.objects.get(name=carrer["center"]).id
             )
+            for carrers_has_departament in carrer["departaments"]:
+                carrer_object.departaments.add(
+                    Departaments.objects.get(name=carrers_has_departament)
+                )
             for itinerarie in carrer["itineraries"].keys():
                 Itineraries.objects.create(
                     id=itineraries_id,
