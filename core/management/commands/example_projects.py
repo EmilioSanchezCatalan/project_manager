@@ -2,8 +2,10 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 from core.models import Masters, Carrers, Itineraries, Mentions, Skills
-from core.models import Departaments, Areas
-from project.models import Tfgs, Tfms, Students, Tutor2
+from core.models import Departaments, Areas, Tutor2
+from login.models import Students
+from tfgs.models import Tfgs
+from tfms.models import Tfms
 
 class Command(BaseCommand):
 
