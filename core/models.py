@@ -8,12 +8,18 @@ class Centers(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
+    def __str__(self):
+        return u'{0}'.format(self.name)
+
 class Departaments(models.Model):
 
     # Campos del modelo
     name = models.CharField(max_length=150)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
+
+    def __str__(self):
+        return u'{0}'.format(self.name)
 
 class Areas(models.Model):
 
@@ -22,6 +28,9 @@ class Areas(models.Model):
     departaments = models.ForeignKey(Departaments, on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
+
+    def __str__(self):
+        return u'{0}'.format(self.name)
 
 class Masters(models.Model):
 
@@ -32,6 +41,9 @@ class Masters(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
+    def __str__(self):
+        return u'{0}'.format(self.name)
+
 class Carrers(models.Model):
 
     # Campos del modelo
@@ -41,6 +53,9 @@ class Carrers(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
+    def __str__(self):
+        return u'{0}'.format(self.name)
+
 class Mentions(models.Model):
 
     # Campos del modelo
@@ -48,6 +63,9 @@ class Mentions(models.Model):
     carrers = models.ForeignKey(Carrers, on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
+
+    def __str__(self):
+        return u'{0}'.format(self.name)
 
 class Itineraries(models.Model):
 
@@ -57,6 +75,9 @@ class Itineraries(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
+    def __str__(self):
+        return u'{0}'.format(self.name)
+
 class Skills(models.Model):
 
     # Campos del modelo
@@ -65,6 +86,9 @@ class Skills(models.Model):
     itineraries = models.ForeignKey(Itineraries, on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
+
+    def __str__(self):
+        return u'{0}'.format(self.name)
 
 
 class Tutor2(models.Model):

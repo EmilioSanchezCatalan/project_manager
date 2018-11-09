@@ -1,13 +1,20 @@
+html, body {
+  height: 100vh;
+  background-color: #f7f7f7;
+}
 .bg-primary {
     background-color: #006D38 !important;
 }
-
+section {
+  background-color: white;
+}
 .fa-plus, .fa-search {
     font-size: 15px;
 }
 #container-button-init {
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
 }
 #tfg-button, #tfm-button {
   padding: 0;

@@ -1,5 +1,5 @@
 from django.views.generic.list import ListView
-from core.models import Carrers
+from .forms import FilterPublicTfgForm
 from .models import Tfgs
 
 class TfgListView(ListView):
@@ -10,6 +10,7 @@ class TfgListView(ListView):
         queryset = super().get_queryset()
         name = self.request.GET.get("name_project", "")
         carrer = self.request.GET.get("formation_project", "")
+        print(name)
         if name:
             queryset = queryset.filter(title__contains=name)
         if carrer:
@@ -20,7 +21,5 @@ class TfgListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Tfgs"
-        context['formations'] = Carrers.objects.all()
-        context['default_select_value'] = "Titulación"
-        context['filters'] = self.request.GET.dict()
+        context['form_filter'] = FilterPublicTfgForm(initial=self.request.GET.dict())
         return context

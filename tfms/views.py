@@ -1,6 +1,6 @@
 from django.views.generic.list import ListView
 from .models import Tfms
-from core.models import Masters
+from .forms import FilterPublicTfmForm
 
 # Create your views here.
 class TfmListView(ListView):
@@ -20,7 +20,5 @@ class TfmListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Tfms"
-        context['formations'] = Masters.objects.all()
-        context['default_select_value'] = "Masters"
-        context['filters'] = self.request.GET.dict()
+        context['form_filter'] = FilterPublicTfmForm(initial=self.request.GET.dict())
         return context

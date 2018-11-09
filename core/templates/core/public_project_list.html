@@ -17,15 +17,10 @@
             </button>
             </div>
             <div class="form-group mx-2 flex-grow-1">
-            <input type="text" class="form-control" name="name_project" value="{{filters.name_project}}" placeholder="Título">
+                {{form_filter.name_project}}
             </div>
             <div class="form-group mx-2 flex-grow-1 flex-lg-grow-0">
-            <select class="form-control" name="formation_project">
-                <option value="" selected>{{default_select_value}}</option>
-                {% for formation in formations%}
-                <option value="{{formation.id}}">{{formation.name}}</option>
-                {% endfor %}
-            </select>
+                {{form_filter.formation_project}}
             </div>
         </form>
     </header>
@@ -46,7 +41,11 @@
                 {% for project in object_list %}
                 <tr onclick="gotoProject()">
                     <td>{{project.title}}</td>
+                    {% if title == "Tfgs" %}
                     <td>{{project.carrers.name}}</td>
+                    {% else %}
+                    <td>{{project.masters.name}}</td>
+                    {% endif %}
                     <td>{{project.tutor1.first_name}}</td>
                     <td>{{project.tutor2.name}}</td>
                 </tr>
