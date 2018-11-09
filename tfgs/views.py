@@ -1,33 +1,26 @@
-from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
+from core.models import Carrers
+from .models import Tfgs
+
+class TfgListView(ListView):
+    model = Tfgs
+    template_name = "core/public_project_list.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        name = self.request.GET.get("name_project", "")
+        carrer = self.request.GET.get("formation_project", "")
+        if name:
+            queryset = queryset.filter(title__contains=name)
+        if carrer:
+            queryset = queryset.filter(carrers_id=carrer)
+        return queryset
 
 
-class ProjectDetailView(TemplateView):
-    template_name = "project/project_detail.html"
-
-
-class ProjecTeachertDetailView(TemplateView):
-    template_name = "project/project_detail.html"
-
-
-class ProjectTeacherCreate(TemplateView):
-    template_name = "project/project_form.html"
-
-
-class ProjectTeacherEdit(TemplateView):
-    template_name = "project/project_form.html"
-
-
-class ProjectTeacherListView(TemplateView):
-    template_name = "project/project_list.html"
-
-
-class ProjectDepartamentCreate(TemplateView):
-    template_name = "project/project_form.html"
-
-
-class ProjectDepartamentEdit(TemplateView):
-    template_name = "project/project_form.html"
-
-
-class ProjectDepartamentListView(TemplateView):
-    template_name = "project/project_list.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Tfgs"
+        context['formations'] = Carrers.objects.all()
+        context['default_select_value'] = "Titulación"
+        context['filters'] = self.request.GET.dict()
+        return context

@@ -2,7 +2,7 @@
 
 {% block title %}
 <header class="container px-3 px-sm-5 mt-0 mt-sm-4">
-    <h1 class="d-none d-sm-block">Listado de projectos</h1>
+    <h1 class="d-none d-sm-block">Listado de {{title}}</h1>
     <h1 class="d-block d-sm-none">Projectos</h1>
 </header>
 {% endblock title %}
@@ -17,21 +17,21 @@
             </button>
             </div>
             <div class="form-group mx-2 flex-grow-1">
-            <input type="text" class="form-control" placeholder="Título">
+            <input type="text" class="form-control" name="name_project" value="{{filters.name_project}}" placeholder="Título">
             </div>
             <div class="form-group mx-2 flex-grow-1 flex-lg-grow-0">
-            <select class="form-control" id="carrerSelected">
-                <option selected>Titulación</option>
-                <option>Ingeniería telemática</option>
-                <option>Ingeniería tecnologías de telecomunicación</option>
-                <option>Ingeniería mínas</option>
+            <select class="form-control" name="formation_project">
+                <option value="" selected>{{default_select_value}}</option>
+                {% for formation in formations%}
+                <option value="{{formation.id}}">{{formation.name}}</option>
+                {% endfor %}
             </select>
             </div>
         </form>
     </header>
     <article style="overflow-x: scroll">
         <script>
-            function gotoProject() { location.href="{% url 'project' %}" }
+            function gotoProject() { location.href="" }
         </script>
         <table class="table table-hover border m-0">
             <thead>
@@ -43,7 +43,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for project in tfgs_list %}
+                {% for project in object_list %}
                 <tr onclick="gotoProject()">
                     <td>{{project.title}}</td>
                     <td>{{project.carrers.name}}</td>
