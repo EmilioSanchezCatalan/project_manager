@@ -13,4 +13,8 @@ class FilterPublicTfmForm(forms.Form):
             attrs={'class': 'form-control'}
         )
     )
-    
+
+class FilterTeacherTfmForm(forms.Form):
+    search_text = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Título'}
+    ))

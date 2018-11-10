@@ -1,0 +1,89 @@
+{% extends "core/base.html" %}
+
+{% load tfms_extras%}
+{% block content %}
+
+<section class="container border bg-white p-3 p-sm-5 mt-0 mt-sm-4">
+  <div class="row">
+    <div class="col-md-4 btn-group mb-4 w-sm-100" role="group" aria-label="Basic example">
+      <a class="btn btn-success w-sm-100" href="">
+        <i class="fas fa-plus mr-2"></i>Añadir TFM
+      </a>
+    </div>
+    <form action="" class="col-md-8 d-inline-flex flex-wrap flex-sm-wrap justify-content-between">
+      <div class="form-group mx-2 flex-grow-1 flex-sm-grow-0">
+        <button for="titleProject" class="btn btn-light btn-block font-weight-bold">
+          <i class="fas fa-search mr-2" style="font-size: 15px;"></i>Buscador
+        </button>
+      </div>
+      <div class="form-group mx-2 flex-grow-1">
+        {{form_filter.search_text}}
+      </div>
+    </form>
+  </div>
+  <article style="overflow-x: scroll">
+    <table class="table table-crud border m-0">
+      <thead>
+        <tr class="thead-light">
+          <th>Título</th>
+          <th>Tipo de Proyecto</th>
+          <th>Modalidad</th>
+          <th>Validación</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tfm in tfms_list %}
+        <tr>
+          <td>{{tfm.title}}</td>
+          <td>{{tfm.type|tfm_type}}</td>
+          <td>{{tfm.mode|tfm_mode}}</td>
+          <td>
+            {% if tfm.departament_validation == True and tfm.center_validation == True %}
+            <i class="fas fa-check-double text-success"></i>
+            {% elif tfm.departament_validation == True and  tfm.center_validation is None %}
+            <i class="fas fa-check text-success"></i>
+            {% elif tfm.departament_validation == False or tfm.center_validation == False %}
+            <i class="fas fa-times text-danger"></i>
+            {% else %}
+            <i class="fas fa-question-circle text-secondary"></i>
+            {% endif %}
+          </td>
+          <td>
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <a class="btn btn-light" href="">
+                <i class="far fa-eye"></i>
+              </a>
+              <a class="btn btn-light" href="edit_tfm.html">
+                <i class="far fa-edit"></i>
+              </a>
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro?');" href="{% url 'teacher_tfms_delete' tfm.id %}">
+                <i class="far fa-trash-alt"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </article>
+  <footer class="d-flex justify-content-end font-italic">
+    <div class="mx-2">
+      <i class="fas fa-check-double text-success"></i>
+      <span>validado por departamento y centro</span>
+    </div>
+    <div class="mx-2">
+      <i class="fas fa-check text-success"></i>
+      <span>validado por departamento</span>
+    </div>
+    <div class="mx-2">
+      <i class="fas fa-times text-danger"></i>
+      <span>proyecto no aceptado</span>
+    </div>
+    <div class="mx-2">
+      <i class="fas fa-question-circle text-secondary"></i>
+      <span>Aún no validado</span>
+    </div>
+  </footer>
+</section>
+{% endblock content %}
