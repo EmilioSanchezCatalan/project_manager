@@ -1,0 +1,129 @@
+{% extends "core/base.html" %}
+
+{% load login_extras tfms_extras%}
+
+{% block content %}
+<section class="container border p-4">
+    {% if can_validate %}
+    <div class="row button-validate-abs d-none d-sm-flex">
+        <div class="col-sm-12 text-right">
+            <a class="btn btn-danger">Rechazar</a>
+            <a class="btn btn-success">Validar</a>
+        </div>
+    </div>
+    {% endif %}
+    <div class="row {%if can_validate %}w-75 w-xs-100 {% endif%}">
+        <div class="col-md-12">
+            <strong>Título:</strong>
+            <p>{{tfms.title}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <strong>Titulación:</strong> {{tfms.masters.name}}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <strong>Tipo de proyecto:</strong> {{tfms.type|tfm_type}}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <strong>Modalidad:</strong> {{tfms.mode|tfm_mode}}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <strong>Idioma:</strong> {{tfms.language}}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+                <strong>Tutor principal:</strong>
+                <p class="pl-4 mt-1">
+                    Nombre: {{tfms.tutor1.first_name}} {{tfms.tutor1.last_name}}<br>
+                    Departemento: {{tfms.tutor1.id|user_departament}} <br>
+                    Area: {{tfms.tutor1.id|user_area}}
+                </p>
+        </div>
+    </div>
+    {% if tfms.tutor2 %}
+    <div class="row">
+        <div class="col-md-12">
+                <strong>Segundo tutor:</strong>
+                <p class="pl-4 mt-1">
+                    Nombre: {{tfms.tutor2.name}} <br>
+                    Departemento: {{tfms.tutor2.departaments.name}} <br>
+                    Area: {{tfms.tutor2.areas.name}} <br>
+                </p>
+        </div>
+    </div>
+    {% endif %}
+    {% if students%}
+    {% for student in students %}
+    <div class="row">
+        <div class="col-md-12">
+            <strong>Alumno</strong>
+            <p class="pl-4 mt-1">
+                Nombre: {{student.name}} <br>
+                DNI: {{student.dni}} <br>
+                Dirección: {{student.address}}<br>
+                Teléfono: {{student.phone}} <br>
+                Correo-e: {{student.email}} <br>
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <div class="row">
+        <div class="col-md-12">
+            <strong>Objetivos:</strong>
+            <p class="pl-4 mt-1">{{tfms.objectives}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <strong>Metodología:</strong>
+            <p class="pl-4 mt-1">{{tfms.methodology}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <strong>Documentos y formatos:</strong>
+            <p class="pl-4 mt-1">{{tfms.docs_and_forms}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <strong>Requisitos</strong>
+            <p class="pl-4 mt-1">{{tfms.knowledge}}</p>
+        </div>
+    </div>
+    <div class="row w-50 d-inline-flex mb-sm-0 {% if can_validate == True %}mb-5{% endif %}">
+        <div class="col-sm-12">
+            <a class="btn btn-light" href="{% url back_url %}">Atras</a>
+        </div>
+    </div>
+    {% if can_validate %}
+    <div class="row w-50 d-none d-sm-inline-flex">
+        <div class="col-sm-12 mt-3 text-right">
+            <a class="btn btn-danger">Rechazar</a>
+            <a class="btn btn-success">Validar</a>
+        </div>
+    </div>
+    <div class="fixed-bottom bar-validator d-sm-none border p-2">
+        <a class="btn btn-danger">Rechazar</a>
+        <a class="btn btn-success">Validar</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock content %}

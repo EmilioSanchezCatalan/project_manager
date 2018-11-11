@@ -58,6 +58,9 @@ a.btn.btn-success, a.btn.btn-success:hover, a.btn.btn-danger, a.btn.btn-danger:h
 .table-crud th:not(:first-child), .table-crud td:not(:first-child){
     text-align: center;
 }
+.table td, .table th{
+  vertical-align: middle;
+}
 .table-crud td:last-child {
     width: 1px;
 }
@@ -236,6 +239,9 @@ a.btn.btn-success, a.btn.btn-success:hover, a.btn.btn-danger, a.btn.btn-danger:h
   /* Responsive utils */
 
   @media (max-width: 767px) {
-    .w-sm-50 { width: 50%; }
-    .w-sm-100 { width: 100%; }
+    .w-sm-50 { width: 50% !important; }
+    .w-sm-100 { width: 100% !important; }
+  }
+  @media (max-width: 575px) {
+    .w-xs-100 { width: 100% !important; }
   }

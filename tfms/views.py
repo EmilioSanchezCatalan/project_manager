@@ -1,13 +1,15 @@
 from django.views.generic.base import RedirectView
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.urls import reverse
+from login.models import Students
 from .models import Tfms
 from .forms import FilterPublicTfmForm, FilterTeacherTfmForm
 
 # Create your views here.
 class TfmListView(ListView):
     model = Tfms
-    template_name = "core/public_project_list.html"
+    template_name = "tfms/public_tfms_list.html"
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -23,6 +25,16 @@ class TfmListView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = "Tfms"
         context['form_filter'] = FilterPublicTfmForm(initial=self.request.GET.dict())
+        return context
+
+class TfmDetailView(DetailView):
+    model = Tfms
+    teamplate_name = "tfms/tfms_detail"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["students"] = Students.objects.filter(tfms_id=context['tfms'].id)
+        context["back_url"] = "public_tfms_list"
         return context
 
 class TeacherTfmListView(ListView):
@@ -42,6 +54,21 @@ class TeacherTfmListView(ListView):
         context['title'] = "Tfms"
         context['form_filter'] = FilterTeacherTfmForm(initial=self.request.GET.dict())
         context['nbar'] = "tfm"
+        return context
+
+class TeacherTfgDetailView(DetailView):
+    model = Tfms
+    teamplate_name = "tfms/tfms_detail"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(tutor1=self.request.user)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["students"] = Students.objects.filter(tfms_id=context['tfms'].id)
+        context["back_url"] = "teacher_tfms_list"
         return context
 
 class TeacherTfmDelete(RedirectView):

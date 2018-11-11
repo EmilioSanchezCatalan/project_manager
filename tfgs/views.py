@@ -1,12 +1,14 @@
 from django.views.generic.base import RedirectView
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.urls import reverse
 from .forms import FilterPublicTfgForm, FilterTeacherTfgForm
 from .models import Tfgs
+from login.models import Students
 
 class TfgListView(ListView):
     model = Tfgs
-    template_name = "core/public_project_list.html"
+    template_name = "tfgs/public_tfgs_list.html"
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -22,9 +24,19 @@ class TfgListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Tfgs"
         context['form_filter'] = FilterPublicTfgForm(initial=self.request.GET.dict())
         return context
+
+class TfgDetailView(DetailView):
+    model = Tfgs
+    teamplate_name = "tfgs/tfgs_detail"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["students"] = Students.objects.filter(tfgs_id=context['tfgs'].id)
+        context["back_url"] = "public_tfgs_list"
+        return context
+
 
 class TeacherTfgListView(ListView):
     model = Tfgs
@@ -43,6 +55,21 @@ class TeacherTfgListView(ListView):
         context['title'] = "Tfgs"
         context['form_filter'] = FilterTeacherTfgForm(initial=self.request.GET.dict())
         context['nbar'] = "tfg"
+        return context
+
+class TeacherTfgDetailView(DetailView):
+    model = Tfgs
+    teamplate_name = "tfgs/tfgs_detail"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(tutor1=self.request.user)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["students"] = Students.objects.filter(tfgs_id=context['tfgs'].id)
+        context["back_url"] = "teacher_tfgs_list"
         return context
 
 class TeacherTfgDelete(RedirectView):

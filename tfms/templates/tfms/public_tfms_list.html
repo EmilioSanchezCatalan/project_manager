@@ -2,7 +2,7 @@
 
 {% block title %}
 <header class="container px-3 px-sm-5 mt-0 mt-sm-4">
-    <h1 class="d-none d-sm-block">Listado de {{title}}</h1>
+    <h1 class="d-none d-sm-block">Listado de Tfgs</h1>
     <h1 class="d-block d-sm-none">Projectos</h1>
 </header>
 {% endblock title %}
@@ -25,29 +25,22 @@
         </form>
     </header>
     <article style="overflow-x: scroll">
-        <script>
-            function gotoProject() { location.href="" }
-        </script>
         <table class="table table-hover border m-0">
             <thead>
                 <tr class="thead-light">
                     <th>Título</th>
                     <th>Títulación</th>
                     <th>Tutor1</th>
-                    <th>Tutor2</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for project in object_list %}
-                <tr onclick="gotoProject()">
+                <tr onclick="">
                     <td>{{project.title}}</td>
-                    {% if title == "Tfgs" %}
-                    <td>{{project.carrers.name}}</td>
-                    {% else %}
                     <td>{{project.masters.name}}</td>
-                    {% endif %}
                     <td>{{project.tutor1.first_name}}</td>
-                    <td>{{project.tutor2.name|default:"NaN"}}</td>
+                    <td><a href="{% url 'public_tfms_detail' project.id %}">Visualizar</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

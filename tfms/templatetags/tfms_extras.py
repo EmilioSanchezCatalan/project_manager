@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 @register.filter(name='tfm_mode')
-def tfg_mode(value):
+def tfm_mode(value):
     mode_texts = [
         "investigador",
         "profesionalizante"
@@ -11,7 +11,7 @@ def tfg_mode(value):
     return mode_texts[value]
 
 @register.filter(name="tfm_type")
-def tfg_type(value):
+def tfm_type(value):
     type_texts = [
         "universidad",
         "empresa"
