@@ -1,23 +1,18 @@
 "use strict";
-$(document).ready(function(){
 
-    // Inicialización del estado del formulario
-    inputShowHiddenFunction($("#tutorCheck"), $("#tutorInput"));
-    inputShowHiddenFunction($("#teamCheck"), $("#inputNumberStudent"));
 
-    // Añade la funcionalidades a un evento
-    $("#tutorCheck").click(() => {
-        inputShowHiddenFunction($("#tutorCheck"), $("#tutorInput"))
-    });
-    $("#teamCheck").click(() => {
-        inputShowHiddenFunction($("#teamCheck"), $("#inputNumberStudent"))
-        initNoTeam($("#teamCheck"));
-    });
-
-    $("#refreshNumberStudents").click(() => {
-        generateSelect($("#inputNumberStudent"), $("#alumno"));
-    })
-});
+/**
+ * Muestra u oculta un bloque vinculado a un checkbox
+ * @param {HTMLInput} checkbox  checkbox que decidirá si mostrar o no el input
+ * @param {HTMLInput} input     input que se mostrará o se ocultará
+ */
+function inputShowHiddenBlockFunction(checkbox, input) {
+    if(checkbox.is(':checked')) {   
+        input.closest(".row.block").css('display', 'flex');
+    } else {
+        input.closest(".row.block").css('display', 'none');
+    }
+}
 
 /**
  * Muestra u oculta un input vinculado a un checkbox

@@ -73,14 +73,15 @@ a.btn.btn-success, a.btn.btn-success:hover, a.btn.btn-danger, a.btn.btn-danger:h
 
 
 /* Ajustes Form */
-.form-check-label-custom {
+.form-check-label-custom label{
     font-weight: bold;
     background-color: #36926b;
     color: #fff;
     border-radius: 4px;
     padding: 1px 5px;
     font-size: 0.9em;
-    border: 1px solid #2a624a
+    border: 1px solid #2a624a;
+    margin-bottom: 0;
 }
 .form-check {
     margin-bottom: 15px;

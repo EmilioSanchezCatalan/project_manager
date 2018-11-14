@@ -49,7 +49,7 @@ class Carrers(models.Model):
     # Campos del modelo
     name = models.CharField(max_length=150)
     centers = models.ForeignKey(Centers, on_delete=models.CASCADE)
-    departaments = models.ManyToManyField(Departaments)
+    departaments = models.ManyToManyField(Departaments, related_name="carrers")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
@@ -88,7 +88,7 @@ class Skills(models.Model):
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
     def __str__(self):
-        return u'{0}'.format(self.name)
+        return u'{0}'.format(self.name + ' - ' + self.text)
 
 
 class Tutor2(models.Model):

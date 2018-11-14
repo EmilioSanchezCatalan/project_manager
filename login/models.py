@@ -10,7 +10,7 @@ class Userinfos(models.Model):
     centers = models.ForeignKey(Centers, on_delete=models.CASCADE, null=True)
     departaments = models.ForeignKey(Departaments, on_delete=models.CASCADE, null=True)
     areas = models.ForeignKey(Areas, on_delete=models.CASCADE, null=True)
-    auth = models.OneToOneField('auth.User', on_delete=models.CASCADE)
+    auth = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='userinfos')
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
@@ -18,7 +18,6 @@ class Students(models.Model):
 
     # Campos del modelo
     name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
     dni = models.CharField(max_length=45)
     phone = models.CharField(max_length=45)
     email = models.EmailField(max_length=150)

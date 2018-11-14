@@ -1,10 +1,14 @@
 from django.views.generic.base import RedirectView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
 from django.urls import reverse
-from .forms import FilterPublicTfgForm, FilterTeacherTfgForm
-from .models import Tfgs
 from login.models import Students
+from login.forms import CreateStudentForm
+from core.forms import CreateTutor2Form
+from .forms import FilterPublicTfgForm, FilterTeacherTfgForm, CreateTfgForm
+from .models import Tfgs
+
 
 class TfgListView(ListView):
     model = Tfgs
@@ -12,6 +16,7 @@ class TfgListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        # filtrar solo por aquellos que este validados completamente
         name = self.request.GET.get("name_project", "")
         carrer = self.request.GET.get("formation_project", "")
         print(name)
@@ -30,13 +35,14 @@ class TfgListView(ListView):
 class TfgDetailView(DetailView):
     model = Tfgs
     teamplate_name = "tfgs/tfgs_detail"
+    
+    # filtrar solo por aquellos que este validados completamente
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["students"] = Students.objects.filter(tfgs_id=context['tfgs'].id)
         context["back_url"] = "public_tfgs_list"
         return context
-
 
 class TeacherTfgListView(ListView):
     model = Tfgs
@@ -72,11 +78,28 @@ class TeacherTfgDetailView(DetailView):
         context["back_url"] = "teacher_tfgs_list"
         return context
 
-class TeacherTfgDelete(RedirectView):
+class TeacherTfgCreateView(CreateView):
+    model = Tfgs
+    form_class = CreateTfgForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if hasattr(self, 'object'):
+            kwargs.update({'instance': self.request.user})
+        return kwargs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["student_form"] = CreateStudentForm
+        context["tutor2_form"] = CreateTutor2Form
+        context["back_url"] = "teacher_tfgs_list"
+        return context
+
+class TeacherTfgDeleteView(RedirectView):
     url = "teacher_tfgs_list"
     pattern_name = 'delete_Tfm'
     
     def get_redirect_url(self, *args, **kwargs):
-        Tfgs.objects.filter(id=kwargs['id']).delete()
+        Tfgs.objects.filter(id=kwargs['id'], tutor1=self.request.user).delete()
         url = reverse(super().get_redirect_url(*args, **kwargs))
         return url

@@ -6,13 +6,13 @@ from login.models import Students
 from .models import Tfms
 from .forms import FilterPublicTfmForm, FilterTeacherTfmForm
 
-# Create your views here.
 class TfmListView(ListView):
     model = Tfms
     template_name = "tfms/public_tfms_list.html"
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        # filtrar solo por aquellos que este validados completamente
         name = self.request.GET.get("name_project", "")
         master = self.request.GET.get("formation_project", "")
         if name:
@@ -30,6 +30,8 @@ class TfmListView(ListView):
 class TfmDetailView(DetailView):
     model = Tfms
     teamplate_name = "tfms/tfms_detail"
+
+    # filtrar solo por aquellos que este validados completamente
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -76,6 +78,6 @@ class TeacherTfmDelete(RedirectView):
     pattern_name = 'delete_Tfm'
     
     def get_redirect_url(self, *args, **kwargs):
-        Tfms.objects.filter(id=kwargs['id']).delete()
+        Tfms.objects.filter(id=kwargs['id'], tutor1=self.request.user).delete()
         url = reverse(super().get_redirect_url(*args, **kwargs))
         return url
