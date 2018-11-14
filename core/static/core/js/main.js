@@ -53,7 +53,7 @@ function generateSelect(inputNumber, brotherElement) {
             var new_element = `
                 <div class="row" id="alumnoL${i}">
                     <div class="col-sm-12">
-                        Alumno<span class="number">${i}</span>
+                        Alumno <span class="number">${i}*</span>
                     </div>
                     <div class="pl-3 pl-sm-5 col-sm-12">
                         <div class="form-group row">

@@ -43,7 +43,7 @@ class CreateTfgForm(forms.ModelForm):
                 attrs={
                     'class': 'form-control',
                     'id': 'inputTitle',
-                    'placeholder': 'Título'
+                    'placeholder': 'Nombre del proyecto'
                 }
             ),
             'carrers': forms.Select(

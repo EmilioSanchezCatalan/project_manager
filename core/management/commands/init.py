@@ -37,7 +37,19 @@ class Command(BaseCommand):
             "departament": "Telecomunicaciones"
         },
         {
-            "name": "Otro",
+            "name": "Otra",
+            "departament": "Telecomunicaciones"
+        },
+        {
+            "name": "Otra",
+            "departament": "Electrónica"
+        },
+        {
+            "name": "Otra",
+            "departament": "Informatica"
+        },
+        {
+            "name": "Otra",
             "departament": "Otro"
         }
     ]

@@ -46,7 +46,6 @@ class Command(BaseCommand):
             "student": [
                 {
                     "name": "Antonio Jesús León-Sanchez",
-                    "address": "Avenida a",
                     "dni": "77346412A",
                     "phone": "658325022",
                     "email": "ajls0003@red.ujaen.es",
@@ -86,7 +85,6 @@ class Command(BaseCommand):
             "student": [
                 {
                     "name": "González-Ginés, María L.",
-                    "address": "Avenida b",
                     "dni": "77243312A",
                     "phone": "654325022",
                     "email": "mlgg0002@red.ujaen.es",
@@ -126,7 +124,6 @@ class Command(BaseCommand):
             "student": [
                 {
                     "name": "Fernández-Piñas-Padial, José L.",
-                    "address": "Avenida c",
                     "dni": "77255312A",
                     "phone": "654935022",
                     "email": "jlfpp0008@red.ujaen.es",
@@ -166,14 +163,12 @@ class Command(BaseCommand):
             "student": [
                 {
                     "name": "Moya-Fernández, Francisco-A.",
-                    "address": "Avenida d",
                     "dni": "775355312A",
                     "phone": "654935852",
                     "email": "afmf00041@red.ujaen.es",
                 },
                 {
                     "name": "Rebollo-Calvo, Eva",
-                    "address": "Avenida e",
                     "dni": "77251312A",
                     "phone": "654935522",
                     "email": "erc0009@red.ujaen.es",
@@ -213,7 +208,6 @@ class Command(BaseCommand):
             "student": [
                 {
                     "name": "Nsogo-Nsa, Samuel Ela",
-                    "address": "Avenida tn",
                     "dni": "77298312A",
                     "phone": "654931592",
                     "email": "esnn0003@red.ujaen.es",
@@ -253,7 +247,6 @@ class Command(BaseCommand):
             "student": [
                 {
                     "name": "Gálvez-Gómez, Joaquín",
-                    "address": "Avenida yy",
                     "dni": "77598312A",
                     "phone": "634931592",
                     "email": "jgg00019@red.ujaen.es",
@@ -291,7 +284,6 @@ class Command(BaseCommand):
             "student": [
                 {
                     "name": "Rodríguez-Reche, Rafael-Rudesindo",
-                    "address": "Avenida g",
                     "dni": "775312312A",
                     "phone": "643935852",
                     "email": "rrrr0002@red.ujaen.es",
@@ -359,7 +351,6 @@ class Command(BaseCommand):
             for student in tfg["student"]:
                 Students.objects.create(
                     name=student["name"],
-                    address=student["address"],
                     dni=student["dni"],
                     phone=student["phone"],
                     email=student["email"],
@@ -396,7 +387,6 @@ class Command(BaseCommand):
             for student in tfm["student"]:
                 Students.objects.create(
                     name=student["name"],
-                    address=student["address"],
                     dni=student["dni"],
                     phone=student["phone"],
                     email=student["email"],
