@@ -89,6 +89,9 @@ class Skills(models.Model):
 
     def __str__(self):
         return u'{0}'.format(self.name + ' - ' + self.text)
+    
+    class Meta:
+         ordering = ['name']
 
 
 class Tutor2(models.Model):

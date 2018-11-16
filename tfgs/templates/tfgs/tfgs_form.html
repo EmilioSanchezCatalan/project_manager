@@ -2,9 +2,10 @@
 
 {% block content %}
 <section class="container bg-white border p-4">
-    <form>
+    <form method="post">
+        {% csrf_token %}
         <div class="form-group row">
-            <label for="inputTitle" class="col-sm-12 col-form-label">Título*</label>
+            <label for="id_title" class="col-sm-12 col-form-label">Título*</label>
             <div class="col-sm-12">
                 {{form.title}}
             </div>
@@ -43,8 +44,8 @@
             <div class="col-sm-4 col-md-3 col-lg-2">Segundo tutor</div>
             <div class="col-sm-8 col-md-9 col-lg-10">
                 <span class="switch switch-sm">
-                    <input type="checkbox" class="switch" id="tutorCheck">
-                    <label for="tutorCheck" id="prueba"></label>
+                    <input type="checkbox" name="has_tutor2" class="switch" id="tutorCheck">
+                    <label for="tutorCheck"></label>
                 </span>
             </div>
         </div>
@@ -83,39 +84,72 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="inputNumberStudent" class="col-sm-12 col-form-label">Número de alumnos</label>
-            <div class="col-sm-12 d-flex">
-                <input type="number" value="2" min="2" class="form-control" id="inputNumberStudent" placeholder="Cantidad">
-                <button type="button" id="refreshNumberStudents" class="btn btn-secondary ml-2"><i class="fas fa-sync-alt"></i></button>
+            <div class="col-sm-4 col-md-3 col-lg-2">Establecer alumno/s</div>
+            <div class="col-sm-8 col-md-9 col-lg-10">
+                <span class="switch switch-sm">
+                    <input type="checkbox" name="has_student" class="switch" id="alumnoCheck">
+                    <label for="alumnoCheck"></label>
+                </span>
             </div>
         </div>
-        <div class="row" id="alumno">
+        <div class="row" id="student1">
             <div class="col-sm-12">
-                Alumno<span class="number"></span>*
+                Alumno <span class="student_number">1</span>*
             </div>
             <div class="pl-3 pl-sm-5 col-sm-12">
                 <div class="form-group row">
                     <label for="alumnoNameInput" class="col-sm-2 col-form-label">Nombre:</label>
                     <div class="col-sm-10">
-                        {{student_form.name}}
+                        {{student_form1.name}}
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="alumnoDireccionInput1" class="col-sm-2 col-form-label">Email:</label>
                     <div class="col-sm-10">
-                        {{student_form.email}}
+                        {{student_form1.email}}
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="alumnoDniInput" class="col-sm-2 col-form-label">DNI:</label>
                     <div class="col-sm-10">
-                        {{student_form.dni}}
+                        {{student_form1.dni}}
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="alumnotlfInput" class="col-sm-2 col-form-label">Telefono:</label>
                     <div class="col-sm-10">
-                        {{student_form.phone}}
+                        {{student_form1.phone}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="student2">
+            <div class="col-sm-12">
+                Alumno <span class="student_number">2</span>*
+            </div>
+            <div class="pl-3 pl-sm-5 col-sm-12">
+                <div class="form-group row">
+                    <label for="alumnoNameInput" class="col-sm-2 col-form-label">Nombre:</label>
+                    <div class="col-sm-10">
+                        {{student_form2.name}}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="alumnoDireccionInput1" class="col-sm-2 col-form-label">Email:</label>
+                    <div class="col-sm-10">
+                        {{student_form2.email}}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="alumnoDniInput" class="col-sm-2 col-form-label">DNI:</label>
+                    <div class="col-sm-10">
+                        {{student_form2.dni}}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="alumnotlfInput" class="col-sm-2 col-form-label">Telefono:</label>
+                    <div class="col-sm-10">
+                        {{student_form2.phone}}
                     </div>
                 </div>
             </div>
@@ -150,7 +184,7 @@
         </div>
         <div class="form-group row">
             <div class="col-sm-12">
-                <button type="submit" class="btn btn-success ">Guardar</button>
+                <input type="submit" class="btn btn-success" value="Guardar">
             </div>
         </div>
         <div class="form-group row">
@@ -169,28 +203,26 @@
 $(document).ready(function(){
     
     // Inicialización del estado del formulario
-    inputShowHiddenBlockFunction($("#tutorCheck"), $("#id_name"));
-    inputShowHiddenFunction($("#id_is_team"), $("#inputNumberStudent"));
+    inputShowHiddenBlockFunction($("#tutorCheck"), $("#id_tutor2-name"));
     updateSelect("id_itineraries", [])
     updateSelect("id_mentions", [])
-    updateSelect("id_area", [])
+    updateSelect("id_tutor2-area", [])
     updateListCheckboxes("id_skills", [])
+    setStudents()
 
     // Añade la funcionalidades a un evento
     // OCulta y mustra el tutor opcional
     $("#tutorCheck").click(() => {
-        inputShowHiddenBlockFunction($("#tutorCheck"), $("#id_name"))
+        inputShowHiddenBlockFunction($("#tutorCheck"), $("#id_tutor2-name"))
     });
 
     // Oculta y muestra los campos para que haya mas de un alumno
     $("#id_is_team").click(() => {
-        inputShowHiddenFunction($("#id_is_team"), $("#inputNumberStudent"))
-        initNoTeam($("#id_is_team"));
+        setStudents()
     });
-    
-    // Actualiza el número de alumnos
-    $("#refreshNumberStudents").click(() => {
-        generateSelect($("#inputNumberStudent"), $("#alumno"));
+
+    $("#alumnoCheck").click(() => {
+        setStudents()
     });
 
     // Actualiza los itinerarios y menciones disponibles
@@ -223,68 +255,15 @@ $(document).ready(function(){
     })
 
     //Actualiza las areas
-    $("#id_departament").change(function() {
+    $("#id_tutor2-departament").change(function() {
         let departaments_id = $(this).val()
         getListApi("/api/areas", departaments_id)
             .then(response => {
-                updateSelect("id_area", response, "Selecciona el area")
+                updateSelect("id_tutor2-area", response, "Selecciona el area")
             }).catch(error => {
                 alert(error)
             })
     })
-
-    function updateListCheckboxes(block_checkbox_id, data_list) {
-        if (data_list.length > 0) {
-            $("#" + block_checkbox_id).css("display", "flex")
-            $("#" + block_checkbox_id).children(".col-sm-12.row").empty()
-            $.each(data_list, function(key, value) {
-                let checkbox = $(`
-                <div class="form-check col-sm-6 form-check-label-custom">
-                    <label for="id_skills_${key}">
-                        <input type="checkbox" name="skills" value="${value.id}" class="form-check-input" id="id_skills_${key}">
-                        ${value.name} - ${value.text}
-                    </label>
-                </div>
-                `)
-                $("#" + block_checkbox_id).children(".col-sm-12.row").append(checkbox)
-            })
-        } else {
-            $("#" + block_checkbox_id).css("display", "none")
-        }
-    }
-
-    function updateSelect(select_id, data_list, empty_label="Selecciona una opción") {
-        if (data_list.length > 0) {
-            $("#" + select_id).closest(".form-group.row").css("display", "flex")
-            $("#" + select_id).empty()
-            $("#" + select_id).append($("<option></option>").attr("value", "").text(empty_label))
-            $.each(data_list, function(key, value) {
-                $("#" + select_id).append($("<option></option>").attr("value", value.id).text(value.name))
-            })
-        } else {
-            $("#" + select_id).closest(".form-group.row").css("display", "none")
-        }
-    }
-
-    function getListApi(full_url, pk) {
-        return new Promise((resolve, reject) => {
-            if ( !isNaN(parseInt(pk)) ) {
-
-                $.ajax({
-                    method: "GET",
-                    url: full_url + "/" + pk,
-                    success: function(data) {
-                        resolve(data)
-                    },
-                    error: function(error) {
-                        reject(error)
-                    }
-                })
-            } else {
-                resolve([])
-            }
-        });
-    }
 });
 </script>
 {% endblock scripts %}

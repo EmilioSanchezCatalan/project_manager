@@ -32,3 +32,6 @@ class Tfgs(models.Model):
     skills = models.ManyToManyField(Skills)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
+
+    class Meta:
+         ordering = ['-createdAt']

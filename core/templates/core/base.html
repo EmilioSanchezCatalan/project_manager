@@ -60,6 +60,14 @@
     </nav>
     {% endif %}
 
+    <!-- Messages -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="container my-1 alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
 
     <!-- Title -->
     {% block title %}{% endblock title %}
@@ -69,5 +77,13 @@
 
     <!-- Scripts -->
     {% block scripts %}{% endblock scripts %}
+
+    <script>
+      $(document).ready(function() {
+        setTimeout(() => {
+          $(".alert").alert("close")
+        }, 3000);
+      });
+    </script>
   </body>
 </html>

@@ -1,8 +1,10 @@
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 from django.views.generic.base import RedirectView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from login.models import Students
 from login.forms import CreateStudentForm
 from core.forms import CreateTutor2Form
@@ -19,7 +21,6 @@ class TfgListView(ListView):
         # filtrar solo por aquellos que este validados completamente
         name = self.request.GET.get("name_project", "")
         carrer = self.request.GET.get("formation_project", "")
-        print(name)
         if name:
             queryset = queryset.filter(title__contains=name)
         if carrer:
@@ -81,19 +82,99 @@ class TeacherTfgDetailView(DetailView):
 class TeacherTfgCreateView(CreateView):
     model = Tfgs
     form_class = CreateTfgForm
+    success_url = reverse_lazy("teacher_tfgs_list")
 
     def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        if hasattr(self, 'object'):
-            kwargs.update({'instance': self.request.user})
+        kwargs = super(TeacherTfgCreateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
         return kwargs
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["student_form"] = CreateStudentForm
-        context["tutor2_form"] = CreateTutor2Form
+        context["student_form1"] = CreateStudentForm(prefix="student1")
+        context["student_form2"] = CreateStudentForm(prefix="student2")
+        context["tutor2_form"] = CreateTutor2Form(prefix="tutor2")
         context["back_url"] = "teacher_tfgs_list"
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        student1_form, student2_form, tutor2_form = None, None, None
+        if self.request.POST.get('has_student') == 'on':
+            student1_form = CreateStudentForm(self.request.POST, prefix="student1")
+            student1_val = student1_form.is_valid()
+        else:
+            student1_val = True
+        if self.request.POST.get('has_tutor2') == 'on':
+            tutor2_form = CreateTutor2Form(self.request.POST, prefix="tutor2")
+            tutor2_val = tutor2_form.is_valid()
+        else:
+            tutor2_val = True
+        if self.request.POST.get('has_student') == 'on' and self.request.POST.get('is_team') == 'on':
+            student2_form = CreateStudentForm(self.request.POST, prefix="student2")
+            student2_val = student2_form.is_valid()
+        else:
+            student2_val = True
+        if form.is_valid() and student1_val and tutor2_val and student2_val:
+            return self.form_valid(form, student1_form, student2_form, tutor2_form)
+        else:
+            return self.form_invalid(form, student1_form, student2_form, tutor2_form)
+
+    def form_valid(self, form, student1_form=None, student2_form=None, tutor2_form=None):
+        tutor2 = self.__createtutor2(tutor2_form)
+        self.__createTfg(form, tutor2)
+        self.__createStudent(self.object, student1_form)
+        self.__createStudent(self.object, student2_form)
+        messages.success(self.request, "Creado correctamente nuevo trabajo fin de grado con titulo: \"" + self.object.title + "\"", 'success')
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form, student1_form=None, student2_form=None, tutor2_form=None):
+        if student1_form is None:
+            student1_form = CreateStudentForm(prefix="student1")
+        if student2_form is None:
+            student2_form = CreateStudentForm(prefix="student2")
+        if tutor2_form is None:
+            tutor2_form = CreateTutor2Form(prefix="tutor2")
+        
+        self.__errorsForm(form)
+        self.__errorsForm(student1_form)
+        self.__errorsForm(student2_form)
+        self.__errorsForm(tutor2_form)
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            student1_form=student1_form,
+            student2_form=student2_form,
+            tutor2_form=tutor2_form
+        ))
+    
+    def __errorsForm(self, form):
+        form_errors = form.errors
+        for fields_error in form_errors.keys():
+            for error in form_errors[fields_error]:
+                messages.error(self.request, error, 'danger')
+
+    def __createTfg(self, form, tutor2=None):
+        self.object = form.save(commit=False)
+        self.object.tutor1 = self.request.user
+        self.object.tutor2 = tutor2
+        self.object.save()
+        form.save_m2m()
+
+    @staticmethod
+    def __createStudent(tfg, form=None):
+        if form is not None:
+            student = form.save(commit=False)
+            student.tfg = tfg
+            student.save()
+
+    @staticmethod
+    def __createtutor2(form=None):
+        if form is not None:
+            return form.save()
+        else:
+            return None
+
 
 class TeacherTfgDeleteView(RedirectView):
     url = "teacher_tfgs_list"

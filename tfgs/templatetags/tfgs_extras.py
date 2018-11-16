@@ -7,7 +7,7 @@ def tfg_mode(value):
     mode_texts = [
         "proyecto de ingeniería",
         "estudio técnico",
-        "trabajo teórico experimental"
+        "T. teórico / experimental"
     ]
     return mode_texts[value]
 

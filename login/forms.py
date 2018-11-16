@@ -25,7 +25,3 @@ class CreateStudentForm(forms.ModelForm):
                 attrs={'class': 'form-control'}
             )
         }
-
-    def __init__(self, *args, **kwargs):
-        super(CreateStudentForm, self).__init__(*args, **kwargs)
-        self.fields['name'].id = 'id_student_name'

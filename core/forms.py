@@ -28,10 +28,7 @@ class CreateTutor2Form(forms.ModelForm):
         self.__customArea()
 
     def __customDepartament(self):
-        print('Entra')
         self.fields['departament'].empty_label = "Selecciona el departamento"
-        self.fields['departament'].required = False
 
     def __customArea(self):
         self.fields['area'].empty_label = "Selecciona el area"
-        self.fields['area'].required = False

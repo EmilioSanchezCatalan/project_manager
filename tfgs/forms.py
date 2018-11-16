@@ -36,14 +36,14 @@ class CreateTfgForm(forms.ModelForm):
             'objectives',
             'methodology',
             'docs_and_forms',
-            'skills'
+            'skills',
+            'tutor1'
         ]
         widgets = {
             'title': forms.TextInput(
                 attrs={
                     'class': 'form-control',
-                    'id': 'inputTitle',
-                    'placeholder': 'Nombre del proyecto'
+                    'placeholder': 'Nombre del proyecto',
                 }
             ),
             'carrers': forms.Select(
@@ -86,17 +86,20 @@ class CreateTfgForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        self.user = user
         super(CreateTfgForm, self).__init__(*args, **kwargs)
-        user = kwargs['instance']
+        self.fields['tutor1'].required = False
         self.__customCarrer(user)
         self.__customItinerarie()
         self.__customMention()
         self.__customType()
         self.__customMode()
 
-    def __customCarrer(self, user):
+    def __customCarrer(self, user=None):
         self.fields['carrers'].empty_label = "Selecciona la titulación"
-        self.fields['carrers'].queryset = user.userinfos.departaments.carrers.all()
+        if user is not None:
+            self.fields['carrers'].queryset = user.userinfos.departaments.carrers.all()
 
     def __customItinerarie(self):
         self.fields['itineraries'].empty_label = "Selecciona el itinerario"
