@@ -21,7 +21,7 @@ class Students(models.Model):
     dni = models.CharField(max_length=45)
     phone = models.CharField(max_length=45)
     email = models.EmailField(max_length=150)
-    tfgs = models.ForeignKey(Tfgs, on_delete=models.CASCADE, null=True)
+    tfgs = models.ForeignKey(Tfgs, on_delete=models.CASCADE, null=True, related_name="students")
     tfms = models.ForeignKey(Tfms, on_delete=models.CASCADE, null=True)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")

@@ -36,7 +36,7 @@ function inputShowHiddenFunction(checkbox, input) {
  * en función de si es un trabajo en equipo o no, o si se van a establecer el alumno
  * asignado al proyecto o no.
  */
-function setStudents() {
+function setStudentsTfg() {
     if($("#alumnoCheck").is(':checked')) {
         $("#student1").css('display', 'flex')
         $("#student1").find("input").prop('required', true);
@@ -58,6 +58,23 @@ function setStudents() {
     }
     
 }
+
+/**
+ * Modifica el formulario añadiendo y elmininado los formaularios de alumnos
+ * en función de si es un trabajo en equipo o no, o si se van a establecer el alumno
+ * asignado al proyecto o no.
+ */
+function setStudentsTfm() {
+    if($("#alumnoCheck").is(':checked')) {
+        $("#student").css('display', 'flex')
+        $("#student").find("input").prop('required', true);
+    } else {
+        $("#student").css('display', 'none')
+        $("#student").find("input").removeAttr("required")
+    }
+    
+}
+
 
 /**
  * Actualiza la lista de checkbox de un bloque de checkbox en función de una lista

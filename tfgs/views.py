@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.views.generic.base import RedirectView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse, reverse_lazy
 from login.models import Students
 from login.forms import CreateStudentForm
@@ -83,6 +83,7 @@ class TeacherTfgCreateView(CreateView):
     model = Tfgs
     form_class = CreateTfgForm
     success_url = reverse_lazy("teacher_tfgs_list")
+    template_name = "tfgs/tfgs_create_form.html"
 
     def get_form_kwargs(self):
         kwargs = super(TeacherTfgCreateView, self).get_form_kwargs()
@@ -152,7 +153,7 @@ class TeacherTfgCreateView(CreateView):
         form_errors = form.errors
         for fields_error in form_errors.keys():
             for error in form_errors[fields_error]:
-                messages.error(self.request, error, 'danger')
+                messages.error(self.request,  fields_error + ": " + error, 'danger')
 
     def __createTfg(self, form, tutor2=None):
         self.object = form.save(commit=False)
@@ -174,6 +175,26 @@ class TeacherTfgCreateView(CreateView):
             return form.save()
         else:
             return None
+
+class TeacherTfgUpdateView(UpdateView):
+    model = Tfgs
+    form_class = CreateTfgForm
+    template_name = "tfgs/tfgs_update_form.html"
+
+    def get_queryset(self):
+        queryset = super(TeacherTfgUpdateView, self).get_queryset()
+        queryset = queryset.filter(tutor1=self.request.user)
+        return queryset
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tfg = self.get_object()
+        context["student_form1"] = CreateStudentForm(prefix="student1")
+        context["student_form2"] = CreateStudentForm(prefix="student2")
+        context["tutor2_form"] = CreateTutor2Form(prefix="tutor2", instance=tfg.tutor2)
+        context["back_url"] = "teacher_tfgs_list"
+        return context
 
 
 class TeacherTfgDeleteView(RedirectView):

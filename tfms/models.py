@@ -21,10 +21,14 @@ class Tfms(models.Model):
     docs_and_forms = models.TextField()
     language = models.CharField(max_length=45)
     knowledge = models.TextField()
-    departament_validation = models.BooleanField()
-    center_validation = models.BooleanField()
+    departament_validation = models.BooleanField(null=True)
+    center_validation = models.BooleanField(null=True)
     tutor1 = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     tutor2 = models.ForeignKey(Tutor2, on_delete=models.CASCADE, null=True)
     masters = models.ForeignKey(Masters, on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
+
+    class Meta:
+         ordering = ['-createdAt']
+
