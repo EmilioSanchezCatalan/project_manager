@@ -35,7 +35,7 @@ class Command(BaseCommand):
             "center_validation": False,
             "tutor1": "jccuevas",
             "tutor2": None,
-            "itinerarie": None,
+            "itinerarie": "General",
             "mention": None,
             "carrer": "Grado en Ingeniería Telemática",
             "skills": [
@@ -74,7 +74,7 @@ class Command(BaseCommand):
             "center_validation": False,
             "tutor1": "fnavarro",
             "tutor2": None,
-            "itinerarie": None,
+            "itinerarie": "General",
             "mention": None,
             "carrer": "Grado en Ingeniería Telemática",
             "skills": [
@@ -113,7 +113,7 @@ class Command(BaseCommand):
             "center_validation": False,
             "tutor1": "jccuevas",
             "tutor2": None,
-            "itinerarie": None,
+            "itinerarie": "General",
             "mention": None,
             "carrer": "Grado en Ingeniería Telemática",
             "skills": [
@@ -152,7 +152,7 @@ class Command(BaseCommand):
             "center_validation": False,
             "tutor1": "jccuevas",
             "tutor2": None,
-            "itinerarie": None,
+            "itinerarie": "General",
             "mention": None,
             "carrer": "Grado en Ingeniería Telemática",
             "skills": [

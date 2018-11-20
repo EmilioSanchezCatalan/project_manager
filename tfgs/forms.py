@@ -87,25 +87,31 @@ class CreateTfgForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
+        tfg = kwargs.pop('tfg', None)
         self.user = user
         super(CreateTfgForm, self).__init__(*args, **kwargs)
         self.fields['tutor1'].required = False
         self.__customCarrer(user)
-        self.__customItinerarie()
+        self.__customItinerarie(tfg)
         self.__customMention()
         self.__customType()
         self.__customMode()
+        self.__customSkills(tfg)
 
     def __customCarrer(self, user=None):
         self.fields['carrers'].empty_label = "Selecciona la titulación"
         if user is not None:
             self.fields['carrers'].queryset = user.userinfos.departaments.carrers.all()
 
-    def __customItinerarie(self):
+    def __customItinerarie(self, tfg=None):
+        if tfg is not None:
+            self.fields['itineraries'].queryset = tfg.carrers.itineraries.all()
         self.fields['itineraries'].empty_label = "Selecciona el itinerario"
         self.fields['itineraries'].required = False
 
-    def __customMention(self):
+    def __customMention(self, tfg=None):
+        if tfg is not None:
+            self.fields['mentions'].queryset = tfg.carrers.mentions.all()
         self.fields['mentions'].empty_label = "Selecciona la mención"
         self.fields['mentions'].required = False
 
@@ -131,3 +137,6 @@ class CreateTfgForm(forms.ModelForm):
             widget=forms.Select(attrs={'class': 'form-control'}),
             choices=CHOICES
         )
+    def __customSkills(self, tfg=None):
+        if tfg is not None:
+            self.fields['skills'].queryset = tfg.itineraries.skills.all()

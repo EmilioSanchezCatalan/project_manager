@@ -144,3 +144,15 @@ function getListApi(full_url, pk) {
         }
     });
 }
+
+/**
+ * Oculta todos los selectores que no posean mas que la opcion por 
+ * defecto
+ */
+function cleanEmptySelects() {
+    $.each($("select"), function(key, value) {
+        if ($(value).children("option").length <= 1) {
+            $(this).closest(".form-group.row").css("display", "none")
+        }
+    });
+}

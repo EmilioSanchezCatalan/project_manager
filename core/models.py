@@ -60,7 +60,7 @@ class Mentions(models.Model):
 
     # Campos del modelo
     name = models.CharField(max_length=150)
-    carrers = models.ForeignKey(Carrers, on_delete=models.CASCADE)
+    carrers = models.ForeignKey(Carrers, on_delete=models.CASCADE, related_name="mentions")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
@@ -71,7 +71,7 @@ class Itineraries(models.Model):
 
     # Campos del modelo
     name = models.CharField(max_length=150)
-    carrers = models.ForeignKey(Carrers, on_delete=models.CASCADE)
+    carrers = models.ForeignKey(Carrers, on_delete=models.CASCADE, related_name="itineraries")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
@@ -83,7 +83,7 @@ class Skills(models.Model):
     # Campos del modelo
     name = models.CharField(max_length=150)
     text = models.TextField()
-    itineraries = models.ForeignKey(Itineraries, on_delete=models.CASCADE)
+    itineraries = models.ForeignKey(Itineraries, on_delete=models.CASCADE, related_name="skills")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
