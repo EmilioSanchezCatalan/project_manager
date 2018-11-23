@@ -53,16 +53,27 @@ class TeacherTfgListView(ListView):
         queryset = super().get_queryset()
         queryset = queryset.filter(tutor1=self.request.user)
         name = self.request.GET.get("search_text", "")
+        carrer = self.request.GET.get("formation_project", "")
         if name:
             queryset = queryset.filter(title__contains=name)
+        if carrer:
+            queryset = queryset.filter(carrers_id=carrer)
         return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Tfgs"
-        context['form_filter'] = FilterTeacherTfgForm(initial=self.request.GET.dict())
+        context['is_filtering'] = self.__check_filters_is_applied(self.request.GET.dict())
+        context['form_filter'] = FilterTeacherTfgForm(initial=self.request.GET.dict(), user=self.request.user)
         context['nbar'] = "tfg"
         return context
+
+    @staticmethod
+    def __check_filters_is_applied(params_dict):
+        for param_name in params_dict.keys():
+            if param_name != "search_text" and params_dict[param_name] != "":
+                return True
+        return False
 
 class TeacherTfgDetailView(DetailView):
     model = Tfgs

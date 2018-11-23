@@ -19,6 +19,19 @@ class FilterTeacherTfmForm(forms.Form):
     search_text = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
+    formation_project = forms.ModelChoiceField(
+        queryset=Masters.objects.all(),
+        empty_label="Masters",
+        required=False, 
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super(FilterTeacherTfmForm, self).__init__(*args, **kwargs)
+        self.fields["formation_project"].queryset = self.user.userinfos.departaments.masters.all()
+
 
 class CreateTfmForm(forms.ModelForm):
 

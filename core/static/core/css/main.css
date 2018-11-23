@@ -86,6 +86,10 @@ a.btn.btn-success, a.btn.btn-success:hover, a.btn.btn-danger, a.btn.btn-danger:h
 .form-check {
     margin-bottom: 15px;
 }
+.form-row {
+  margin-left: 0;
+  margin-right: 0;
+}
 /* Logo */
 .form-signin {
     height: calc(100vh - 80px);
@@ -112,6 +116,11 @@ a.btn.btn-success, a.btn.btn-success:hover, a.btn.btn-danger, a.btn.btn-danger:h
   font-weight: bold;
   font-size: 1.2rem;
 }
+.navbar-toggler { border-color: #f8f9fa !important; }
+.navbar-toggler i { color: #f8f9fa; }
+.navbar-toggler:active i, .navbar-toggler:hover i{ color: black; }
+@media (min-width: 992px) { #logoutMenu { display: none; } }
+@media (max-width: 991px) { #logoutButton { display: none; } }
 
 @media (max-height: 700px) { .form-signin form { bottom: 0px; } }
 .form-signin input[type="text"] {
@@ -238,11 +247,21 @@ a.btn.btn-success, a.btn.btn-success:hover, a.btn.btn-danger, a.btn.btn-danger:h
 
 
   /* Responsive utils */
+  .fb-60 { flex-basis: 60% !important; }
+
+  @media (max-width: 991px) {
+    .mr-md-100 { margin-right: 100% !important; }
+    .mr-md-auto { margin-right: auto !important; }
+  }
 
   @media (max-width: 767px) {
     .w-sm-50 { width: 50% !important; }
     .w-sm-100 { width: 100% !important; }
+    .fb-sm-85 { flex-basis: 85% !important; }
+    .fb-sm-100 { flex-basis: 100% !important; }
+    .mr-sm-auto { margin-right: auto !important; }
   }
   @media (max-width: 575px) {
     .w-xs-100 { width: 100% !important; }
+    .fb-xs-80 { flex-basis: 80% !important; }
   }

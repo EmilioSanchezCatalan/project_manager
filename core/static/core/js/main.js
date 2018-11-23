@@ -156,3 +156,14 @@ function cleanEmptySelects() {
         }
     });
 }
+
+/**
+ * Cambia el estado de los filtros extendidos, mostrandolos y ocultandolos
+ * @param {HTMLElement} button      botton con el que cambiará el estado
+ * @param {HTMLDivElement} divBlock block con la extensión de los filtros
+ */
+function changeExtendsFiltersState(button, divBlock) {
+    button.children("i").toggle()
+    $("hr").toggle()
+    divBlock.toggle()
+  }

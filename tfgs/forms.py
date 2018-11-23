@@ -9,7 +9,7 @@ class FilterPublicTfgForm(forms.Form):
     ))
     formation_project = forms.ModelChoiceField(
         queryset=Carrers.objects.all(),
-        empty_label="Título",
+        empty_label="Titulación",
         required=False, 
         widget=forms.Select(
             attrs={'class': 'form-control'}
@@ -20,6 +20,19 @@ class FilterTeacherTfgForm(forms.Form):
     search_text = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
+    formation_project = forms.ModelChoiceField(
+        queryset=Carrers.objects.all(),
+        empty_label="Titulación",
+        required=False, 
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super(FilterTeacherTfgForm, self).__init__(*args, **kwargs)
+        self.fields["formation_project"].queryset = self.user.userinfos.departaments.carrers.all()
+
 
 class CreateTfgForm(forms.ModelForm):
 

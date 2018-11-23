@@ -4,23 +4,36 @@
 {% block content %}
 
 <section class="container border bg-white p-3 p-sm-5 mt-0 mt-sm-4">
-  <div class="row">
-    <div class="col-md-4 btn-group mb-4 w-sm-100" role="group" aria-label="Basic example">
-      <a class="btn btn-success w-sm-100" href="{% url 'teacher_tfgs_create' %}">
-        <i class="fas fa-plus mr-2"></i>Añadir TFG
-      </a>
-    </div>
-    <form action="" class="col-md-8 d-inline-flex flex-wrap flex-sm-wrap justify-content-between">
-      <div class="form-group mx-2 flex-grow-1 flex-sm-grow-0">
-        <button for="titleProject" class="btn btn-light btn-block font-weight-bold">
+  <form action="">
+    <div class="form-row justify-content-between">
+      <!-- Boton añadir nuevo tfg -->
+      <div class="form-group mr-auto mr-md-100 fb-sm-100 mr-sm-auto">
+        <a class="btn btn-success btn-block" href="{% url 'teacher_tfgs_create' %}">
+          <i class="fas fa-plus mr-2"></i>Añadir TFG
+        </a>
+      </div>
+      <div class="form-group fb-sm-100 mr-lg-0 mr-auto">
+        <button type="submit" for="titleProject" class="btn btn-light btn-block font-weight-bold">
           <i class="fas fa-search mr-2" style="font-size: 15px;"></i>Buscador
         </button>
       </div>
-      <div class="form-group mx-2 flex-grow-1">
+      <div class="form-group mx-2 fb-60 fb-sm-85 fb-xs-80">
         {{form_filter.search_text}}
       </div>
-    </form>
-  </div>
+      <div class="form-group">
+        <div class="btn {% if is_filtering %}btn-warning{% else %}btn-light{% endif %} font-weight-bold" id="btn-extends-filter">
+          <i class="fas fa-angle-down" {% if is_filtering %}style="display: none"{% endif %}></i>
+          <i class="fas fa-angle-up" {% if not is_filtering %}style="display: none"{% endif %}></i>
+        </div>
+      </div>
+    </div>
+    <hr {% if not is_filtering %}style="display:none"{% endif %}>
+    <div class="form-row" id="extends-filters" {% if not is_filtering %}style="display: none"{% endif %}>
+      <div class="form-group">
+        {{form_filter.formation_project}}
+      </div>
+    </div>
+  </form>
   <article style="overflow-x: scroll">
     <table class="table table-crud border m-0">
       <thead>
@@ -67,7 +80,7 @@
       </tbody>
     </table>
   </article>
-  <footer class="d-flex justify-content-end font-italic">
+  <footer class="d-flex justify-content-end font-italic flex-wrap">
     <div class="mx-2">
       <i class="fas fa-check-double text-success"></i>
       <span>validado por departamento y centro</span>
@@ -87,3 +100,11 @@
   </footer>
 </section>
 {% endblock content %}
+
+{% block scripts %}
+<script>
+  $("#btn-extends-filter").click(function() {
+    changeExtendsFiltersState($(this), $("#extends-filters"))
+  });
+</script>
+{% endblock scripts %}
