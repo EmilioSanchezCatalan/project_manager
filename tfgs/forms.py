@@ -140,3 +140,4 @@ class CreateTfgForm(forms.ModelForm):
     def __customSkills(self, tfg=None):
         if tfg is not None:
             self.fields['skills'].queryset = tfg.itineraries.skills.all()
+        self.fields['skills'].required = False

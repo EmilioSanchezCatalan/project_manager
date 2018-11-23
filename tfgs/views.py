@@ -241,6 +241,10 @@ class TeacherTfgUpdateView(UpdateView):
             )
             student1_val = student1_form.is_valid()
         else:
+            student = self.__get_student_tfg(self.request.POST.get('student1-dni'))
+            if student is not None:
+                student.tfgs = None
+                student.save()
             student1_val = True
         if self.request.POST.get('has_tutor2') == 'on':
             tutor2_form = CreateTutor2Form(self.request.POST, prefix="tutor2", instance=self.object.tutor2)
@@ -257,6 +261,10 @@ class TeacherTfgUpdateView(UpdateView):
             )
             student2_val = student2_form.is_valid()
         else:
+            student = self.__get_student_tfg(self.request.POST.get('student2-dni'))
+            if student is not None:
+                student.tfgs = None
+                student.save()
             student2_val = True
         if form.is_valid() and student1_val and tutor2_val and student2_val:
             return self.form_valid(form, student1_form, student2_form, tutor2_form)

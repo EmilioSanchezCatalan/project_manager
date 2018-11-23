@@ -11,21 +11,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="id_itineraries" class="col-sm-12 col-form-label">Titulación*</label>
+            <label for="id_itineraries" class="col-sm-12 col-form-label">Master*</label>
             <div class="col-sm-12">
-                {{form.carrers}}
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="id_itineraries" class="col-sm-12 col-form-label">Itinerario*</label>
-            <div class="col-sm-12">
-                {{form.itineraries}}
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="id_mentions" class="col-sm-12 col-form-label">Mención*</label>
-            <div class="col-sm-12">
-                {{form.mentions}}
+                {{form.masters}}
             </div>
         </div>
         <div class="form-group row">
@@ -38,6 +26,12 @@
             <label for="id_mode" class="col-sm-12 col-form-label">Modalidad*</label>
             <div class="col-sm-12">
                 {{form.mode}}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="id_title" class="col-sm-12 col-form-label">Indioma*</label>
+            <div class="col-sm-12">
+                {{form.language}}
             </div>
         </div>
         <div class="form-group row">
@@ -75,15 +69,6 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-4 col-md-3 col-lg-2">Trabajo en equipo</div>
-            <div class="col-sm-8 col-md-9 col-lg-10">
-                <span class="switch switch-sm">
-                    {{form.is_team}}
-                    <label for="id_is_team"></label>
-                </span>
-            </div>
-        </div>
-        <div class="form-group row">
             <div class="col-sm-4 col-md-3 col-lg-2">Establecer alumno/s</div>
             <div class="col-sm-8 col-md-9 col-lg-10">
                 <span class="switch switch-sm">
@@ -92,64 +77,33 @@
                 </span>
             </div>
         </div>
-        <div class="row" id="student1">
+        <div class="row" id="student">
             <div class="col-sm-12">
-                Alumno <span class="student_number">1</span>*
+                Alumno *
             </div>
             <div class="pl-3 pl-sm-5 col-sm-12">
                 <div class="form-group row">
                     <label for="alumnoNameInput" class="col-sm-2 col-form-label">Nombre:</label>
                     <div class="col-sm-10">
-                        {{student_form1.name}}
+                        {{student_form.name}}
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="alumnoDireccionInput1" class="col-sm-2 col-form-label">Email:</label>
                     <div class="col-sm-10">
-                        {{student_form1.email}}
+                        {{student_form.email}}
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="alumnoDniInput" class="col-sm-2 col-form-label">DNI:</label>
                     <div class="col-sm-10">
-                        {{student_form1.dni}}
+                        {{student_form.dni}}
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="alumnotlfInput" class="col-sm-2 col-form-label">Telefono:</label>
                     <div class="col-sm-10">
-                        {{student_form1.phone}}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row" id="student2">
-            <div class="col-sm-12">
-                Alumno <span class="student_number">2</span>*
-            </div>
-            <div class="pl-3 pl-sm-5 col-sm-12">
-                <div class="form-group row">
-                    <label for="alumnoNameInput" class="col-sm-2 col-form-label">Nombre:</label>
-                    <div class="col-sm-10">
-                        {{student_form2.name}}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="alumnoDireccionInput1" class="col-sm-2 col-form-label">Email:</label>
-                    <div class="col-sm-10">
-                        {{student_form2.email}}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="alumnoDniInput" class="col-sm-2 col-form-label">DNI:</label>
-                    <div class="col-sm-10">
-                        {{student_form2.dni}}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="alumnotlfInput" class="col-sm-2 col-form-label">Telefono:</label>
-                    <div class="col-sm-10">
-                        {{student_form2.phone}}
+                        {{student_form.phone}}
                     </div>
                 </div>
             </div>
@@ -172,14 +126,10 @@
                 {{form.docs_and_forms}}
             </div>
         </div>
-        <div class="form-group row" id="id_skills">
-            <div class="col-sm-12 mb-2">Capacidades</div>
-            <div class="col-sm-12 row">
-                {% for skill in form.skills %}
-                <div class="form-check col-sm-6 form-check-label-custom">
-                    {{skill}}
-                </div>
-                {% endfor %}
+        <div class="form-group row">
+            <label for="inputDocsAndForms" class="col-sm-12 col-form-label">Conicimientos requeridos*</label>
+            <div class="col-sm-12">
+                {{form.knowledge}}
             </div>
         </div>
         <div class="form-group row">
@@ -204,7 +154,7 @@ $(document).ready(function(){
     
     // Inicialización del estado del formulario
     inputShowHiddenBlockFunction($("#tutorCheck"), $("#id_tutor2-name"));
-    setStudentsTfg()
+    setStudentsTfm()
     cleanEmptySelects()
 
     // Añade la funcionalidades a un evento
@@ -214,42 +164,9 @@ $(document).ready(function(){
     });
 
     // Oculta y muestra los campos para que haya mas de un alumno
-    $("#id_is_team").click(() => {
-        setStudentsTfg()
-    });
-
     $("#alumnoCheck").click(() => {
-        setStudentsTfg()
+        setStudentsTfm()
     });
-
-    // Actualiza los itinerarios y menciones disponibles
-    $("#id_carrers").change( function() {
-        let carrer_id = $(this).val()
-        getListApi("/api/itineraries", carrer_id)
-            .then(response => {
-                updateSelect("id_itineraries", response, "Selecciona el itinerario")
-            }).catch (error => {
-                alert(error)
-            })
-        getListApi("/api/mentions", carrer_id)
-            .then(response => {
-                updateSelect("id_mentions", response, "Selecciona la mención")
-            }).catch( error => {
-                alert(error)
-            })
-    })
-
-    // Actualiza las Capacidades
-    $("#id_itineraries").change(function() {
-        let itineraries_id = $(this).val()
-        getListApi("/api/skills", itineraries_id)
-            .then(response =>{
-                updateListCheckboxes("id_skills", response)
-            })
-            .catch(error => {
-                alert(error)
-            })
-    })
 
     //Actualiza las areas
     $("#id_tutor2-departament").change(function() {
