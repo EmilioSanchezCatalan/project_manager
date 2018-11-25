@@ -1,5 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
+from django.utils.decorators import method_decorator
 from django.views.generic.base import RedirectView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
@@ -8,8 +10,9 @@ from django.urls import reverse, reverse_lazy
 from core.forms import CreateTutor2Form
 from login.models import Students
 from login.forms import CreateStudentForm
+from login.decorators import is_teacher, is_from_group, is_departaments
 from .models import Tfms
-from .forms import FilterPublicTfmForm, FilterTeacherTfmForm, CreateTfmForm
+from .forms import FilterPublicTfmForm, FilterTeacherTfmForm, CreateTfmForm, FilterDepartamentTfmForm
 
 class TfmListView(ListView):
     model = Tfms
@@ -44,6 +47,7 @@ class TfmDetailView(DetailView):
         context["back_url"] = "public_tfms_list"
         return context
 
+@method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfmListView(ListView):
     model = Tfms
     template_name = "tfms/teacher_tfms_list.html"
@@ -74,6 +78,7 @@ class TeacherTfmListView(ListView):
                 return True
         return False
 
+@method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfmDetailView(DetailView):
     model = Tfms
     teamplate_name = "tfms/tfms_detail"
@@ -89,6 +94,7 @@ class TeacherTfmDetailView(DetailView):
         context["back_url"] = "teacher_tfms_list"
         return context
 
+@method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfmCreateView(CreateView):
     model = Tfms
     form_class = CreateTfmForm
@@ -187,20 +193,34 @@ class TeacherTfmCreateView(CreateView):
         else:
             return None
 
-class TeacherTfmUpdateView(UpdateView):
+@method_decorator(user_passes_test(is_from_group), name="dispatch")
+class TfmUpdateView(UpdateView):
     model = Tfms
     form_class = CreateTfmForm
     template_name = "tfms/tfms_update_form.html"
-    success_url = reverse_lazy("teacher_tfms_list")
 
     def get_form_kwargs(self):
-        kwargs = super(TeacherTfmUpdateView, self).get_form_kwargs()
-        kwargs['user'] = self.request.user
+        kwargs = super(TfmUpdateView, self).get_form_kwargs()
+        if self.request.user.groups.filter(name="Teachers").exists():
+            kwargs['user'] = self.request.user
+        else:
+            kwargs['user'] = self.get_object().tutor1
         return kwargs
 
+    def get_success_url(self):
+        if self.request.user.groups.filter(name="Teachers").exists():
+            return reverse('teacher_tfms_list')
+        elif self.request.user.groups.filter(name="Departaments").exists():
+            return reverse('departament_tfms_list')
+        elif self.request.user.groups.filter(name="Centers").exists():
+            return reverse('public_tfms_list')
+
     def get_queryset(self):
-        queryset = super(TeacherTfmUpdateView, self).get_queryset()
-        queryset = queryset.filter(tutor1=self.request.user)
+        queryset = super(TfmUpdateView, self).get_queryset()
+        if self.request.user.groups.filter(name="Teachers").exists():
+            queryset = queryset.filter(tutor1=self.request.user)
+        if self.request.user.groups.filter(name="Departaments").exists():
+            queryset = queryset.filter(masters__departament=self.request.user.userinfos.departaments)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -210,7 +230,12 @@ class TeacherTfmUpdateView(UpdateView):
         context["student_form"] = CreateStudentForm(prefix="student", instance=student[0])
         context["number_students"] = tfm.students.all().count()
         context["tutor2_form"] = CreateTutor2Form(prefix="tutor2", instance=tfm.tutor2)
-        context["back_url"] = "teacher_tfms_list"
+        if self.request.user.groups.filter(name="Teachers").exists():
+            context["back_url"] = "teacher_tfms_list"
+        elif self.request.user.groups.filter(name="Departaments").exists():
+            context["back_url"] = "departament_tfms_list"
+        elif self.request.user.groups.filter(name="Centers").exists():
+            context["back_url"] = "departament_tfgs_list"
         return context
     
     def post(self, request, *args, **kwargs):
@@ -272,7 +297,6 @@ class TeacherTfmUpdateView(UpdateView):
 
     def __createtfm(self, form, tutor2=None):
         self.object = form.save(commit=False)
-        self.object.tutor1 = self.request.user
         self.object.tutor2 = tutor2
         self.object.save()
 
@@ -305,12 +329,85 @@ class TeacherTfmUpdateView(UpdateView):
         else:
             return None
 
-
+@method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfmDelete(RedirectView):
     url = "teacher_tfms_list"
     pattern_name = 'delete_Tfm'
     
     def get_redirect_url(self, *args, **kwargs):
         Tfms.objects.filter(id=kwargs['id'], tutor1=self.request.user).delete()
+        url = reverse(super().get_redirect_url(*args, **kwargs))
+        return url
+
+@method_decorator(user_passes_test(is_departaments), name="dispatch")
+class DepartamentTfmListView(ListView):
+    model = Tfms
+    template_name = "tfms/departament_tfms_list.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(masters__departament=self.request.user.userinfos.departaments, departament_validation=None)
+        name = self.request.GET.get("search_text", "")
+        master = self.request.GET.get("formation_project", "")
+        area = self.request.GET.get("area", "")
+        tutor = self.request.GET.get("tutor", "")
+        if name:
+            queryset = queryset.filter(title__contains=name)
+        if master:
+            queryset = queryset.filter(masters_id=master)
+        if area:
+            queryset = queryset.filter(tutor1__userinfos__areas_id=area)
+        if tutor:
+            queryset = queryset.filter(tutor1_id=tutor)
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Tfms"
+        context['is_filtering'] = self.__check_filters_is_applied(self.request.GET.dict())
+        context['form_filter'] = FilterDepartamentTfmForm(initial=self.request.GET.dict(), user=self.request.user)
+        context['nbar'] = "tfm"
+        return context
+
+    @staticmethod
+    def __check_filters_is_applied(params_dict):
+        for param_name in params_dict.keys():
+            if param_name != "search_text" and params_dict[param_name] != "":
+                return True
+        return False
+
+@method_decorator(user_passes_test(is_departaments), name="dispatch")
+class DepartamentTfmDetailView(DetailView):
+    model = Tfms
+    teamplate_name = "tfms/tfms_detail"
+
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(
+            masters__departament=self.request.user.userinfos.departaments,
+            departament_validation=None
+        )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["students"] = Students.objects.filter(tfgs_id=context['tfms'].id)
+        context["back_url"] = "departament_tfms_list"
+        context["can_validate"] = True
+        context["validation_url"] = "departament_tfms_validation"
+        return context
+
+@method_decorator(user_passes_test(is_departaments), name="dispatch")
+class DepartamentValidation(RedirectView):
+    url = "departament_tfms_list"
+    pattern_name = 'validation'
+    
+    def get_redirect_url(self, *args, **kwargs):
+        tfm = Tfms.objects.get(
+            id=kwargs['id'],
+            masters__departament=self.request.user.userinfos.departaments,
+            departament_validation=None
+        )
+        tfm.departament_validation = True if kwargs['validate'] == 1 else False
+        tfm.save()
         url = reverse(super().get_redirect_url(*args, **kwargs))
         return url

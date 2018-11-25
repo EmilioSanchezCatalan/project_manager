@@ -254,7 +254,12 @@ class TfgUpdateView(UpdateView):
         context["student_form2"] = CreateStudentForm(prefix="student2", instance=list_students[1])
         context["number_students"] = tfg.students.all().count()
         context["tutor2_form"] = CreateTutor2Form(prefix="tutor2", instance=tfg.tutor2)
-        context["back_url"] = "departament_tfgs_list"
+        if self.request.user.groups.filter(name="Teachers").exists():
+            context["back_url"] = "teacher_tfgs_list"
+        elif self.request.user.groups.filter(name="Departaments").exists():
+            context["back_url"] = "departament_tfgs_list"
+        elif self.request.user.groups.filter(name="Centers").exists():
+            context["back_url"] = "departament_tfgs_list"
         return context
     
     def post(self, request, *args, **kwargs):

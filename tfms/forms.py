@@ -1,5 +1,6 @@
 from django import forms
-from core.models import Masters
+from django.contrib.auth.models import User
+from core.models import Masters, Areas
 from .models import Tfms
 
 class FilterPublicTfmForm(forms.Form):
@@ -31,6 +32,41 @@ class FilterTeacherTfmForm(forms.Form):
         self.user = kwargs.pop("user")
         super(FilterTeacherTfmForm, self).__init__(*args, **kwargs)
         self.fields["formation_project"].queryset = self.user.userinfos.departaments.masters.all()
+
+class FilterDepartamentTfmForm(forms.Form):
+    search_text = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Título'}
+    ))
+    formation_project = forms.ModelChoiceField(
+        queryset=Masters.objects.all(),
+        empty_label="Masters",
+        required=False, 
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    area = forms.ModelChoiceField(
+        queryset=Areas.objects.all(),
+        empty_label="Area de conocimiento",
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    tutor = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        empty_label="Tutor",
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super(FilterDepartamentTfmForm, self).__init__(*args, **kwargs)
+        self.fields["formation_project"].queryset = self.user.userinfos.departaments.master.all()
+        self.fields["area"].queryset = self.user.userinfos.departaments.areas.all()
+        self.fields["tutor"].queryset = User.objects.filter(userinfos__departaments = self.user.userinfos.departaments, groups__name="Teachers")
 
 
 class CreateTfmForm(forms.ModelForm):
@@ -95,6 +131,7 @@ class CreateTfmForm(forms.ModelForm):
                     'rows': 5
                 }
             ),
+            'tutor1': forms.HiddenInput()
         }
 
     def __init__(self, *args, **kwargs):

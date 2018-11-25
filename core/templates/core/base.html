@@ -41,7 +41,11 @@
             {% endif %}
           </li>
           <li class="nav-item {% if nbar == 'tfm' %}active{% endif %}">
+            {% if user|has_group:"Teachers"%}
             <a class="nav-link" href="{% url 'teacher_tfms_list' %}">TFM</a>
+            {% elif user|has_group:"Departaments"%}
+            <a class="nav-link" href="{% url 'departament_tfms_list' %}">TFM</a>
+            {% endif %}
           </li>
           <li class="nav-item" id="logoutMenu">
             <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a>
