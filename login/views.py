@@ -15,7 +15,7 @@ class LoginPageView(LoginView):
         if self.request.user.groups.filter(id=1).exists():
             return reverse('teacher_tfgs_list')
         elif self.request.user.groups.filter(id=2).exists():
-            return reverse('public_tfgs_list')
+            return reverse('departament_tfgs_list')
         elif self.request.user.groups.filter(id=3).exists():
             return reverse('public_tfgs_list')
         else: 

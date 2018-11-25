@@ -1,5 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
+from django.utils.decorators import method_decorator
 from django.views.generic.base import RedirectView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -7,8 +9,9 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse, reverse_lazy
 from login.forms import CreateStudentForm
 from login.models import Students
+from login.decorators import is_teacher, is_from_group, is_departaments
 from core.forms import CreateTutor2Form
-from .forms import FilterPublicTfgForm, FilterTeacherTfgForm, CreateTfgForm
+from .forms import FilterPublicTfgForm, FilterTeacherTfgForm, CreateTfgForm, FilterDepartamentTfgForm
 from .models import Tfgs
 
 
@@ -45,6 +48,7 @@ class TfgDetailView(DetailView):
         context["back_url"] = "public_tfgs_list"
         return context
 
+@method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfgListView(ListView):
     model = Tfgs
     template_name = "tfgs/teacher_tfgs_list.html"
@@ -75,6 +79,7 @@ class TeacherTfgListView(ListView):
                 return True
         return False
 
+@method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfgDetailView(DetailView):
     model = Tfgs
     teamplate_name = "tfgs/tfgs_detail"
@@ -90,6 +95,7 @@ class TeacherTfgDetailView(DetailView):
         context["back_url"] = "teacher_tfgs_list"
         return context
 
+@method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfgCreateView(CreateView):
     model = Tfgs
     form_class = CreateTfgForm
@@ -209,6 +215,7 @@ class TeacherTfgCreateView(CreateView):
         else:
             return None
 
+@method_decorator(user_passes_test(is_from_group), name="dispatch")
 class TeacherTfgUpdateView(UpdateView):
     model = Tfgs
     form_class = CreateTfgForm
@@ -354,6 +361,7 @@ class TeacherTfgUpdateView(UpdateView):
         else:
             return None
 
+@method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfgDeleteView(RedirectView):
     url = "teacher_tfgs_list"
     pattern_name = 'delete_Tfm'
@@ -362,3 +370,40 @@ class TeacherTfgDeleteView(RedirectView):
         Tfgs.objects.filter(id=kwargs['id'], tutor1=self.request.user).delete()
         url = reverse(super().get_redirect_url(*args, **kwargs))
         return url
+    
+@method_decorator(user_passes_test(is_departaments), name="dispatch")
+class DepartamentTfgListView(ListView):
+    model = Tfgs
+    template_name = "tfgs/departament_tfgs_list.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(carrers__departament=self.request.user.userinfos.departaments)
+        name = self.request.GET.get("search_text", "")
+        carrer = self.request.GET.get("formation_project", "")
+        area = self.request.GET.get("area", "")
+        tutor = self.request.GET.get("tutor", "")
+        if name:
+            queryset = queryset.filter(title__contains=name)
+        if carrer:
+            queryset = queryset.filter(carrers_id=carrer)
+        if area:
+            queryset = queryset.filter(tutor1__userinfos__areas_id=area)
+        if tutor:
+            queryset = queryset.filter(tutor1_id=tutor)
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Tfgs"
+        context['is_filtering'] = self.__check_filters_is_applied(self.request.GET.dict())
+        context['form_filter'] = FilterDepartamentTfgForm(initial=self.request.GET.dict(), user=self.request.user)
+        context['nbar'] = "tfg"
+        return context
+
+    @staticmethod
+    def __check_filters_is_applied(params_dict):
+        for param_name in params_dict.keys():
+            if param_name != "search_text" and params_dict[param_name] != "":
+                return True
+        return False

@@ -250,6 +250,7 @@ a.btn.btn-success, a.btn.btn-success:hover, a.btn.btn-danger, a.btn.btn-danger:h
   .fb-60 { flex-basis: 60% !important; }
 
   @media (max-width: 991px) {
+    .fb-md-100 { flex-basis: 100% }
     .mr-md-100 { margin-right: 100% !important; }
     .mr-md-auto { margin-right: auto !important; }
   }

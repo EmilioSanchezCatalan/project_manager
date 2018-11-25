@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <hr {% if not is_filtering %}style="display:none"{% endif %}>
+    <hr class="mt-0" {% if not is_filtering %}style="display:none"{% endif %}>
     <div class="form-row" id="extends-filters" {% if not is_filtering %}style="display: none"{% endif %}>
       <div class="form-group">
         {{form_filter.formation_project}}

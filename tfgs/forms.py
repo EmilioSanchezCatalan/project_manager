@@ -1,5 +1,6 @@
 from django import forms
-from core.models import Carrers, Departaments, Skills
+from django.contrib.auth.models import User, Group
+from core.models import Carrers, Departaments, Skills, Areas
 from .models import Tfgs
 from login.models import Userinfos
 
@@ -33,6 +34,40 @@ class FilterTeacherTfgForm(forms.Form):
         super(FilterTeacherTfgForm, self).__init__(*args, **kwargs)
         self.fields["formation_project"].queryset = self.user.userinfos.departaments.carrers.all()
 
+class FilterDepartamentTfgForm(forms.Form):
+    search_text = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Título'}
+    ))
+    formation_project = forms.ModelChoiceField(
+        queryset=Carrers.objects.all(),
+        empty_label="Titulación",
+        required=False, 
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    area = forms.ModelChoiceField(
+        queryset=Areas.objects.all(),
+        empty_label="Area de conocimiento",
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    tutor = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        empty_label="Tutor",
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super(FilterDepartamentTfgForm, self).__init__(*args, **kwargs)
+        self.fields["formation_project"].queryset = self.user.userinfos.departaments.carrer.all()
+        self.fields["area"].queryset = self.user.userinfos.departaments.areas.all()
+        self.fields["tutor"].queryset = User.objects.filter(userinfos__departaments = self.user.userinfos.departaments, groups__name="Teachers")
 
 class CreateTfgForm(forms.ModelForm):
 

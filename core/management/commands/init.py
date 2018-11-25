@@ -62,6 +62,7 @@ class Command(BaseCommand):
                 "Telecomunicaciones",
                 "Electrónica"
             ],
+            "departament": "Telecomunicaciones"
         },
     ]
 
@@ -74,6 +75,7 @@ class Command(BaseCommand):
                 "Electrónica",
                 "Informatica",
             ],
+            "departament": "Telecomunicaciones",
             "itineraries": {
                 "Sistemas de telecomunicación": [
                     {
@@ -162,6 +164,7 @@ class Command(BaseCommand):
                 "Electrónica",
                 "Informatica",
             ],
+            "departament": "Telecomunicaciones",
             "itineraries": {
                 "General": [
                     {
@@ -300,7 +303,8 @@ class Command(BaseCommand):
             master_object = Masters.objects.create(
                 id=masters_id,
                 name=master["name"],
-                centers_id=Centers.objects.get(name=master["center"]).id
+                centers_id=Centers.objects.get(name=master["center"]).id,
+                departament_id=Departaments.objects.get(name=master["departament"]).id
             )
             for masters_has_departament in master["departaments"]:
                 master_object.departaments.add(
@@ -315,7 +319,8 @@ class Command(BaseCommand):
             carrer_object = Carrers.objects.create(
                 id=carrers_id,
                 name=carrer["name"],
-                centers_id=Centers.objects.get(name=carrer["center"]).id
+                centers_id=Centers.objects.get(name=carrer["center"]).id,
+                departament_id=Departaments.objects.get(name=carrer["departament"]).id
             )
             for carrers_has_departament in carrer["departaments"]:
                 carrer_object.departaments.add(

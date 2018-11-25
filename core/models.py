@@ -25,7 +25,7 @@ class Areas(models.Model):
 
     # Campos del modelo
     name = models.CharField(max_length=150)
-    departaments = models.ForeignKey(Departaments, on_delete=models.CASCADE)
+    departaments = models.ForeignKey(Departaments, on_delete=models.CASCADE, related_name="areas")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
@@ -38,6 +38,7 @@ class Masters(models.Model):
     name = models.CharField(max_length=150)
     centers = models.ForeignKey(Centers, on_delete=models.CASCADE)
     departaments = models.ManyToManyField(Departaments, related_name="masters")
+    departament = models.ForeignKey(Departaments, on_delete=models.CASCADE,  related_name="master")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
@@ -50,6 +51,7 @@ class Carrers(models.Model):
     name = models.CharField(max_length=150)
     centers = models.ForeignKey(Centers, on_delete=models.CASCADE)
     departaments = models.ManyToManyField(Departaments, related_name="carrers")
+    departament = models.ForeignKey(Departaments, on_delete=models.CASCADE,  related_name="carrer")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 

@@ -22,6 +22,7 @@
   </head>
   <body>
     <!-- Navbar -->
+    {% load login_extras %}
     {% if user.is_authenticated %}
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
       <a class="navbar-brand" href="{% url 'home' %}">
@@ -33,7 +34,11 @@
       <div class="collapse navbar-collapse" id="navbarToggler">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item {% if nbar == 'tfg' %}active{% endif %}">
+            {% if user|has_group:"Teachers"%}
             <a class="nav-link" href="{% url 'teacher_tfgs_list' %}">TFG</a>
+            {% elif user|has_group:"Departaments"%}
+            <a class="nav-link" href="{% url 'departament_tfgs_list' %}">TFG</a>
+            {% endif %}
           </li>
           <li class="nav-item {% if nbar == 'tfm' %}active{% endif %}">
             <a class="nav-link" href="{% url 'teacher_tfms_list' %}">TFM</a>
