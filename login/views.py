@@ -12,11 +12,11 @@ class LoginPageView(LoginView):
     def get_redirect_url(self):
         if self.request.user.is_staff:
             return reverse('admin:index')
-        if self.request.user.groups.filter(id=1).exists():
+        if self.request.user.groups.filter(name="Teachers").exists():
             return reverse('teacher_tfgs_list')
-        elif self.request.user.groups.filter(id=2).exists():
+        elif self.request.user.groups.filter(name="Departaments").exists():
             return reverse('departament_tfgs_list')
-        elif self.request.user.groups.filter(id=3).exists():
+        elif self.request.user.groups.filter(name="Centers").exists():
             return reverse('public_tfgs_list')
         else: 
             return reverse('home')

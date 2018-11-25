@@ -216,21 +216,34 @@ class TeacherTfgCreateView(CreateView):
             return None
 
 @method_decorator(user_passes_test(is_from_group), name="dispatch")
-class TeacherTfgUpdateView(UpdateView):
+class TfgUpdateView(UpdateView):
     model = Tfgs
     form_class = CreateTfgForm
     template_name = "tfgs/tfgs_update_form.html"
-    success_url = reverse_lazy("teacher_tfgs_list")
 
     def get_form_kwargs(self):
-        kwargs = super(TeacherTfgUpdateView, self).get_form_kwargs()
-        kwargs['user'] = self.request.user
+        kwargs = super(TfgUpdateView, self).get_form_kwargs()
+        if self.request.user.groups.filter(name="Teachers").exists():
+            kwargs['user'] = self.request.user
+        else:
+            kwargs['user'] = self.get_object().tutor1
         kwargs['tfg'] = self.get_object()
         return kwargs
 
+    def get_success_url(self):
+        if self.request.user.groups.filter(name="Teachers").exists():
+            return reverse('teacher_tfgs_list')
+        elif self.request.user.groups.filter(name="Departaments").exists():
+            return reverse('departament_tfgs_list')
+        elif self.request.user.groups.filter(name="Centers").exists():
+            return reverse('public_tfgs_list')
+
     def get_queryset(self):
-        queryset = super(TeacherTfgUpdateView, self).get_queryset()
-        queryset = queryset.filter(tutor1=self.request.user)
+        queryset = super(TfgUpdateView, self).get_queryset()
+        if self.request.user.groups.filter(name="Teachers").exists():
+            queryset = queryset.filter(tutor1=self.request.user)
+        if self.request.user.groups.filter(name="Departaments").exists():
+            queryset = queryset.filter(carrers__departament=self.request.user.userinfos.departaments)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -241,7 +254,7 @@ class TeacherTfgUpdateView(UpdateView):
         context["student_form2"] = CreateStudentForm(prefix="student2", instance=list_students[1])
         context["number_students"] = tfg.students.all().count()
         context["tutor2_form"] = CreateTutor2Form(prefix="tutor2", instance=tfg.tutor2)
-        context["back_url"] = "teacher_tfgs_list"
+        context["back_url"] = "departament_tfgs_list"
         return context
     
     def post(self, request, *args, **kwargs):
@@ -324,7 +337,6 @@ class TeacherTfgUpdateView(UpdateView):
 
     def __createTfg(self, form, tutor2=None):
         self.object = form.save(commit=False)
-        self.object.tutor1 = self.request.user
         self.object.tutor2 = tutor2
         self.object.save()
         form.save_m2m()
@@ -378,7 +390,7 @@ class DepartamentTfgListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(carrers__departament=self.request.user.userinfos.departaments)
+        queryset = queryset.filter(carrers__departament=self.request.user.userinfos.departaments, departament_validation=None)
         name = self.request.GET.get("search_text", "")
         carrer = self.request.GET.get("formation_project", "")
         area = self.request.GET.get("area", "")
@@ -407,3 +419,40 @@ class DepartamentTfgListView(ListView):
             if param_name != "search_text" and params_dict[param_name] != "":
                 return True
         return False
+
+@method_decorator(user_passes_test(is_departaments), name="dispatch")
+class DepartamentTfgDetailView(DetailView):
+    model = Tfgs
+    teamplate_name = "tfgs/tfgs_detail"
+
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(
+            carrers__departament=self.request.user.userinfos.departaments,
+            departament_validation=None
+        )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["students"] = Students.objects.filter(tfgs_id=context['tfgs'].id)
+        context["back_url"] = "departament_tfgs_list"
+        context["can_validate"] = True
+        context["validation_url"] = "departament_tfgs_validation"
+        return context
+
+@method_decorator(user_passes_test(is_departaments), name="dispatch")
+class DepartamentValidation(RedirectView):
+    url = "departament_tfgs_list"
+    pattern_name = 'validation'
+    
+    def get_redirect_url(self, *args, **kwargs):
+        tfg = Tfgs.objects.get(
+            id=kwargs['id'],
+            carrers__departament=self.request.user.userinfos.departaments,
+            departament_validation=None
+        )
+        tfg.departament_validation = True if kwargs['validate'] == 1 else False
+        tfg.save()
+        url = reverse(super().get_redirect_url(*args, **kwargs))
+        return url
+    

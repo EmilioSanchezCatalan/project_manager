@@ -129,8 +129,8 @@ class CreateTfgForm(forms.ModelForm):
             ),
             'skills': forms.CheckboxSelectMultiple(
                 attrs={'class': 'form-check-input'}
-            )
-
+            ),
+            'tutor1': forms.HiddenInput()
         }
 
     def __init__(self, *args, **kwargs):
@@ -138,7 +138,7 @@ class CreateTfgForm(forms.ModelForm):
         tfg = kwargs.pop('tfg', None)
         self.user = user
         super(CreateTfgForm, self).__init__(*args, **kwargs)
-        self.fields['tutor1'].required = False
+        self.fields["tutor1"].required = False
         self.__customCarrer(user)
         self.__customItinerarie(tfg)
         self.__customMention()

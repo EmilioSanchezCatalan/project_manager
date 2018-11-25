@@ -12,7 +12,7 @@ def is_from_group(user):
     return user.groups.filter(
         name__in=[
             'Teachers',
-            'Departaments'
+            'Departaments',
             'Centers'
         ]
     )
