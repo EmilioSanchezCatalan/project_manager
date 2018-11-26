@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from core.models import Masters, Areas
+from core.models import Masters, Areas, Departaments
 from .models import Tfms
 
 class FilterPublicTfmForm(forms.Form):
@@ -68,6 +68,39 @@ class FilterDepartamentTfmForm(forms.Form):
         self.fields["area"].queryset = self.user.userinfos.departaments.areas.all()
         self.fields["tutor"].queryset = User.objects.filter(userinfos__departaments = self.user.userinfos.departaments, groups__name="Teachers")
 
+class FilterCenterTfmForm(forms.Form):
+    search_text = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Título'}
+    ))
+    formation_project = forms.ModelChoiceField(
+        queryset=Masters.objects.all(),
+        empty_label="Master",
+        required=False, 
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    departament = forms.ModelChoiceField(
+        queryset=Departaments.objects.all(),
+        empty_label="Departamento",
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    tutor = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        empty_label="Tutor",
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super(FilterCenterTfmForm, self).__init__(*args, **kwargs)
+        self.fields["formation_project"].queryset = self.user.userinfos.centers.masters.all()
+        self.fields["tutor"].queryset = User.objects.filter(groups__name="Teachers")
 
 class CreateTfmForm(forms.ModelForm):
 

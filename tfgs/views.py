@@ -9,9 +9,9 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse, reverse_lazy
 from login.forms import CreateStudentForm
 from login.models import Students
-from login.decorators import is_teacher, is_from_group, is_departaments
+from login.decorators import is_teacher, is_from_group, is_departaments, is_center
 from core.forms import CreateTutor2Form
-from .forms import FilterPublicTfgForm, FilterTeacherTfgForm, CreateTfgForm, FilterDepartamentTfgForm
+from .forms import FilterPublicTfgForm, FilterTeacherTfgForm, CreateTfgForm, FilterDepartamentTfgForm, FilterCenterTfgForm
 from .models import Tfgs
 
 
@@ -20,8 +20,7 @@ class TfgListView(ListView):
     template_name = "tfgs/public_tfgs_list.html"
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        # filtrar solo por aquellos que este validados completamente
+        queryset = super().get_queryset().filter(departament_validation=True, center_validation=True)
         name = self.request.GET.get("name_project", "")
         carrer = self.request.GET.get("formation_project", "")
         if name:
@@ -40,7 +39,9 @@ class TfgDetailView(DetailView):
     model = Tfgs
     teamplate_name = "tfgs/tfgs_detail"
     
-    # filtrar solo por aquellos que este validados completamente
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(departament_validation=True, center_validation=True)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -236,14 +237,23 @@ class TfgUpdateView(UpdateView):
         elif self.request.user.groups.filter(name="Departaments").exists():
             return reverse('departament_tfgs_list')
         elif self.request.user.groups.filter(name="Centers").exists():
-            return reverse('public_tfgs_list')
+            return reverse('center_tfgs_list')
 
     def get_queryset(self):
         queryset = super(TfgUpdateView, self).get_queryset()
         if self.request.user.groups.filter(name="Teachers").exists():
             queryset = queryset.filter(tutor1=self.request.user)
         if self.request.user.groups.filter(name="Departaments").exists():
-            queryset = queryset.filter(carrers__departament=self.request.user.userinfos.departaments)
+            queryset = queryset.filter(
+                carrers__departament=self.request.user.userinfos.departaments,
+                departament_validation=None
+            )
+        if self.request.user.groups.filter(name="Centers").exists():
+            queryset = queryset.filter(
+                carrers__centers=self.request.user.userinfos.centers,
+                departament_validation=True,
+                center_validation=None
+            )
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -259,7 +269,7 @@ class TfgUpdateView(UpdateView):
         elif self.request.user.groups.filter(name="Departaments").exists():
             context["back_url"] = "departament_tfgs_list"
         elif self.request.user.groups.filter(name="Centers").exists():
-            context["back_url"] = "departament_tfgs_list"
+            context["back_url"] = "center_tfgs_list"
         return context
     
     def post(self, request, *args, **kwargs):
@@ -460,4 +470,78 @@ class DepartamentValidation(RedirectView):
         tfg.save()
         url = reverse(super().get_redirect_url(*args, **kwargs))
         return url
+
+@method_decorator(user_passes_test(is_center), name="dispatch")
+class CenterTfgListView(ListView):
+    model = Tfgs
+    template_name = "tfgs/center_tfgs_list.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(carrers__centers=self.request.user.userinfos.centers, departament_validation=True, center_validation=None)
+        name = self.request.GET.get("search_text", "")
+        carrer = self.request.GET.get("formation_project", "")
+        departament = self.request.GET.get("departament", "")
+        tutor = self.request.GET.get("tutor", "")
+        if name:
+            queryset = queryset.filter(title__contains=name)
+        if carrer:
+            queryset = queryset.filter(carrers_id=carrer)
+        if departament:
+            queryset = queryset.filter(carrers__departament_id=departament)
+        if tutor:
+            queryset = queryset.filter(tutor1_id=tutor)
+        return queryset
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Tfgs"
+        context['is_filtering'] = self.__check_filters_is_applied(self.request.GET.dict())
+        context['form_filter'] = FilterCenterTfgForm(initial=self.request.GET.dict(), user=self.request.user)
+        context['nbar'] = "tfg"
+        return context
+    
+    @staticmethod
+    def __check_filters_is_applied(params_dict):
+        for param_name in params_dict.keys():
+            if param_name != "search_text" and params_dict[param_name] != "":
+                return True
+        return False
+
+@method_decorator(user_passes_test(is_center), name="dispatch")
+class CenterTfgDetailView(DetailView):
+    model = Tfgs
+    teamplate_name = "tfgs/tfgs_detail"
+
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(
+            carrers__centers=self.request.user.userinfos.centers,
+            departament_validation=True,
+            center_validation=None
+        )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["students"] = Students.objects.filter(tfgs_id=context['tfgs'].id)
+        context["back_url"] = "center_tfgs_list"
+        context["can_validate"] = True
+        context["validation_url"] = "center_tfgs_validation"
+        return context
+
+@method_decorator(user_passes_test(is_center), name="dispatch")
+class CenterValidation(RedirectView):
+    url = "center_tfgs_list"
+    pattern_name = 'validation'
+    
+    def get_redirect_url(self, *args, **kwargs):
+        tfg = Tfgs.objects.get(
+            id=kwargs['id'],
+            carrers__centers=self.request.user.userinfos.centers,
+            departament_validation=True,
+            center_validation=None
+        )
+        tfg.center_validation = True if kwargs['validate'] == 1 else False
+        tfg.save()
+        url = reverse(super().get_redirect_url(*args, **kwargs))
+        return url

@@ -36,7 +36,7 @@ class Masters(models.Model):
 
     # Campos del modelo
     name = models.CharField(max_length=150)
-    centers = models.ForeignKey(Centers, on_delete=models.CASCADE)
+    centers = models.ForeignKey(Centers, on_delete=models.CASCADE, related_name="masters")
     departaments = models.ManyToManyField(Departaments, related_name="masters")
     departament = models.ForeignKey(Departaments, on_delete=models.CASCADE,  related_name="master")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
@@ -49,7 +49,7 @@ class Carrers(models.Model):
 
     # Campos del modelo
     name = models.CharField(max_length=150)
-    centers = models.ForeignKey(Centers, on_delete=models.CASCADE)
+    centers = models.ForeignKey(Centers, on_delete=models.CASCADE, related_name="carrers")
     departaments = models.ManyToManyField(Departaments, related_name="carrers")
     departament = models.ForeignKey(Departaments, on_delete=models.CASCADE,  related_name="carrer")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")

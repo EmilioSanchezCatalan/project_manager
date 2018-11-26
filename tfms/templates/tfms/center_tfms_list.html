@@ -1,0 +1,85 @@
+{% extends "core/base.html" %}
+
+{% load tfms_extras%}
+{% block content %}
+
+<section class="container border bg-white p-3 p-sm-5 mt-0 mt-sm-4">
+  <form action="">
+    <div class="form-row justify-content-between">
+      <div class="form-group fb-sm-100 mr-auto">
+        <button type="submit" for="titleProject" class="btn btn-light btn-block font-weight-bold">
+          <i class="fas fa-search mr-2" style="font-size: 15px;"></i>Buscador
+        </button>
+      </div>
+      <div class="form-group mx-2 fb-60 fb-sm-85 fb-xs-80">
+        {{form_filter.search_text}}
+      </div>
+      <div class="form-group">
+        <div class="btn {% if is_filtering %}btn-warning{% else %}btn-light{% endif %} font-weight-bold" id="btn-extends-filter">
+          <i class="fas fa-angle-down" {% if is_filtering %}style="display: none"{% endif %}></i>
+          <i class="fas fa-angle-up" {% if not is_filtering %}style="display: none"{% endif %}></i>
+        </div>
+      </div>
+    </div>
+    <hr class="mt-0" {% if not is_filtering %}style="display:none"{% endif %}>
+    <div class="form-row" id="extends-filters" {% if not is_filtering %}style="display: none"{% endif %}>
+      <div class="form-group mr-lg-1 mr-auto fb-md-100">
+        {{form_filter.departament}}
+      </div>
+      <div class="form-group mr-lg-1 mr-auto fb-md-100">
+        {{form_filter.formation_project}}
+      </div>
+      <div class="form-group fb-md-100">
+        {{form_filter.tutor}}
+      </div>
+    </div>
+  </form>
+  <article style="overflow-x: scroll">
+    <table class="table table-crud border m-0">
+      <thead>
+        <tr class="thead-light">
+          <th>Título</th>
+          <th>Titulación</th>
+          <th>Tutor principal</th>
+          <th>Departamento</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tfm in tfms_list %}
+        <tr>
+          <td>{{tfm.title}}</td>
+          <td>{{tfm.masters.name}}</td>
+          <td>{{tfm.tutor1.first_name}} {{tfm.tutor1.last_name}}</td>
+          <td>{{tfm.masters.departament.name}}</td>
+          <td>
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <a class="btn btn-light" href="{% url 'center_tfms_detail' tfm.id %}">
+                <i class="far fa-eye"></i>
+              </a>
+              <a class="btn btn-light" href="{% url 'tfms_update' tfm.id %}">
+                <i class="far fa-edit"></i>
+              </a>
+              <a class="btn btn-light" href="{% url 'center_tfms_validation' id=tfm.id validate=1 %}">
+                <i class="fas fa-check text-success"></i>
+              </a>
+              <a class="btn btn-light" href="{% url 'center_tfms_validation' id=tfm.id validate=0 %}">
+                <i class="fas fa-times text-danger"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  $("#btn-extends-filter").click(function() {
+    changeExtendsFiltersState($(this), $("#extends-filters"))
+  });
+</script>
+{% endblock scripts %}

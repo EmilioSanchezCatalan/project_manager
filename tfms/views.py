@@ -10,17 +10,16 @@ from django.urls import reverse, reverse_lazy
 from core.forms import CreateTutor2Form
 from login.models import Students
 from login.forms import CreateStudentForm
-from login.decorators import is_teacher, is_from_group, is_departaments
+from login.decorators import is_teacher, is_from_group, is_departaments, is_center
 from .models import Tfms
-from .forms import FilterPublicTfmForm, FilterTeacherTfmForm, CreateTfmForm, FilterDepartamentTfmForm
+from .forms import FilterPublicTfmForm, FilterTeacherTfmForm, CreateTfmForm, FilterDepartamentTfmForm, FilterCenterTfmForm
 
 class TfmListView(ListView):
     model = Tfms
     template_name = "tfms/public_tfms_list.html"
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        # filtrar solo por aquellos que este validados completamente
+        queryset = super().get_queryset().filter(departament_validation=True, center_validation=True)
         name = self.request.GET.get("name_project", "")
         master = self.request.GET.get("formation_project", "")
         if name:
@@ -213,14 +212,23 @@ class TfmUpdateView(UpdateView):
         elif self.request.user.groups.filter(name="Departaments").exists():
             return reverse('departament_tfms_list')
         elif self.request.user.groups.filter(name="Centers").exists():
-            return reverse('public_tfms_list')
+            return reverse('center_tfms_list')
 
     def get_queryset(self):
         queryset = super(TfmUpdateView, self).get_queryset()
         if self.request.user.groups.filter(name="Teachers").exists():
             queryset = queryset.filter(tutor1=self.request.user)
-        if self.request.user.groups.filter(name="Departaments").exists():
-            queryset = queryset.filter(masters__departament=self.request.user.userinfos.departaments)
+        elif self.request.user.groups.filter(name="Departaments").exists():
+            queryset = queryset.filter(
+                masters__departament=self.request.user.userinfos.departaments,
+                departament_validation=None
+            )
+        elif self.request.user.groups.filter(name="Centers").exists():
+            queryset = queryset.filter(
+                masters__centers=self.request.user.userinfos.centers,
+                departament_validation=True,
+                center_validation=None
+            )
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -235,7 +243,7 @@ class TfmUpdateView(UpdateView):
         elif self.request.user.groups.filter(name="Departaments").exists():
             context["back_url"] = "departament_tfms_list"
         elif self.request.user.groups.filter(name="Centers").exists():
-            context["back_url"] = "departament_tfgs_list"
+            context["back_url"] = "center_tfms_list"
         return context
     
     def post(self, request, *args, **kwargs):
@@ -390,7 +398,7 @@ class DepartamentTfmDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["students"] = Students.objects.filter(tfgs_id=context['tfms'].id)
+        context["students"] = Students.objects.filter(tfms_id=context['tfms'].id)
         context["back_url"] = "departament_tfms_list"
         context["can_validate"] = True
         context["validation_url"] = "departament_tfms_validation"
@@ -408,6 +416,85 @@ class DepartamentValidation(RedirectView):
             departament_validation=None
         )
         tfm.departament_validation = True if kwargs['validate'] == 1 else False
+        tfm.save()
+        url = reverse(super().get_redirect_url(*args, **kwargs))
+        return url
+
+@method_decorator(user_passes_test(is_center), name="dispatch")
+class CenterTfmListView(ListView):
+    model = Tfms
+    template_name = "tfms/center_tfms_list.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(
+            masters__centers=self.request.user.userinfos.centers,
+            departament_validation=True,
+            center_validation=None
+        )
+        name = self.request.GET.get("search_text", "")
+        master = self.request.GET.get("formation_project", "")
+        departament = self.request.GET.get("departament", "")
+        tutor = self.request.GET.get("tutor", "")
+        if name:
+            queryset = queryset.filter(title__contains=name)
+        if master:
+            queryset = queryset.filter(masters_id=master)
+        if departament:
+            queryset = queryset.filter(masters__departament_id=departament)
+        if tutor:
+            queryset = queryset.filter(tutor1_id=tutor)
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Tfms"
+        context['is_filtering'] = self.__check_filters_is_applied(self.request.GET.dict())
+        context['form_filter'] = FilterCenterTfmForm(initial=self.request.GET.dict(), user=self.request.user)
+        context['nbar'] = "tfm"
+        return context
+    
+    @staticmethod
+    def __check_filters_is_applied(params_dict):
+        for param_name in params_dict.keys():
+            if param_name != "search_text" and params_dict[param_name] != "":
+                return True
+        return False
+
+@method_decorator(user_passes_test(is_center), name="dispatch")
+class CenterTfmDetailView(DetailView):
+    model = Tfms
+    teamplate_name = "tfms/tfms_detail"
+
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(
+            masters__centers=self.request.user.userinfos.centers,
+            departament_validation=True,
+            center_validation=None
+        )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["students"] = Students.objects.filter(tfms_id=context['tfms'].id)
+        context["back_url"] = "center_tfms_list"
+        context["can_validate"] = True
+        context["validation_url"] = "center_tfms_validation"
+        return context
+
+@method_decorator(user_passes_test(is_center), name="dispatch")
+class CenterValidation(RedirectView):
+    url = "center_tfms_list"
+    pattern_name = 'validation'
+    
+    def get_redirect_url(self, *args, **kwargs):
+        tfm = Tfms.objects.get(
+            id=kwargs['id'],
+            masters__centers=self.request.user.userinfos.centers,
+            departament_validation=True,
+            center_validation=None
+        )
+        tfm.center_validation = True if kwargs['validate'] == 1 else False
         tfm.save()
         url = reverse(super().get_redirect_url(*args, **kwargs))
         return url
