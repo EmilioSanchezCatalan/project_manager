@@ -7,8 +7,8 @@
     {% if can_validate %}
     <div class="row button-validate-abs d-none d-sm-flex">
         <div class="col-sm-12 text-right">
-            <a class="btn btn-danger" href="{% url validation_url id=tfms.id validate=0 %}">Rechazar</a>
-            <a class="btn btn-success" href="{% url validation_url id=tfms.id validate=1 %}">Validar</a>
+            <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfms.id validate=0 %}">Rechazar</a>
+            <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfms.id validate=1 %}">Validar</a>
         </div>
     </div>
     {% endif %}
@@ -108,13 +108,13 @@
     {% if can_validate %}
     <div class="row w-50 d-none d-sm-inline-flex">
         <div class="col-sm-12 mt-3 text-right">
-            <a class="btn btn-danger" href="{% url validation_url id=tfms.id validate=0 %}">Rechazar</a>
-            <a class="btn btn-success" href="{% url validation_url id=tfms.id validate=1 %}">Validar</a>
+            <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfms.id validate=0 %}">Rechazar</a>
+            <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfms.id validate=1 %}">Validar</a>
         </div>
     </div>
     <div class="fixed-bottom bar-validator d-sm-none border p-2">
-        <a class="btn btn-danger" href="{% url validation_url id=tfms.id validate=0 %}">Rechazar</a>
-        <a class="btn btn-success" href="{% url validation_url id=tfms.id validate=1 %}">Validar</a>
+        <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfms.id validate=0 %}">Rechazar</a>
+        <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfms.id validate=1 %}">Validar</a>
     </div>
     {% endif %}
 </section>
