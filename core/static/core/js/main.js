@@ -86,21 +86,48 @@ function setStudentsTfm() {
  * @param {Object} data_list            objecto con la lista de chexboxs
  */
 function updateListCheckboxes(block_checkbox_id, data_list) {
+    // Comprobamos si la lista de opciones esta vacía
     if (data_list.length > 0) {
+
+        // Mostramos el bloque contenedor del checkboxs
         $("#" + block_checkbox_id).css("display", "flex")
+        
+        let checkedVals = [];      
+        $.each($("#" + block_checkbox_id)
+            .find($("input:checked")), function(index, value) { 
+                checkedVals.push(parseInt($(value).val()));
+            });
+
+        // Limpiamos los checkboxes
         $("#" + block_checkbox_id).children(".col-sm-12.row").empty()
+
+        //Creamos cada checkbox y lo añadimos, comprobando si estaba previamente seleccionado
         $.each(data_list, function(key, value) {
-            let checkbox = $(`
-            <div class="form-check col-sm-6 form-check-label-custom">
-                <label for="id_skills_${key}">
-                    <input type="checkbox" name="skills" value="${value.id}" class="form-check-input" id="id_skills_${key}">
-                    ${value.name} - ${value.text}
-                </label>
-            </div>
-            `)
+            let checkbox = null
+            if ( checkedVals.includes(value.id) ){
+                checkbox = $(`
+                <div class="form-check col-sm-6 form-check-label-custom">
+                    <label for="id_skills_${key}">
+                        <input type="checkbox" name="skills" value="${value.id}" class="form-check-input" id="id_skills_${key}" checked>
+                        ${value.name} - ${value.text}
+                    </label>
+                </div>
+                `);
+            } else {
+                checkbox = $(`
+                <div class="form-check col-sm-6 form-check-label-custom">
+                    <label for="id_skills_${key}">
+                        <input type="checkbox" name="skills" value="${value.id}" class="form-check-input" id="id_skills_${key}">
+                        ${value.name} - ${value.text}
+                    </label>
+                </div>
+                `);
+            }
             $("#" + block_checkbox_id).children(".col-sm-12.row").append(checkbox)
         })
     } else {
+
+        // Ocultamos el bloque contenedor de los checkboxs
         $("#" + block_checkbox_id).css("display", "none")
     }
 }
@@ -112,12 +139,30 @@ function updateListCheckboxes(block_checkbox_id, data_list) {
  * @param {String} empty_label  opción por defecto
  */
 function updateSelect(select_id, data_list, empty_label="Selecciona una opción") {
+
+    // Comprobamos si la lista de opciones esta vacía
     if (data_list.length > 0) {
-        $("#" + select_id).closest(".form-group.row").css("display", "flex")
+        // Mostramos el bloque contenedor del select
+        $("#" + select_id).closest(".form-group.row").css("display", "flex");
+
+        // Guardamos el valor seleccionado antes de actualizar
+        let selectedVal = $("#" + select_id).find(":selected").val()
+
+        // Limpiamos el selector
         $("#" + select_id).empty()
+
+        // Añadimos la opción por defecto
         $("#" + select_id).append($("<option></option>").attr("value", "").text(empty_label))
+
+        // Creamos la nueva lista de opciones
         $.each(data_list, function(key, value) {
-            $("#" + select_id).append($("<option></option>").attr("value", value.id).text(value.name))
+
+            // Si coincide el valor con el valor seleccionado antes de actualizar, lo seleccionamos al crearlo
+            if (value.id == selectedVal) {
+                $("#" + select_id).append($("<option selected></option>").attr("value", value.id).text(value.name))
+            } else {
+                $("#" + select_id).append($("<option></option>").attr("value", value.id).text(value.name))
+            }
         })
     } else {
         $("#" + select_id).closest(".form-group.row").css("display", "none")
@@ -132,7 +177,6 @@ function updateSelect(select_id, data_list, empty_label="Selecciona una opción"
 function getListApi(full_url, pk) {
     return new Promise((resolve, reject) => {
         if ( !isNaN(parseInt(pk)) ) {
-
             $.ajax({
                 method: "GET",
                 url: full_url + "/" + pk,

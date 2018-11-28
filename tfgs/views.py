@@ -229,7 +229,6 @@ class TfgUpdateView(UpdateView):
             kwargs['user'] = self.request.user
         else:
             kwargs['user'] = self.get_object().tutor1
-        kwargs['tfg'] = self.get_object()
         return kwargs
 
     def get_success_url(self):

@@ -211,8 +211,28 @@ $(document).ready(function(){
     
     // Inicialización del estado del formulario
     inputShowHiddenBlockFunction($("#tutorCheck"), $("#id_tutor2-name"));
+    let carrer_id = $("#id_carrers").val();
+    getListApi("/api/itineraries", carrer_id)
+        .then(response => {
+            updateSelect("id_itineraries", response, "Selecciona el itinerario")
+        }).catch (error => {
+            alert(error)
+        });
+    getListApi("/api/mentions", carrer_id)
+        .then(response => {
+            updateSelect("id_mentions", response, "Selecciona la mención")
+        }).catch( error => {
+            alert(error)
+        });
+    let itineraries_id = $("#id_itineraries").find(":selected").val();
+    getListApi("/api/skills", itineraries_id)
+        .then(response =>{
+            updateListCheckboxes("id_skills", response)
+        })
+        .catch(error => {
+            alert(error)
+        });
     setStudentsTfg()
-    cleanEmptySelects()
     cleanFileFieldRequired("curriculum_vitae", "tutor2");
 
     // Añade la funcionalidades a un evento
