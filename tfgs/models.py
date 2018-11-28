@@ -36,7 +36,7 @@ class Tfgs(models.Model):
     tutor1 = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name="tutor1", verbose_name="Tutor principal")
     tutor2 = models.ForeignKey(Tutor2, on_delete=models.CASCADE, null=True, verbose_name="Tutor de apoyo", blank=True)
     carrers = models.ForeignKey(Carrers, on_delete=models.CASCADE, related_name="tfgs", verbose_name="Titulación")
-    itineraries = models.ForeignKey(Itineraries, on_delete=models.CASCADE, null=True, verbose_name="Itinerario", blank=True)
+    itineraries = models.ForeignKey(Itineraries, on_delete=models.CASCADE, verbose_name="Itinerario")
     mentions = models.ForeignKey(Mentions, on_delete=models.CASCADE, null=True, verbose_name="Mencion", blank=True)
     skills = models.ManyToManyField(Skills, verbose_name="Competencias que desarrolla")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")

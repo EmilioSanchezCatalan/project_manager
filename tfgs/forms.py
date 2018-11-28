@@ -189,13 +189,11 @@ class CreateTfgForm(forms.ModelForm):
         if tfg is not None:
             self.fields['itineraries'].queryset = tfg.carrers.itineraries.all()
         self.fields['itineraries'].empty_label = "Selecciona el itinerario"
-        self.fields['itineraries'].required = False
 
     def __customMention(self, tfg=None):
         if tfg is not None:
             self.fields['mentions'].queryset = tfg.carrers.mentions.all()
         self.fields['mentions'].empty_label = "Selecciona la mención"
-        self.fields['mentions'].required = False
 
     def __customType(self):
         CHOICES = (
