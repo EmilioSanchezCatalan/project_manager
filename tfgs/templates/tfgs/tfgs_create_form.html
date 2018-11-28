@@ -41,8 +41,13 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-4 col-md-3 col-lg-2">Segundo tutor</div>
-            <div class="col-sm-8 col-md-9 col-lg-10">
+            <div class="col-8 col-sm-4 col-md-3 col-lg-2">
+                Segundo tutor
+                <a class="text-muted notification-popper" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="En caso de 2º tutor/a externo/a a la UJA, debe adjuntarse CV">
+                    <i class="fas fa-info-circle"></i>
+                </a>
+            </div>
+            <div class="col-4 col-sm-8 col-md-9 col-lg-10 d-flex align-items-center">
                 <span class="switch switch-sm">
                     <input type="checkbox" name="has_tutor2" class="switch" id="tutorCheck">
                     <label for="tutorCheck"></label>
@@ -81,8 +86,13 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-4 col-md-3 col-lg-2">Trabajo en equipo</div>
-            <div class="col-sm-8 col-md-9 col-lg-10">
+            <div class="col-8 col-sm-4 col-md-3 col-lg-2">
+                Trabajo en<br>equipo
+                <a class="text-muted notification-popper" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="En esta modalidad debe de adjuntarse una memoria justificartiva">
+                    <i class="fas fa-info-circle"></i>
+                </a>
+            </div>
+            <div class="col-4 col-sm-8 col-md-9 col-lg-10 d-flex align-items-center">
                 <span class="switch switch-sm">
                     {{form.is_team}}
                     <label for="id_is_team"></label>
@@ -90,8 +100,13 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-4 col-md-3 col-lg-2">Establecer alumno/s</div>
-            <div class="col-sm-8 col-md-9 col-lg-10">
+            <div class="col-8 col-sm-4 col-md-3 col-lg-2">
+                Establecer<br>alumno/s
+                <a class="text-muted notification-popper" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Activar en caso de que la propuesta de TFG se realice a iniciativa del estudiante">
+                    <i class="fas fa-info-circle"></i>
+                </a>    
+            </div>
+            <div class="col-4 col-sm-8 col-md-9 col-lg-10 d-flex align-items-center">
                 <span class="switch switch-sm">
                     <input type="checkbox" name="has_student" class="switch" id="alumnoCheck">
                     <label for="alumnoCheck"></label>
@@ -161,25 +176,45 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="inputObjectives" class="col-sm-12 col-form-label">Objetivos*</label>
+            <label for="inputObjectives" class="col-sm-12 col-form-label">
+                Objetivos*
+                <a class="text-muted notification-popper" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Debe de indicarse con claridad los objectivos del trabajo propuesto: ¿qué se va a hacer?">
+                    <i class="fas fa-info-circle"></i>
+                </a>
+            </label>
             <div class="col-sm-12">
                 {{form.objectives}}
             </div>
         </div>
         <div class="form-group row">
-            <label for="inputMethod" class="col-sm-12 col-form-label">Metodología*</label>
+            <label for="inputMethod" class="col-sm-12 col-form-label">
+                Metodología*
+                <a class="text-muted notification-popper" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Debe indicarse explícitamente la metodología a seguir en la elaboración del trabajo: ¿cómo se va a hacer?">
+                    <i class="fas fa-info-circle"></i>
+                </a>  
+            </label>
             <div class="col-sm-12">
                 {{form.methodology}}
             </div>
         </div>
         <div class="form-group row">
-            <label for="inputDocsAndForms" class="col-sm-12 col-form-label">Documentos y formatos*</label>
+            <label for="inputDocsAndForms" class="col-sm-12 col-form-label">
+                Documentos y formatos*
+                <a class="text-muted notification-popper" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Especificar qué documentos intregrarán el TFG en función de su tipo y los formatos de archivo">
+                    <i class="fas fa-info-circle"></i>
+                </a>  
+            </label>
             <div class="col-sm-12">
                 {{form.docs_and_forms}}
             </div>
         </div>
         <div class="form-group row" id="id_skills">
-            <div class="col-sm-12 mb-2">Competencias</div>
+            <div class="col-sm-12 mb-2">
+                Competencias
+                <a class="text-muted notification-popper" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Deben de señalarse al menos dos">
+                    <i class="fas fa-info-circle"></i>
+                </a>  
+            </div>
             <div class="col-sm-12 row">
                 {% for skill in form.skills %}
                 <div class="form-check col-sm-6 form-check-label-custom">
