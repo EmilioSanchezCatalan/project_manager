@@ -50,7 +50,6 @@
         <tr>
           <td>{{tfm.title}}</td>
           <td>{{tfm.type|tfm_type}}</td>
-          <td>{{tfm.mode|tfm_mode}}</td>
           <td>
             {% if tfm.departament_validation == True and tfm.center_validation == True %}
             <i class="fas fa-check-double text-success"></i>
@@ -67,7 +66,7 @@
               <a class="btn btn-light" href="{% url 'teacher_tfms_detail' tfm.id %}">
                 <i class="far fa-eye"></i>
               </a>
-              <a class="btn btn-light" href="{% url 'teacher_tfms_update' tfm.id %}">
+              <a class="btn btn-light" href="{% url 'tfms_update' tfm.id %}">
                 <i class="far fa-edit"></i>
               </a>
               <a class="btn btn-light" onclick="return confirm('¿Estás seguro?');" href="{% url 'teacher_tfms_delete' tfm.id %}">

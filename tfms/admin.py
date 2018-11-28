@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Tfms
 
-# Register your models here.
+class TfmsAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Tfms)

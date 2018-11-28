@@ -2,7 +2,7 @@
 
 {% block content %}
 <section class="container bg-white border p-4">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group row">
             <label for="id_title" class="col-sm-12 col-form-label">Título*</label>
@@ -53,7 +53,7 @@
             <div class="col-sm-12">
                 Tutor 2
             </div>
-            <div class="pl-3 pl-sm-5 col-sm-12">
+            <div class="pl-3 pl-sm-5 col-sm-12 mb-4">
                 <div class="form-group row">
                     <label for="alumnoNameInput" class="col-sm-2 col-form-label">Nombre completo:*</label>
                     <div class="col-sm-10">
@@ -70,6 +70,12 @@
                     <label for="alumnoDniInput" class="col-sm-2 col-form-label">Area:*</label>
                     <div class="col-sm-10">
                         {{tutor2_form.area}}
+                    </div>
+                </div>
+                <div class="form-group-row">
+                    <label for="exampleFormControlFile1">Curriculum vitae:</label>
+                    <div class="col-sm-10">
+                        {{tutor2_form.curriculum_vitae}}
                     </div>
                 </div>
             </div>
@@ -173,7 +179,7 @@
             </div>
         </div>
         <div class="form-group row" id="id_skills">
-            <div class="col-sm-12 mb-2">Capacidades</div>
+            <div class="col-sm-12 mb-2">Competencias</div>
             <div class="col-sm-12 row">
                 {% for skill in form.skills %}
                 <div class="form-check col-sm-6 form-check-label-custom">
@@ -204,16 +210,24 @@ $(document).ready(function(){
     
     // Inicialización del estado del formulario
     inputShowHiddenBlockFunction($("#tutorCheck"), $("#id_tutor2-name"));
-    updateSelect("id_itineraries", [])
-    updateSelect("id_mentions", [])
-    updateSelect("id_tutor2-area", [])
-    updateListCheckboxes("id_skills", [])
-    setStudentsTfg()
+    updateSelect("id_itineraries", []);
+    updateSelect("id_mentions", []);
+    updateSelect("id_tutor2-area", []);
+    updateListCheckboxes("id_skills", []);
+    setStudentsTfg();
+    cleanFileFieldRequired("curriculum_vitae", "tutor2");
 
     // Añade la funcionalidades a un evento
     // OCulta y mustra el tutor opcional
     $("#tutorCheck").click(() => {
-        inputShowHiddenBlockFunction($("#tutorCheck"), $("#id_tutor2-name"))
+        inputShowHiddenBlockFunction(
+            $("#tutorCheck"),
+            $("#id_tutor2-name"),
+            [
+                $("#tutor2-curriculum_vitae-clear_id"),
+                $("#id_tutor2-curriculum_vitae")
+            ]
+        );
     });
 
     // Oculta y muestra los campos para que haya mas de un alumno
@@ -227,43 +241,43 @@ $(document).ready(function(){
 
     // Actualiza los itinerarios y menciones disponibles
     $("#id_carrers").change( function() {
-        let carrer_id = $(this).val()
+        let carrer_id = $(this).val();
         getListApi("/api/itineraries", carrer_id)
             .then(response => {
-                updateSelect("id_itineraries", response, "Selecciona el itinerario")
+                updateSelect("id_itineraries", response, "Selecciona el itinerario");
             }).catch (error => {
-                alert(error)
+                alert(error);
             })
         getListApi("/api/mentions", carrer_id)
             .then(response => {
-                updateSelect("id_mentions", response, "Selecciona la mención")
+                updateSelect("id_mentions", response, "Selecciona la mención");
             }).catch( error => {
-                alert(error)
+                alert(error);
             })
     })
 
     // Actualiza las Capacidades
     $("#id_itineraries").change(function() {
-        let itineraries_id = $(this).val()
+        let itineraries_id = $(this).val();
         getListApi("/api/skills", itineraries_id)
             .then(response =>{
-                updateListCheckboxes("id_skills", response)
+                updateListCheckboxes("id_skills", response);
             })
             .catch(error => {
-                alert(error)
-            })
-    })
+                alert(error);
+            });
+    });
 
     //Actualiza las areas
     $("#id_tutor2-departament").change(function() {
         let departaments_id = $(this).val()
         getListApi("/api/areas", departaments_id)
             .then(response => {
-                updateSelect("id_tutor2-area", response, "Selecciona el area")
+                updateSelect("id_tutor2-area", response, "Selecciona el area");
             }).catch(error => {
-                alert(error)
+                alert(error);
             })
-    })
+    });
 });
 </script>
 {% endblock scripts %}

@@ -31,11 +31,11 @@ class Command(BaseCommand):
                               + "Ut vel luctus sem, non vehicula erat. Donec sit amet lacus sapien."
                               + " Fusce lobortis ipsum id arcu faucibus, quis porttitor libero "
                               + "scelerisque.",
-            "departament_validation": False,
-            "center_validation": False,
+            "departament_validation": None,
+            "center_validation": None,
             "tutor1": "jccuevas",
             "tutor2": None,
-            "itinerarie": "General",
+            "itinerarie": "General (Telematica)",
             "mention": None,
             "carrer": "Grado en Ingeniería Telemática",
             "skills": [
@@ -70,11 +70,11 @@ class Command(BaseCommand):
                               + "Ut vel luctus sem, non vehicula erat. Donec sit amet lacus sapien."
                               + " Fusce lobortis ipsum id arcu faucibus, quis porttitor libero "
                               + "scelerisque.",
-            "departament_validation": False,
-            "center_validation": False,
+            "departament_validation": None,
+            "center_validation": None,
             "tutor1": "fnavarro",
             "tutor2": None,
-            "itinerarie": "General",
+            "itinerarie": "General (Telematica)",
             "mention": None,
             "carrer": "Grado en Ingeniería Telemática",
             "skills": [
@@ -109,11 +109,11 @@ class Command(BaseCommand):
                               + "Ut vel luctus sem, non vehicula erat. Donec sit amet lacus sapien."
                               + " Fusce lobortis ipsum id arcu faucibus, quis porttitor libero "
                               + "scelerisque.",
-            "departament_validation": False,
-            "center_validation": False,
+            "departament_validation": None,
+            "center_validation": None,
             "tutor1": "jccuevas",
             "tutor2": None,
-            "itinerarie": "General",
+            "itinerarie": "General (Telematica)",
             "mention": None,
             "carrer": "Grado en Ingeniería Telemática",
             "skills": [
@@ -148,11 +148,11 @@ class Command(BaseCommand):
                               + "Ut vel luctus sem, non vehicula erat. Donec sit amet lacus sapien."
                               + " Fusce lobortis ipsum id arcu faucibus, quis porttitor libero "
                               + "scelerisque.",
-            "departament_validation": False,
-            "center_validation": False,
+            "departament_validation": None,
+            "center_validation": None,
             "tutor1": "jccuevas",
             "tutor2": None,
-            "itinerarie": "General",
+            "itinerarie": "General (Telematica)",
             "mention": None,
             "carrer": "Grado en Ingeniería Telemática",
             "skills": [
@@ -193,8 +193,8 @@ class Command(BaseCommand):
                               + "Ut vel luctus sem, non vehicula erat. Donec sit amet lacus sapien."
                               + " Fusce lobortis ipsum id arcu faucibus, quis porttitor libero "
                               + "scelerisque.",
-            "departament_validation": False,
-            "center_validation": False,
+            "departament_validation": None,
+            "center_validation": None,
             "tutor1": "ajyuste",
             "tutor2": None,
             "itinerarie": "Sistemas de telecomunicación",
@@ -232,8 +232,8 @@ class Command(BaseCommand):
                               + "Ut vel luctus sem, non vehicula erat. Donec sit amet lacus sapien."
                               + " Fusce lobortis ipsum id arcu faucibus, quis porttitor libero "
                               + "scelerisque.",
-            "departament_validation": False,
-            "center_validation": False,
+            "departament_validation": None,
+            "center_validation": None,
             "tutor1": "ajyuste",
             "tutor2": None,
             "itinerarie": "Sonido e imagen",
@@ -258,7 +258,6 @@ class Command(BaseCommand):
         {
             "title": "Estrategias inteligentes de planificación en Cloud Computing",
             "type": Tfms.TYPE_UNI,
-            "mode": Tfms.MODE_PROFESSIONALIZING,
             "objectives": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
                           + "Ut vel luctus sem, non vehicula erat. Donec sit amet lacus sapien. "
                           + "Fusce lobortis ipsum id arcu faucibus, quis porttitor libero "
@@ -276,8 +275,8 @@ class Command(BaseCommand):
                          + "Ut vel luctus sem, non vehicula erat. Donec sit amet lacus sapien."
                          + " Fusce lobortis ipsum id arcu faucibus, quis porttitor libero "
                          + "scelerisque.",
-            "departament_validation": False,
-            "center_validation": False,
+            "departament_validation": None,
+            "center_validation": None,
             "tutor1": "jccuevas",
             "tutor2": None,
             "master": "Máster Universitario en Ingeniería de Telecomunicación",
@@ -372,7 +371,6 @@ class Command(BaseCommand):
             tfm_item = Tfms.objects.create(
                 title=tfm["title"],
                 type=tfm["type"],
-                mode=tfm["mode"],
                 objectives=tfm["objectives"],
                 methodology=tfm["methodology"],
                 docs_and_forms=tfm["docs_and_forms"],

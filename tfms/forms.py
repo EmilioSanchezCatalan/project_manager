@@ -110,7 +110,6 @@ class CreateTfmForm(forms.ModelForm):
             'title',
             'masters',
             'type',
-            'mode',
             'objectives',
             'methodology',
             'language',
@@ -129,9 +128,6 @@ class CreateTfmForm(forms.ModelForm):
                 attrs={'class': 'form-control'}
             ),
             'type': forms.Select(
-                attrs={'class': 'form-control'}
-            ),
-            'mode': forms.Select(
                 attrs={'class': 'form-control'}
             ),
             'language': forms.TextInput(
@@ -174,7 +170,6 @@ class CreateTfmForm(forms.ModelForm):
         self.fields['tutor1'].required = False
         self.__customMasters(user)
         self.__customType()
-        self.__customMode()
 
     def __customMasters(self, user=None):
         self.fields['masters'].empty_label = "Selecciona la titulación"
@@ -188,17 +183,6 @@ class CreateTfmForm(forms.ModelForm):
             (Tfms.TYPE_UNI, 'Universidad'),
         )
         self.fields['type'] = forms.ChoiceField(
-            widget=forms.Select(attrs={'class': 'form-control'}),
-            choices=CHOICES
-        )
-    
-    def __customMode(self):
-        CHOICES = (
-            ("", "Selecciona la modalidad"),
-            (Tfms.MODE_INVESTIGATOR, 'Investigador'),
-            (Tfms.MODE_PROFESSIONALIZING, 'Profesionalizante')
-        )
-        self.fields['mode'] = forms.ChoiceField(
             widget=forms.Select(attrs={'class': 'form-control'}),
             choices=CHOICES
         )

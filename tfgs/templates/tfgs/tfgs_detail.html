@@ -76,6 +76,9 @@
                     Nombre: {{tfgs.tutor2.name}} <br>
                     Departemento: {{tfgs.tutor2.departament.name}} <br>
                     Area: {{tfgs.tutor2.area.name}} <br>
+                    {% if tfgs.tutor2.curriculum_vitae %}
+                    CV: <a href="{{tfgs.tutor2.curriculum_vitae.url}}">pinche aquí para acceder</a>
+                    {% endif %}
                 </p>
         </div>
     </div>

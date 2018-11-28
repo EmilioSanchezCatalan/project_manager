@@ -3,9 +3,10 @@
 /**
  * Muestra u oculta un bloque vinculado a un checkbox
  * @param {HTMLInput} checkbox  checkbox que decidirá si mostrar o no el input
- * @param {HTMLInput} input     input que se mostrará o se ocultará
+ * @param {HTMLInput} input     input que se mostrará o se ocultará (uno de ellos)
+ * @param {Array<HTMLInput>} exceptionsRequired excepciones de valores que no serán requeridos
  */
-function inputShowHiddenBlockFunction(checkbox, input) {
+function inputShowHiddenBlockFunction(checkbox, input, exceptionsRequired=[]) {
     if(checkbox.is(':checked')) {   
         input.closest(".row.block").css('display', 'flex');
         input.closest(".row.block").find("input").prop('required', true);
@@ -16,6 +17,9 @@ function inputShowHiddenBlockFunction(checkbox, input) {
         input.closest(".row.block").find("select").removeAttr("required")
 
     }
+    exceptionsRequired.forEach(element => {
+        element.removeAttr("required")
+    });
 }
 
 /**
@@ -167,3 +171,16 @@ function changeExtendsFiltersState(button, divBlock) {
     $("hr").toggle()
     divBlock.toggle()
   }
+
+/**
+ * Limipia los atributos required de un AdminFileWidget
+ * @param {String} field nombre del campo del formulario
+ * @param {String} prefix prefijo si fuera necesario
+ */
+function cleanFileFieldRequired(field, prefix="") {
+    if (prefix != "") { 
+        prefix += "-";
+    }
+    $("#id_"+prefix+field).removeAttr("required");
+    $("#"+prefix+field+"-clear_id").removeAttr("required");
+}

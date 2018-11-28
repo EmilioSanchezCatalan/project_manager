@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Tfgs
 
-# Register your models here.
+class TfgsAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Tfgs, TfgsAdmin)

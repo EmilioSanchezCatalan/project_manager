@@ -37,15 +37,15 @@ class Command(BaseCommand):
             "departament": "Telecomunicaciones"
         },
         {
-            "name": "Otra",
+            "name": "Otra (Telecomunicaciones)",
             "departament": "Telecomunicaciones"
         },
         {
-            "name": "Otra",
+            "name": "Otra (Electronica)",
             "departament": "Electrónica"
         },
         {
-            "name": "Otra",
+            "name": "Otra (Informatica)",
             "departament": "Informatica"
         },
         {
@@ -166,7 +166,7 @@ class Command(BaseCommand):
             ],
             "departament": "Telecomunicaciones",
             "itineraries": {
-                "General": [
+                "General (Telematica)": [
                     {
                         "name": "TEL1",
                         "description":"Capacidad de construir, explotar y gestionar las "

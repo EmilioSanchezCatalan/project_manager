@@ -128,7 +128,11 @@ class TeacherTfmCreateView(CreateView):
         else:
             student_val = True
         if self.request.POST.get('has_tutor2') == 'on':
-            tutor2_form = CreateTutor2Form(self.request.POST, prefix="tutor2")
+            tutor2_form = CreateTutor2Form(
+                self.request.POST,
+                self.request.FILES,
+                prefix="tutor2"
+            )
             tutor2_val = tutor2_form.is_valid()
         else:
             tutor2_val = True
@@ -267,7 +271,12 @@ class TfmUpdateView(UpdateView):
                 student.save()
             student_val = True
         if self.request.POST.get('has_tutor2') == 'on':
-            tutor2_form = CreateTutor2Form(self.request.POST, prefix="tutor2", instance=self.object.tutor2)
+            tutor2_form = CreateTutor2Form(
+                self.request.POST,
+                self.request.FILES,
+                prefix="tutor2",
+                instance=self.object.tutor2
+            )
             tutor2_val = tutor2_form.is_valid()
         else:
             tutor2_val = True

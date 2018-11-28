@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.admin.widgets import AdminFileWidget
+
 from .models import Tutor2
 
 class CreateTutor2Form(forms.ModelForm):
@@ -8,7 +10,8 @@ class CreateTutor2Form(forms.ModelForm):
         fields = [
             'name',
             'departament',
-            'area'
+            'area',
+            'curriculum_vitae'
         ]
         widgets = {
             'name': forms.TextInput(
@@ -19,11 +22,15 @@ class CreateTutor2Form(forms.ModelForm):
             ),
             'area': forms.Select(
                 attrs={'class': 'form-control'}
+            ),
+            'curriculum_vitae': AdminFileWidget(
+                attrs={'class': 'form-control-file'}
             )
         }
     
     def __init__(self, *args, **kwargs):
         super(CreateTutor2Form, self).__init__(*args, **kwargs)
+        self.fields['curriculum_vitae'].required = False
         self.__customDepartament()
         self.__customArea()
 
