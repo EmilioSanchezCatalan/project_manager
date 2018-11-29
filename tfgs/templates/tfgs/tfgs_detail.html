@@ -90,6 +90,15 @@
             </p>
         </div>
     </div>
+    {% if tfgs.team_memory %}
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <strong>Memoria del trabajo en equipo:</strong> <a href="{{tfgs.team_memory.url}}">pinche aquí para acceder</a>
+            </p>
+        </div>
+    </div>
+    {% endif %}
     {% if not tfgs.is_team and students%}
     {% for student in students %}
     <div class="row">

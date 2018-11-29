@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.admin.widgets import AdminFileWidget
 from core.models import Carrers, Departaments, Skills, Areas
 from .models import Tfgs
 from login.models import Userinfos
@@ -132,7 +133,8 @@ class CreateTfgForm(forms.ModelForm):
             'methodology',
             'docs_and_forms',
             'skills',
-            'tutor1'
+            'tutor1',
+            'team_memory'
         ]
         widgets = {
             'title': forms.TextInput(
@@ -155,6 +157,9 @@ class CreateTfgForm(forms.ModelForm):
             ),
             'is_team': forms.CheckboxInput(
                 attrs={'class': 'switch'}
+            ),
+            'team_memory': AdminFileWidget(
+                attrs={'class': 'form-control-file'}
             ),
             'objectives': forms.Textarea(
                 attrs={

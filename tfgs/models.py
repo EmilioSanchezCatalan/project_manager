@@ -34,6 +34,7 @@ class Tfgs(models.Model):
     type = models.PositiveSmallIntegerField(verbose_name="Tipo de proyecto", choices=TYPE_CHOICE)
     mode = models.PositiveSmallIntegerField(verbose_name="Modalidad", choices=MODE_CHOICE)
     is_team = models.BooleanField(verbose_name="¿Es un trabajo en equipo?")
+    team_memory = models.FileField(verbose_name="Memoria justificativa", upload_to="is_team", blank=True, null=True)
     objectives = models.TextField(verbose_name="Objetivos")
     methodology = models.TextField(verbose_name="Metodología")
     docs_and_forms = models.TextField(verbose_name="Documentos y formatos de entrega")
