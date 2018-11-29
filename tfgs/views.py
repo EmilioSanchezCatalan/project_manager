@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.views.generic.base import RedirectView
 from django.views.generic.list import ListView
@@ -59,10 +60,22 @@ class TeacherTfgListView(ListView):
         queryset = queryset.filter(tutor1=self.request.user)
         name = self.request.GET.get("search_text", "")
         carrer = self.request.GET.get("formation_project", "")
+        validation = self.request.GET.get("validation_state", "")
         if name:
             queryset = queryset.filter(title__contains=name)
         if carrer:
             queryset = queryset.filter(carrers_id=carrer)
+        if validation:
+            validation = int(validation)
+            if validation == Tfgs.NOT_VALIDATED:
+                queryset = queryset.filter(departament_validation=None, center_validation=None)
+            elif validation == Tfgs.DEPARTAMENT_VALIDATION:
+                queryset = queryset.filter(departament_validation=True, center_validation=None)
+            elif validation == Tfgs.CENTER_VALIDATION:
+                queryset = queryset.filter(departament_validation=True, center_validation=True)
+            elif validation == Tfgs.FAIL_VALIDATION:
+                queryset = queryset.filter(Q(departament_validation=False) | Q(center_validation=False))
+
         return queryset
     
     def get_context_data(self, **kwargs):

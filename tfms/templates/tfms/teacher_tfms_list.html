@@ -29,8 +29,11 @@
     </div>
     <hr class="mt-0" {% if not is_filtering %}style="display:none"{% endif %}>
     <div class="form-row" id="extends-filters" {% if not is_filtering %}style="display: none"{% endif %}>
-      <div class="form-group">
+      <div class="form-group  mr-lg-1 mr-auto fb-md-100">
         {{form_filter.formation_project}}
+      </div>
+      <div class="form-group fb-md-100">
+        {{form_filter.validation_state}}
       </div>
     </div>
   </form>

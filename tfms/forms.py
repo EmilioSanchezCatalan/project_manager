@@ -28,6 +28,19 @@ class FilterTeacherTfmForm(forms.Form):
             attrs={'class': 'form-control'}
         )
     )
+    validation_state = forms.ChoiceField(
+        choices=(
+            ("", "Selecciona el estado de la validación"),
+            (Tfms.NOT_VALIDATED, "❔ Aún no validado"),
+            (Tfms.DEPARTAMENT_VALIDATION, "✔️ Validado por departamento"),
+            (Tfms.CENTER_VALIDATION, "✔️✔️ Validado por el centro"),
+            (Tfms.FAIL_VALIDATION, "❌ Projecto no aceptado")
+        ),
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         super(FilterTeacherTfmForm, self).__init__(*args, **kwargs)

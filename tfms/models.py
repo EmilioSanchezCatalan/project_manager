@@ -12,6 +12,12 @@ class Tfms(models.Model):
         (TYPE_UNI, 'Universidad'),
     )
 
+    # Estado de Validacion
+    NOT_VALIDATED = 0
+    DEPARTAMENT_VALIDATION = 1
+    CENTER_VALIDATION = 2
+    FAIL_VALIDATION = 3
+
     # Campos del modelo
     title = models.CharField(max_length=255, verbose_name="Título")
     type = models.PositiveSmallIntegerField(verbose_name="Tipo de proyecto", choices=TYPE_CHOICE)
