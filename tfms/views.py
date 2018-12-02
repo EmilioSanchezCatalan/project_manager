@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
@@ -8,6 +8,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.urls import reverse, reverse_lazy
+from project_manager.utils import render_to_pdf
 from core.forms import CreateTutor2Form
 from login.models import Students
 from login.forms import CreateStudentForm
@@ -46,6 +47,13 @@ class TfmDetailView(DetailView):
         context["students"] = Students.objects.filter(tfms_id=context['tfms'].id)
         context["back_url"] = "public_tfms_list"
         return context
+    
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("format") == "pdf":
+            pdf = render_to_pdf("tfms/tfms_format_pdf.html", { "tfm": self.get_object() })
+            return HttpResponse(pdf, content_type="application/pdf")
+        else:
+            return super().get(request, *args, **kwargs)
 
 @method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfmListView(ListView):
@@ -105,6 +113,13 @@ class TeacherTfmDetailView(DetailView):
         context["students"] = Students.objects.filter(tfms_id=context['tfms'].id)
         context["back_url"] = "teacher_tfms_list"
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("format") == "pdf":
+            pdf = render_to_pdf("tfms/tfms_format_pdf.html", { "tfm": self.get_object() })
+            return HttpResponse(pdf, content_type="application/pdf")
+        else:
+            return super().get(request, *args, **kwargs)
 
 @method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfmCreateView(CreateView):
@@ -426,6 +441,13 @@ class DepartamentTfmDetailView(DetailView):
         context["validation_url"] = "departament_tfms_validation"
         return context
 
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("format") == "pdf":
+            pdf = render_to_pdf("tfms/tfms_format_pdf.html", { "tfm": self.get_object() })
+            return HttpResponse(pdf, content_type="application/pdf")
+        else:
+            return super().get(request, *args, **kwargs)
+
 @method_decorator(user_passes_test(is_departaments), name="dispatch")
 class DepartamentValidation(RedirectView):
     url = "departament_tfms_list"
@@ -503,6 +525,13 @@ class CenterTfmDetailView(DetailView):
         context["can_validate"] = True
         context["validation_url"] = "center_tfms_validation"
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("format") == "pdf":
+            pdf = render_to_pdf("tfms/tfms_format_pdf.html", { "tfm": self.get_object() })
+            return HttpResponse(pdf, content_type="application/pdf")
+        else:
+            return super().get(request, *args, **kwargs)
 
 @method_decorator(user_passes_test(is_center), name="dispatch")
 class CenterValidation(RedirectView):

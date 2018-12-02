@@ -54,6 +54,9 @@
           <td>{{tfm.masters.departament.name}}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
+              <a class="btn btn-light" href="{% url 'center_tfms_detail' tfm.id %}?format=pdf">
+                <i class="far fa-file-pdf"></i>              
+              </a>
               <a class="btn btn-light" href="{% url 'center_tfms_detail' tfm.id %}">
                 <i class="far fa-eye"></i>
               </a>

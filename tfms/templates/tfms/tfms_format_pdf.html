@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Trabajo fin de Master PDF</title>
+   
+    <style>
+        body {
+            margin: 0 50px;
+        }
+        h1 {
+            font-size: 3em;
+            text-align: center
+        }
+        h2 {
+            font-size: 2.5em;
+            text-align: center;
+            font-weight: normal
+        }
+        .section {
+            font-size: 1.5em;
+        }
+        .article, .article-t {
+            padding: 5px;
+        }
+        .article-t {
+            margin-left: 15px;
+        }
+        .label, .label-h {
+            font-weight: bold
+        }
+        .label-h {
+            font-size: 1.1em;
+        }
+        th {
+            padding: 2.5px 0;
+        }
+        td {
+            padding-top:60px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Propuesta Trabajo fin de master</h1>
+        <h2>{{tfm.masters.name}}</h2>
+    </header>
+    {% load tfms_extras%}
+    <div class="section">
+        <div class="article">
+            <div class="row">
+                <span class="label">Título del tfm: </span>
+                <span class="value">{{tfm.title}}</span>
+            </div>
+            <div class="row">
+                <span class="label">Tipo de tfm: </span>
+                <span class="value">{{tfm.type|tfm_type}}</span>
+            </div>
+            <div class="row">
+                <span class="label">Idioma: </span>
+                <span class="value">{{tfm.language}}</span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="section">
+        <div class="header">
+            <span class="label-h">Tutor principal</span>
+        </div>
+        <div class="article-t">
+            <div class="row">
+                <span class="label">Nombre completo: </span>
+                <span class="value">{{tfm.tutor1.first_name}} {{tfm.tutor1.last_name}}</span>
+            </div>
+            <div class="row">
+                <span class="label">Departamento: </span>
+                <span class="value">{{tfm.tutor1.userinfos.departaments.name}}</span>
+            </div>
+            <div class="row">
+                <span class="label">Area: </span>
+                <span class="value">{{tfm.tutor1.userinfos.areas.name}}</span>
+            </div>
+        </div>
+    </div>
+    {% if tfm.tutor2 %}
+    <br>
+    <div class="section">
+        <div class="header">
+            <span class="label-h">Tutor de apoyo</span>
+        </div>
+        <div class="article-t">
+            <div class="row">
+                <span class="label">Nombre completo: </span>
+                <span class="value">{{tfm.tutor2.name}}</span>
+            </div>
+            <div class="row">
+                <span class="label">Departamento: </span>
+                <span class="value">{{tfm.tutor2.departament.name}}</span>
+            </div>
+            <div class="row">
+                <span class="label">Area: </span>
+                <span class="value">{{tfm.tutor2.area.name}}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if tfm.students%}
+    {% for student in tfm.students.all %}
+    <br>
+    <div class="section">
+        <div class="header">
+            <span class="label-h">Alumno</span>
+        </div>
+        <div class="article-t">
+            <div class="row">
+                <span class="label">Nombre completo: </span>
+                <span class="value">{{student.name}}</span>
+            </div>
+            <div class="row">
+                <span class="label">Dni/pasaporte: </span>
+                <span class="value">{{student.dni}}</span>
+            </div>
+            <div class="row">
+                <span class="label">Teléfono: </span>
+                <span class="value">{{student.phone}}</span>
+            </div>
+            <div class="row">
+                <span class="label">Correo-e: </span>
+                <span class="value">{{student.email}}</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <br>
+    <div class="section">
+        <div class="header">
+            <span class="label-h">Objectivos del tfm</span>
+        </div>
+        <div class="article-t">
+            <div class="row">
+                <p>{{tfm.objectives}}</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="section">
+        <div class="header">
+            <span class="label-h">Metodología del tfm</span>
+        </div>
+        <div class="article-t">
+            <div class="row">
+                <p>{{tfm.methodology}}</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="section">
+        <div class="header">
+            <span class="label-h">Documentos y formatos de entrega</span>
+        </div>
+        <div class="article-t">
+            <div class="row">
+                <p>{{tfm.docs_and_forms}}</p>
+            </div>
+        </div>
+    </div>
+    {% if tfm.knowledge %}
+    <br>
+    <div class="section">
+        <div class="header">
+            <span class="label-h">Requisitos</span>
+        </div>
+        <div class="article-t">
+            <div class="row">
+                <p>{{tfm.knowledge}}</p>
+            </div>
+        </div>
+    </div>    
+    {% endif %}
+    <br>
+    <div class="section">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Firma del Tutor/a del tfm</th>
+                    <th>Firma del director/a de departamento o sección departamental</th>
+                    <th>Firma del estudiante especificando DNI</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Fdo:</td>
+                    <td>Fdo:</td>
+                    <td>Fdo:</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,20 +1,20 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.utils.decorators import method_decorator
-from django.views.generic.base import RedirectView
+from django.views.generic.base import RedirectView, View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse, reverse_lazy
+from project_manager.utils import render_to_pdf
 from login.forms import CreateStudentForm
 from login.models import Students
 from login.decorators import is_teacher, is_from_group, is_departaments, is_center
 from core.forms import CreateTutor2Form
 from .forms import FilterPublicTfgForm, FilterTeacherTfgForm, CreateTfgForm, FilterDepartamentTfgForm, FilterCenterTfgForm
 from .models import Tfgs
-
 
 class TfgListView(ListView):
     model = Tfgs
@@ -49,6 +49,13 @@ class TfgDetailView(DetailView):
         context["students"] = Students.objects.filter(tfgs_id=context['tfgs'].id)
         context["back_url"] = "public_tfgs_list"
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("format") == "pdf":
+            pdf = render_to_pdf("tfgs/tfgs_format_pdf.html", { "tfg": self.get_object() })
+            return HttpResponse(pdf, content_type="application/pdf")
+        else:
+            return super().get(request, *args, **kwargs)
 
 @method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfgListView(ListView):
@@ -108,6 +115,13 @@ class TeacherTfgDetailView(DetailView):
         context["students"] = Students.objects.filter(tfgs_id=context['tfgs'].id)
         context["back_url"] = "teacher_tfgs_list"
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("format") == "pdf":
+            pdf = render_to_pdf("tfgs/tfgs_format_pdf.html", { "tfg": self.get_object() })
+            return HttpResponse(pdf, content_type="application/pdf")
+        else:
+            return super().get(request, *args, **kwargs)
 
 @method_decorator(user_passes_test(is_teacher), name="dispatch")
 class TeacherTfgCreateView(CreateView):
@@ -472,6 +486,12 @@ class DepartamentTfgDetailView(DetailView):
         context["can_validate"] = True
         context["validation_url"] = "departament_tfgs_validation"
         return context
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("format") == "pdf":
+            pdf = render_to_pdf("tfgs/tfgs_format_pdf.html", { "tfg": self.get_object() })
+            return HttpResponse(pdf, content_type="application/pdf")
+        else:
+            return super().get(request, *args, **kwargs)
 
 @method_decorator(user_passes_test(is_departaments), name="dispatch")
 class DepartamentValidation(RedirectView):
@@ -546,6 +566,12 @@ class CenterTfgDetailView(DetailView):
         context["can_validate"] = True
         context["validation_url"] = "center_tfgs_validation"
         return context
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("format") == "pdf":
+            pdf = render_to_pdf("tfgs/tfgs_format_pdf.html", { "tfg": self.get_object() })
+            return HttpResponse(pdf, content_type="application/pdf")
+        else:
+            return super().get(request, *args, **kwargs)
 
 @method_decorator(user_passes_test(is_center), name="dispatch")
 class CenterValidation(RedirectView):

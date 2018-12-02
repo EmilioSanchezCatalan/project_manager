@@ -54,6 +54,9 @@
           <td>{{tfg.tutor2.name|default:"Ninguno"}}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
+              <a class="btn btn-light" href="{% url 'departament_tfgs_detail' tfg.id %}?format=pdf">
+                <i class="far fa-file-pdf"></i>              
+              </a>
               <a class="btn btn-light" href="{% url 'departament_tfgs_detail' tfg.id %}">
                 <i class="far fa-eye"></i>
               </a>
