@@ -9,6 +9,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse, reverse_lazy
 from project_manager.utils import render_to_pdf
+from project_manager.settings import PAGINATION
 from login.forms import CreateStudentForm
 from login.models import Students
 from login.decorators import is_teacher, is_from_group, is_departaments, is_center
@@ -19,6 +20,7 @@ from .models import Tfgs
 class TfgListView(ListView):
     model = Tfgs
     template_name = "tfgs/public_tfgs_list.html"
+    paginate_by = PAGINATION
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(departament_validation=True, center_validation=True)
@@ -61,6 +63,7 @@ class TfgDetailView(DetailView):
 class TeacherTfgListView(ListView):
     model = Tfgs
     template_name = "tfgs/teacher_tfgs_list.html"
+    paginate_by = PAGINATION
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -434,6 +437,7 @@ class TeacherTfgDeleteView(RedirectView):
 class DepartamentTfgListView(ListView):
     model = Tfgs
     template_name = "tfgs/departament_tfgs_list.html"
+    paginate_by = PAGINATION
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -513,6 +517,7 @@ class DepartamentValidation(RedirectView):
 class CenterTfgListView(ListView):
     model = Tfgs
     template_name = "tfgs/center_tfgs_list.html"
+    paginate_by = PAGINATION
 
     def get_queryset(self):
         queryset = super().get_queryset()

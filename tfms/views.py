@@ -9,6 +9,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.urls import reverse, reverse_lazy
 from project_manager.utils import render_to_pdf
+from project_manager.settings import PAGINATION
 from core.forms import CreateTutor2Form
 from login.models import Students
 from login.forms import CreateStudentForm
@@ -19,6 +20,7 @@ from .forms import FilterPublicTfmForm, FilterTeacherTfmForm, CreateTfmForm, Fil
 class TfmListView(ListView):
     model = Tfms
     template_name = "tfms/public_tfms_list.html"
+    paginate_by = PAGINATION
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(departament_validation=True, center_validation=True)
@@ -59,6 +61,7 @@ class TfmDetailView(DetailView):
 class TeacherTfmListView(ListView):
     model = Tfms
     template_name = "tfms/teacher_tfms_list.html"
+    paginate_by = PAGINATION
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -388,6 +391,7 @@ class TeacherTfmDelete(RedirectView):
 class DepartamentTfmListView(ListView):
     model = Tfms
     template_name = "tfms/departament_tfms_list.html"
+    paginate_by = PAGINATION
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -468,6 +472,7 @@ class DepartamentValidation(RedirectView):
 class CenterTfmListView(ListView):
     model = Tfms
     template_name = "tfms/center_tfms_list.html"
+    paginate_by = PAGINATION
 
     def get_queryset(self):
         queryset = super().get_queryset()

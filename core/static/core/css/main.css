@@ -137,6 +137,15 @@ a.btn.btn-success, a.btn.btn-success:hover, a.btn.btn-danger, a.btn.btn-danger:h
     border-top-left-radius: 0px;
 }
 
+
+/* Pagination */
+.page-link { color: #28a745; }
+.page-link:hover { color: #28a745; }
+.page-item.active .page-link {
+  color: white;
+  background-color: #28a745;
+  border-color: #28a745
+}
 /* Switch button */
 .switch {
     font-size: 1rem;
