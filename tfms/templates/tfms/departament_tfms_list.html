@@ -54,7 +54,7 @@
           <td>{{tfm.tutor2.name|default:"Ninguno"}}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <a class="btn btn-light" href="{% url 'departament_tfms_detail' tfm.id %}?format=pdf">
+              <a class="btn btn-light" target="_blank" href="{% url 'departament_tfms_detail' tfm.id %}?format=pdf">
                 <i class="far fa-file-pdf"></i>              
               </a>
               <a class="btn btn-light" href="{% url 'departament_tfms_detail' tfm.id %}">

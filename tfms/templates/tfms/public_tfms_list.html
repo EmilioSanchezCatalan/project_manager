@@ -42,7 +42,7 @@
                     <td>{{project.masters.name}}</td>
                     <td>{{project.tutor1.first_name}}</td>
                     <td><a href="{% url 'public_tfms_detail' project.id %}">Visualizar</a></td>
-                    <td><a href="{% url 'public_tfms_detail' project.id %}?format=pdf">Imprimir</a></td>
+                    <td><a target="_blank" href="{% url 'public_tfms_detail' project.id %}?format=pdf">Imprimir</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -45,7 +45,7 @@
                         <a href="{% url 'public_tfgs_detail' project.id %}">Visualizar</a>
                     </td>
                     <td>
-                        <a href="{% url 'public_tfgs_detail' project.id %}?format=pdf">Imprimir</a>
+                        <a target="_blank" href="{% url 'public_tfgs_detail' project.id %}?format=pdf">Imprimir</a>
                     </td>
                 </tr>
                 {% endfor %}
