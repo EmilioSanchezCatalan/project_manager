@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 from core.models import Tutor2, Masters
 
 # Create your models here.
@@ -21,11 +22,11 @@ class Tfms(models.Model):
     # Campos del modelo
     title = models.CharField(max_length=255, verbose_name="Título")
     type = models.PositiveSmallIntegerField(verbose_name="Tipo de proyecto", choices=TYPE_CHOICE)
-    objectives = models.TextField(verbose_name="objectivos")
-    methodology = models.TextField(verbose_name="Metodología")
-    docs_and_forms = models.TextField(verbose_name="Documentos y formatos de entrega")
+    objectives = RichTextField(verbose_name="objectivos")
+    methodology = RichTextField(verbose_name="Metodología")
+    docs_and_forms = RichTextField(verbose_name="Documentos y formatos de entrega")
     language = models.CharField(max_length=45, verbose_name="Idioma")
-    knowledge = models.TextField(null=True, verbose_name="Conocimientos requeridos", blank=True)
+    knowledge = RichTextField(null=True, verbose_name="Conocimientos requeridos", blank=True)
     departament_validation = models.BooleanField(null=True, verbose_name="Validación del departamento")
     center_validation = models.BooleanField(null=True, verbose_name="Validación del centro")
     tutor1 = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Tutor principal")

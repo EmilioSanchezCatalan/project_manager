@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from ckeditor.widgets import CKEditorWidget
 from core.models import Masters, Areas, Departaments
 from .models import Tfms
 
@@ -149,30 +150,10 @@ class CreateTfmForm(forms.ModelForm):
                     'placeholder': 'Español, Ingles ...'
                 }
             ),
-            'objectives': forms.Textarea(
-                attrs={
-                    'class': 'form-control',
-                    'rows': 5
-                }
-            ),
-            'methodology': forms.Textarea(
-                attrs={
-                    'class': 'form-control',
-                    'rows': 5
-                }
-            ),
-            'docs_and_forms': forms.Textarea(
-                attrs={
-                    'class': 'form-control',
-                    'rows': 5
-                }
-            ),
-            'knowledge': forms.Textarea(
-                attrs={
-                    'class': 'form-control',
-                    'rows': 5
-                }
-            ),
+            'objectives': CKEditorWidget(),
+            'methodology': CKEditorWidget(),
+            'docs_and_forms': CKEditorWidget(),
+            'knowledge': CKEditorWidget(),
             'tutor1': forms.HiddenInput()
         }
 

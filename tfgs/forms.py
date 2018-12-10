@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.admin.widgets import AdminFileWidget
+from ckeditor.widgets import CKEditorWidget
 from core.models import Carrers, Departaments, Skills, Areas
 from .models import Tfgs
 from login.models import Userinfos
@@ -161,24 +162,9 @@ class CreateTfgForm(forms.ModelForm):
             'team_memory': AdminFileWidget(
                 attrs={'class': 'form-control-file'}
             ),
-            'objectives': forms.Textarea(
-                attrs={
-                    'class': 'form-control',
-                    'rows': 5
-                }
-            ),
-            'methodology': forms.Textarea(
-                attrs={
-                    'class': 'form-control',
-                    'rows': 5
-                }
-            ),
-            'docs_and_forms': forms.Textarea(
-                attrs={
-                    'class': 'form-control',
-                    'rows': 5
-                }
-            ),
+            'objectives': CKEditorWidget(),
+            'methodology': CKEditorWidget(),
+            'docs_and_forms': CKEditorWidget(),
             'skills': forms.CheckboxSelectMultiple(
                 attrs={'class': 'form-check-input'}
             ),

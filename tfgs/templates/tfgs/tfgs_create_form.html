@@ -194,7 +194,7 @@
                     <i class="fas fa-info-circle"></i>
                 </a>
             </label>
-            <div class="col-sm-12">
+            <div class="col-sm-12 text-center">
                 {{form.objectives}}
             </div>
         </div>
@@ -205,7 +205,7 @@
                     <i class="fas fa-info-circle"></i>
                 </a>  
             </label>
-            <div class="col-sm-12">
+            <div class="col-sm-12 text-center">
                 {{form.methodology}}
             </div>
         </div>
@@ -216,7 +216,7 @@
                     <i class="fas fa-info-circle"></i>
                 </a>  
             </label>
-            <div class="col-sm-12">
+            <div class="col-sm-12 text-center">
                 {{form.docs_and_forms}}
             </div>
         </div>
@@ -331,4 +331,6 @@ $(document).ready(function(){
     });
 });
 </script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 {% endblock scripts %}

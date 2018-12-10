@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 from core.models import Carrers
 from core.models import Mentions, Tutor2, Itineraries, Skills
 
@@ -35,9 +36,9 @@ class Tfgs(models.Model):
     mode = models.PositiveSmallIntegerField(verbose_name="Modalidad", choices=MODE_CHOICE)
     is_team = models.BooleanField(verbose_name="¿Es un trabajo en equipo?")
     team_memory = models.FileField(verbose_name="Memoria justificativa", upload_to="is_team", blank=True, null=True)
-    objectives = models.TextField(verbose_name="Objetivos")
-    methodology = models.TextField(verbose_name="Metodología")
-    docs_and_forms = models.TextField(verbose_name="Documentos y formatos de entrega")
+    objectives = RichTextField(verbose_name="Objetivos")
+    methodology = RichTextField(verbose_name="Metodología")
+    docs_and_forms = RichTextField(verbose_name="Documentos y formatos de entrega")
     departament_validation = models.BooleanField(null=True, verbose_name="Validación del departamento")
     center_validation = models.BooleanField(null=True, verbose_name="Validación del centro")
     tutor1 = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name="tutor1", verbose_name="Tutor principal")

@@ -79,25 +79,25 @@
     <div class="row">
         <div class="col-md-12">
             <strong>Objetivos:</strong>
-            <p class="pl-4 mt-1">{{tfms.objectives}}</p>
+            <p class="pl-4 mt-1">{{tfms.objectives|safe}}</p>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <strong>Metodología:</strong>
-            <p class="pl-4 mt-1">{{tfms.methodology}}</p>
+            <p class="pl-4 mt-1">{{tfms.methodology|safe}}</p>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <strong>Documentos y formatos:</strong>
-            <p class="pl-4 mt-1">{{tfms.docs_and_forms}}</p>
+            <p class="pl-4 mt-1">{{tfms.docs_and_forms|safe}}</p>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <strong>Requisitos</strong>
-            <p class="pl-4 mt-1">{{tfms.knowledge}}</p>
+            <p class="pl-4 mt-1">{{tfms.knowledge|safe}}</p>
         </div>
     </div>
     <div class="row w-50 d-inline-flex mb-sm-0 {% if can_validate == True %}mb-5{% endif %}">
