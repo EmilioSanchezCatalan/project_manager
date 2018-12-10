@@ -14,6 +14,7 @@ from login.forms import CreateStudentForm
 from login.models import Students
 from login.decorators import is_teacher, is_from_group, is_departaments, is_center
 from core.forms import CreateTutor2Form
+from announcements.models import Announcements
 from .forms import FilterPublicTfgForm, FilterTeacherTfgForm, CreateTfgForm, FilterDepartamentTfgForm, FilterCenterTfgForm
 from .models import Tfgs
 
@@ -67,7 +68,7 @@ class TeacherTfgListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(tutor1=self.request.user)
+        queryset = queryset.filter(tutor1=self.request.user, draft=False)
         name = self.request.GET.get("search_text", "")
         carrer = self.request.GET.get("formation_project", "")
         validation = self.request.GET.get("validation_state", "")
@@ -85,7 +86,38 @@ class TeacherTfgListView(ListView):
                 queryset = queryset.filter(departament_validation=True, center_validation=True)
             elif validation == Tfgs.FAIL_VALIDATION:
                 queryset = queryset.filter(Q(departament_validation=False) | Q(center_validation=False))
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Tfgs"
+        context['is_filtering'] = self.__check_filters_is_applied(self.request.GET.dict())
+        context['form_filter'] = FilterTeacherTfgForm(initial=self.request.GET.dict(), user=self.request.user)
+        context['nbar'] = "tfg"
+        return context
 
+    @staticmethod
+    def __check_filters_is_applied(params_dict):
+        for param_name in params_dict.keys():
+            if param_name != "search_text" and params_dict[param_name] != "":
+                return True
+        return False
+
+@method_decorator(user_passes_test(is_teacher), name="dispatch")
+class TeacherTfgDraftListView(ListView):
+    model = Tfgs
+    template_name = "tfgs/teacher_draft_tfgs_list.html"
+    paginate_by = PAGINATION
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(tutor1=self.request.user, draft=True)
+        name = self.request.GET.get("search_text", "")
+        carrer = self.request.GET.get("formation_project", "")
+        if name:
+            queryset = queryset.filter(title__contains=name)
+        if carrer:
+            queryset = queryset.filter(carrers_id=carrer)
         return queryset
     
     def get_context_data(self, **kwargs):
@@ -223,6 +255,135 @@ class TeacherTfgCreateView(CreateView):
         self.object = form.save(commit=False)
         self.object.tutor1 = self.request.user
         self.object.tutor2 = tutor2
+        announcement_open = self.object.carrers.centers.announcements.filter(status=Announcements.STATUS_OPEN)
+        if announcement_open:
+            self.object.announcements = announcement_open[0]
+            self.object.draft = False
+        else:
+            self.object.draft = True
+            messages.warning(self.request, "No Existe convocatoria de publicación, con lo que se ha enviado a Borradores", 'warning')
+        self.object.save()
+        form.save_m2m()
+    
+    @staticmethod
+    def __get_student_tfg(dni):
+        try:
+            return Students.objects.get(dni=dni)
+        except:
+            return None
+
+    @staticmethod
+    def __createStudent(tfg, form=None):
+        if form is not None:
+            student = form.save(commit=False)
+            student.tfgs = tfg
+            student.save()
+
+    @staticmethod
+    def __createtutor2(form=None):
+        if form is not None:
+            return form.save()
+        else:
+            return None
+
+@method_decorator(user_passes_test(is_teacher), name="dispatch")
+class TeacherDraftTfgCreateView(CreateView):
+    model = Tfgs
+    form_class = CreateTfgForm
+    success_url = reverse_lazy("teacher_tfgs_list")
+    template_name = "tfgs/tfgs_create_form.html"
+
+    def get_form_kwargs(self):
+        kwargs = super(TeacherDraftTfgCreateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["student_form1"] = CreateStudentForm(prefix="student1")
+        context["student_form2"] = CreateStudentForm(prefix="student2")
+        context["tutor2_form"] = CreateTutor2Form(prefix="tutor2")
+        context["back_url"] = "teacher_draft_tfgs_list"
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        student1_form, student2_form, tutor2_form = None, None, None
+        if self.request.POST.get('has_student') == 'on':
+            student1_form = CreateStudentForm(
+                self.request.POST,
+                prefix="student1",
+                instance=self.__get_student_tfg(
+                    self.request.POST.get('student1-dni')
+                )
+            )
+            student1_val = student1_form.is_valid()
+        else:
+            student1_val = True
+        if self.request.POST.get('has_tutor2') == 'on':
+            tutor2_form = CreateTutor2Form(
+                self.request.POST,
+                self.request.FILES,
+                prefix="tutor2"
+            )
+            tutor2_val = tutor2_form.is_valid()
+        else:
+            tutor2_val = True
+        if self.request.POST.get('has_student') == 'on' and self.request.POST.get('is_team') == 'on':
+            student2_form = CreateStudentForm(
+                self.request.POST,
+                prefix="student2",
+                instance=self.__get_student_tfg(
+                    self.request.POST.get('student2-dni')
+                )
+            )
+            student2_val = student2_form.is_valid()
+        else:
+            student2_val = True
+        if form.is_valid() and student1_val and tutor2_val and student2_val:
+            return self.form_valid(form, student1_form, student2_form, tutor2_form)
+        else:
+            return self.form_invalid(form, student1_form, student2_form, tutor2_form)
+
+    def form_valid(self, form, student1_form=None, student2_form=None, tutor2_form=None):
+        tutor2 = self.__createtutor2(tutor2_form)
+        self.__createTfg(form, tutor2)
+        self.__createStudent(self.object, student1_form)
+        self.__createStudent(self.object, student2_form)
+        messages.success(self.request, "Creado correctamente nuevo trabajo fin de grado con titulo: \"" + self.object.title + "\"", 'success')
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form, student1_form=None, student2_form=None, tutor2_form=None):
+        if student1_form is None:
+            student1_form = CreateStudentForm(prefix="student1")
+        if student2_form is None:
+            student2_form = CreateStudentForm(prefix="student2")
+        if tutor2_form is None:
+            tutor2_form = CreateTutor2Form(prefix="tutor2")
+        
+        self.__errorsForm(form)
+        self.__errorsForm(student1_form)
+        self.__errorsForm(student2_form)
+        self.__errorsForm(tutor2_form)
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            student1_form=student1_form,
+            student2_form=student2_form,
+            tutor2_form=tutor2_form
+        ))
+    
+    def __errorsForm(self, form):
+        form_errors = form.errors
+        for fields_error in form_errors.keys():
+            for error in form_errors[fields_error]:
+                messages.error(self.request,  fields_error + ": " + error, 'danger')
+
+    def __createTfg(self, form, tutor2=None):
+        self.object = form.save(commit=False)
+        self.object.tutor1 = self.request.user
+        self.object.tutor2 = tutor2
+        self.object.draft = True
         self.object.save()
         form.save_m2m()
     

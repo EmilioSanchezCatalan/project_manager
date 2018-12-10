@@ -35,10 +35,12 @@
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item {% if nbar == 'tfg' %}active{% endif %}">
             {% if user|has_group:"Teachers"%}
-            <a class="nav-link dropdown-toggle" id="navbarTfgDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">TFG</a>
+            <a class="nav-link dropdown-toggle" id="navbarTfgDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+              TFG
+            </a>
             <div class="dropdown-menu" aria-labelledby="navbarTfgDropdown">
               <a class="dropdown-item" href="{% url 'teacher_tfgs_list' %}">Publicados</a>
-              <a class="dropdown-item" href="">Borrador</a>
+              <a class="dropdown-item" href="{% url 'teacher_draft_tfgs_list' %}">Borrador</a>
             </div>
             {% elif user|has_group:"Departaments"%}
             <a class="nav-link" href="{% url 'departament_tfgs_list' %}">TFG</a>
@@ -81,8 +83,11 @@
     <!-- Messages -->
     {% if messages %}
     {% for message in messages %}
-    <div class="container my-1 alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+    <div class="container my-1 alert alert-{% if message.tags %}{{ message.tags }}{% endif %} fade show" role="alert">
         {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
     {% endfor %}
     {% endif %}
@@ -98,9 +103,9 @@
 
     <script>
       $(document).ready(function() {
-        setTimeout(() => {
+        {% comment %} setTimeout(() => {
           $(".alert").alert("close")
-        }, 3000);
+        }, 3000); {% endcomment %}
 
         $('[data-toggle="popover"]').popover()
 
