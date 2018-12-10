@@ -53,7 +53,6 @@ class Masters(models.Model):
     name = models.CharField(max_length=150, verbose_name="Nombre")
     centers = models.ForeignKey(Centers, on_delete=models.CASCADE, related_name="masters", verbose_name="Centro de validación")
     departaments = models.ManyToManyField(Departaments, related_name="masters", verbose_name="Departamentos que imparten")
-    departament = models.ForeignKey(Departaments, on_delete=models.CASCADE,  related_name="master", verbose_name="Departamento de validación")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
@@ -72,7 +71,6 @@ class Carrers(models.Model):
     name = models.CharField(max_length=150, verbose_name="Nombre")
     centers = models.ForeignKey(Centers, on_delete=models.CASCADE, related_name="carrers", verbose_name="Centro de validación")
     departaments = models.ManyToManyField(Departaments, related_name="carrers", verbose_name="Departamentos que imparten")
-    departament = models.ForeignKey(Departaments, on_delete=models.CASCADE,  related_name="carrer", verbose_name="Departamento de validación")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 

@@ -441,7 +441,7 @@ class DepartamentTfgListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(carrers__departament=self.request.user.userinfos.departaments, departament_validation=None)
+        queryset = queryset.filter(tutor1__userinfos__departaments=self.request.user.userinfos.departaments, departament_validation=None)
         name = self.request.GET.get("search_text", "")
         carrer = self.request.GET.get("formation_project", "")
         area = self.request.GET.get("area", "")
@@ -478,7 +478,7 @@ class DepartamentTfgDetailView(DetailView):
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(
-            carrers__departament=self.request.user.userinfos.departaments,
+            tutor1__userinfos__departaments=self.request.user.userinfos.departaments,
             departament_validation=None
         )
         return queryset
@@ -505,7 +505,7 @@ class DepartamentValidation(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         tfg = Tfgs.objects.get(
             id=kwargs['id'],
-            carrers__departament=self.request.user.userinfos.departaments,
+            tutor1__userinfos__departaments=self.request.user.userinfos.departaments,
             departament_validation=None
         )
         tfg.departament_validation = True if kwargs['validate'] == 1 else False

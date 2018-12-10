@@ -80,7 +80,7 @@ class FilterDepartamentTfgForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         super(FilterDepartamentTfgForm, self).__init__(*args, **kwargs)
-        self.fields["formation_project"].queryset = self.user.userinfos.departaments.carrer.all()
+        self.fields["formation_project"].queryset = Carrers.objects.filter(tfgs__tutor1__userinfos__departaments=self.user.userinfos.departaments).distinct()
         self.fields["area"].queryset = self.user.userinfos.departaments.areas.all()
         self.fields["tutor"].queryset = User.objects.filter(userinfos__departaments = self.user.userinfos.departaments, groups__name="Teachers")
 

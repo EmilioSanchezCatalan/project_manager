@@ -78,7 +78,7 @@ class FilterDepartamentTfmForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         super(FilterDepartamentTfmForm, self).__init__(*args, **kwargs)
-        self.fields["formation_project"].queryset = self.user.userinfos.departaments.master.all()
+        self.fields["formation_project"].queryset = Masters.objects.filter(tfms__tutor1__userinfos__departaments=self.user.userinfos.departaments).distinct()
         self.fields["area"].queryset = self.user.userinfos.departaments.areas.all()
         self.fields["tutor"].queryset = User.objects.filter(userinfos__departaments = self.user.userinfos.departaments, groups__name="Teachers")
 

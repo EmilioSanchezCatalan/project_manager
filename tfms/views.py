@@ -395,7 +395,7 @@ class DepartamentTfmListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(masters__departament=self.request.user.userinfos.departaments, departament_validation=None)
+        queryset = queryset.filter(tutor1__userinfos__departaments=self.request.user.userinfos.departaments, departament_validation=None)
         name = self.request.GET.get("search_text", "")
         master = self.request.GET.get("formation_project", "")
         area = self.request.GET.get("area", "")
@@ -432,7 +432,7 @@ class DepartamentTfmDetailView(DetailView):
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(
-            masters__departament=self.request.user.userinfos.departaments,
+            tutor1__userinfos__departaments=self.request.user.userinfos.departaments,
             departament_validation=None
         )
         return queryset
@@ -460,7 +460,7 @@ class DepartamentValidation(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         tfm = Tfms.objects.get(
             id=kwargs['id'],
-            masters__departament=self.request.user.userinfos.departaments,
+            tutor1__userinfos__departaments=self.request.user.userinfos.departaments,
             departament_validation=None
         )
         tfm.departament_validation = True if kwargs['validate'] == 1 else False
