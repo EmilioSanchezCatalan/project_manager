@@ -2,6 +2,7 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from core.models import Carrers
 from core.models import Mentions, Tutor2, Itineraries, Skills
+from announcements.models import Announcements
 
 # Create your models here.
 class Tfgs(models.Model):
@@ -41,11 +42,14 @@ class Tfgs(models.Model):
     docs_and_forms = RichTextField(verbose_name="Documentos y formatos de entrega")
     departament_validation = models.BooleanField(null=True, verbose_name="Validación del departamento")
     center_validation = models.BooleanField(null=True, verbose_name="Validación del centro")
+    draft = models.BooleanField(verbose_name="Borrador")
+    date_assignment = models.DateTimeField(verbose_name="Fecha de asignación", null=True)
     tutor1 = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name="tutor1", verbose_name="Tutor principal")
     tutor2 = models.ForeignKey(Tutor2, on_delete=models.CASCADE, null=True, verbose_name="Tutor de apoyo", blank=True)
     carrers = models.ForeignKey(Carrers, on_delete=models.CASCADE, related_name="tfgs", verbose_name="Titulación")
     itineraries = models.ForeignKey(Itineraries, on_delete=models.CASCADE, verbose_name="Itinerario")
     mentions = models.ForeignKey(Mentions, on_delete=models.CASCADE, null=True, verbose_name="Mencion", blank=True)
+    announcements = models.ForeignKey(Announcements, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Convocatoria")
     skills = models.ManyToManyField(Skills, verbose_name="Competencias que desarrolla")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")

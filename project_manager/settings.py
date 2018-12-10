@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'ckeditor',
     'core',
+    'announcements',
     'login',
     'tfgs',
     'tfms',

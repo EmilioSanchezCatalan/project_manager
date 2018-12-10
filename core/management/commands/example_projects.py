@@ -33,6 +33,7 @@ class Command(BaseCommand):
                               + "scelerisque.",
             "departament_validation": None,
             "center_validation": None,
+            "draft": False,
             "tutor1": "jccuevas",
             "tutor2": None,
             "itinerarie": "General (Telematica)",
@@ -72,6 +73,7 @@ class Command(BaseCommand):
                               + "scelerisque.",
             "departament_validation": None,
             "center_validation": None,
+            "draft": False,
             "tutor1": "fnavarro",
             "tutor2": None,
             "itinerarie": "General (Telematica)",
@@ -111,6 +113,7 @@ class Command(BaseCommand):
                               + "scelerisque.",
             "departament_validation": None,
             "center_validation": None,
+            "draft": False,
             "tutor1": "jccuevas",
             "tutor2": None,
             "itinerarie": "General (Telematica)",
@@ -150,6 +153,7 @@ class Command(BaseCommand):
                               + "scelerisque.",
             "departament_validation": None,
             "center_validation": None,
+            "draft": False,
             "tutor1": "jccuevas",
             "tutor2": None,
             "itinerarie": "General (Telematica)",
@@ -195,6 +199,7 @@ class Command(BaseCommand):
                               + "scelerisque.",
             "departament_validation": None,
             "center_validation": None,
+            "draft": False,
             "tutor1": "ajyuste",
             "tutor2": None,
             "itinerarie": "Sistemas de telecomunicación",
@@ -234,6 +239,7 @@ class Command(BaseCommand):
                               + "scelerisque.",
             "departament_validation": None,
             "center_validation": None,
+            "draft": False,
             "tutor1": "ajyuste",
             "tutor2": None,
             "itinerarie": "Sonido e imagen",
@@ -277,6 +283,7 @@ class Command(BaseCommand):
                          + "scelerisque.",
             "departament_validation": None,
             "center_validation": None,
+            "draft": False,
             "tutor1": "jccuevas",
             "tutor2": None,
             "master": "Máster Universitario en Ingeniería de Telecomunicación",
@@ -345,7 +352,8 @@ class Command(BaseCommand):
                 if tfg["itinerarie"] is not None else None,
                 mentions_id=Mentions.objects.get(name=tfg["mention"]).id
                 if tfg["mention"] is not None else None,
-                carrers_id=Carrers.objects.get(name=tfg["carrer"]).id
+                carrers_id=Carrers.objects.get(name=tfg["carrer"]).id,
+                draft=tfg["draft"]
             )
             for student in tfg["student"]:
                 Students.objects.create(
@@ -380,7 +388,8 @@ class Command(BaseCommand):
                 center_validation=tfm["center_validation"],
                 tutor1_id=User.objects.get(username=tfm["tutor1"]).id,
                 tutor2=tutor2,
-                masters_id=Masters.objects.get(name=tfm["master"]).id
+                masters_id=Masters.objects.get(name=tfm["master"]).id,
+                draft=tfm["draft"]
             )
             for student in tfm["student"]:
                 Students.objects.create(
