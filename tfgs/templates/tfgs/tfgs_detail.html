@@ -7,8 +7,13 @@
     {% if can_validate %}
     <div class="row button-validate-abs d-none d-sm-flex">
         <div class="col-sm-12 text-right">
-            <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfgs.id validate=0 %}">Rechazar</a>
-            <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfgs.id validate=1 %}">Validar</a>
+            {% if announ_id %}
+            <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_error announ_id=announ_id id=tfgs.id validate=1 %}">Rechazar</a>
+            <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_ok announ_id=announ_id id=tfgs.id validate=1 %}">Validar</a>
+            {% else %}
+            <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_error id=tfgs.id validate=1 %}">Rechazar</a>
+            <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_ok id=tfgs.id validate=1 %}">Validar</a>
+            {% endif %}
         </div>
     </div>
     {% endif %}
@@ -162,19 +167,37 @@
     </div>
     <div class="row w-50 d-inline-flex mb-sm-0 {% if can_validate == True %}mb-5{% endif %}">
         <div class="col-sm-12">
-            <a class="btn btn-light" href="{% url back_url %}">Atras</a>
+            {% if announ_id %}
+            <a class="btn btn-light" href="{% url back_url announ_id %}">
+                Atras
+            </a>
+            {% else %}
+            <a class="btn btn-light" href="{% url back_url %}">
+                Atras
+            </a>
+            {% endif %}
         </div>
     </div>
     {% if can_validate %}
     <div class="row w-50 d-none d-sm-inline-flex">
         <div class="col-sm-12 mt-3 text-right">
-            <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfgs.id validate=0 %}">Rechazar</a>
-            <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfgs.id validate=1 %}">Validar</a>
+            {% if announ_id %}
+            <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_error announ_id=announ_id id=tfgs.id validate=1 %}">Rechazar</a>
+            <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_ok announ_id=announ_id id=tfgs.id validate=1 %}">Validar</a>
+            {% else %}
+            <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_error id=tfgs.id validate=1 %}">Rechazar</a>
+            <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_ok id=tfgs.id validate=1 %}">Validar</a>
+            {% endif %}
         </div>
     </div>
     <div class="fixed-bottom bar-validator d-sm-none border p-2">
-        <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfgs.id validate=0 %}">Rechazar</a>
-        <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url id=tfgs.id validate=1 %}">Validar</a>
+        {% if announ_id %}
+        <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_error announ_id=announ_id id=tfgs.id validate=1 %}">Rechazar</a>
+        <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_ok announ_id=announ_id id=tfgs.id validate=1 %}">Validar</a>
+        {% else %}
+        <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_error id=tfgs.id validate=1 %}">Rechazar</a>
+        <a class="btn btn-success" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_ok id=tfgs.id validate=1 %}">Validar</a>
+        {% endif %}
     </div>
     {% endif %}
 </section>

@@ -1,0 +1,25 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<section class="container bg-white border p-4">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group row">
+            <label for="id_title" class="col-sm-12 col-form-label">Nombre*</label>
+            <div class="col-sm-12">
+                {{form.name}}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-success" value="Guardar">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <a class="btn btn-light" href="{% url back_url %}">Atras</a>
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock content %}

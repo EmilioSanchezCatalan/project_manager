@@ -2,7 +2,7 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from core.models import Carrers
 from core.models import Mentions, Tutor2, Itineraries, Skills
-from announcements.models import Announcements
+from announcements.models import AnnouncementsTfg
 
 # Create your models here.
 class Tfgs(models.Model):
@@ -49,7 +49,7 @@ class Tfgs(models.Model):
     carrers = models.ForeignKey(Carrers, on_delete=models.CASCADE, related_name="tfgs", verbose_name="Titulación")
     itineraries = models.ForeignKey(Itineraries, on_delete=models.CASCADE, verbose_name="Itinerario")
     mentions = models.ForeignKey(Mentions, on_delete=models.CASCADE, null=True, verbose_name="Mencion", blank=True)
-    announcements = models.ForeignKey(Announcements, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Convocatoria")
+    announcements = models.ForeignKey(AnnouncementsTfg, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Convocatoria")
     skills = models.ManyToManyField(Skills, verbose_name="Competencias que desarrolla")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")

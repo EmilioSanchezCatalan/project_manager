@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Announcements
+from .models import AnnouncementsTfg
 
 class AnnouncementsAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Announcements, AnnouncementsAdmin)
+admin.site.register(AnnouncementsTfg, AnnouncementsAdmin)

@@ -23,7 +23,8 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('login/', include('login.urls')),
     path('projects/tfgs/', include('tfgs.urls')),
-    path('projects/tfms/', include('tfms.urls'))
+    path('projects/tfms/', include('tfms.urls')),
+    path('announ/', include('announcements.urls'))
 ]
 
 if settings.DEBUG:

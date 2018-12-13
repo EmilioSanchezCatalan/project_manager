@@ -135,7 +135,8 @@ class CreateTfgForm(forms.ModelForm):
             'docs_and_forms',
             'skills',
             'tutor1',
-            'team_memory'
+            'team_memory',
+            'draft'
         ]
         widgets = {
             'title': forms.TextInput(
@@ -157,6 +158,9 @@ class CreateTfgForm(forms.ModelForm):
                 attrs={'class': 'form-control'}
             ),
             'is_team': forms.CheckboxInput(
+                attrs={'class': 'switch'}
+            ),
+            'draft': forms.CheckboxInput(
                 attrs={'class': 'switch'}
             ),
             'team_memory': AdminFileWidget(

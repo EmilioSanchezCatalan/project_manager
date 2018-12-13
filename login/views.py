@@ -17,7 +17,7 @@ class LoginPageView(LoginView):
         elif self.request.user.groups.filter(name="Departaments").exists():
             return reverse('departament_tfgs_list')
         elif self.request.user.groups.filter(name="Centers").exists():
-            return reverse('center_tfgs_list')
+            return reverse('announ_tfgs_list')
         else: 
             return reverse('home')
 

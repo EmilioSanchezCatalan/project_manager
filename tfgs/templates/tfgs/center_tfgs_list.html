@@ -1,5 +1,12 @@
 {% extends "core/base.html" %}
 
+{% block title %}
+<header class="container px-3 px-sm-5 mt-0 mt-sm-4">
+    <h1 class="d-none d-sm-block">{{announ.name}}</h1>
+    <h1 class="d-block d-sm-none">{{announ.name}}</h1>
+</header>
+{% endblock title %}
+
 {% load tfgs_extras%}
 {% block content %}
 
@@ -51,24 +58,36 @@
           <td>{{tfg.title}}</td>
           <td>{{tfg.carrers.name}}</td>
           <td>{{tfg.tutor1.first_name}} {{tfg.tutor1.last_name}}</td>
-          <td>{{tfg.carrers.departament.name}}</td>
+          <td>{{tfg.tutor1.userinfos.departaments.name}}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <a class="btn btn-light" target="_blank" href="{% url 'center_tfgs_detail' tfg.id %}?format=pdf">
+              <a class="btn btn-light" target="_blank" href="{% url 'center_tfgs_detail' announ_id=announ.id pk=tfg.id %}?format=pdf">
                 <i class="far fa-file-pdf"></i>              
               </a>
-              <a class="btn btn-light" href="{% url 'center_tfgs_detail' tfg.id %}">
+              <a class="btn btn-light" href="{% url 'center_tfgs_detail' announ_id=announ.id pk=tfg.id %}">
                 <i class="far fa-eye"></i>
               </a>
-              <a class="btn btn-light" href="{% url 'tfgs_update' tfg.id %}">
+              <a class="btn btn-light" href="{% url 'center_tfgs_update' announ_id=announ.id pk=tfg.id %}">
                 <i class="far fa-edit"></i>
               </a>
-              <a class="btn btn-light" onclick="return confirm('¿Estás seguro?');" href="{% url 'center_tfgs_validation' id=tfg.id validate=1 %}">
+              {% if tfg.center_validation %}
+              <a class="btn btn-success" onclick="return confirm('¿Estás seguro que deseas desvalidar?');" href="{% url 'center_tfgs_validation_ok' announ_id=announ.id id=tfg.id validate=0 %}">
+                <i class="fas fa-check text-light"></i>
+              </a>
+              {% else %}
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que deseas validar?');" href="{% url 'center_tfgs_validation_ok' announ_id=announ.id id=tfg.id validate=1 %}">
                 <i class="fas fa-check text-success"></i>
               </a>
-              <a class="btn btn-light" onclick="return confirm('¿Estás seguro?');" href="{% url 'center_tfgs_validation' id=tfg.id validate=0 %}">
+              {% endif %}
+              {% if tfg.center_validation == False %}
+              <a class="btn btn-danger" onclick="return confirm('¿Estás seguro que deseas desrechazar?');" href="{% url 'center_tfgs_validation_error' announ_id=announ.id id=tfg.id validate=0 %}">
+                <i class="fas fa-times text-light"></i>
+              </a>
+              {% else %}
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que deseas rechazar?');" href="{% url 'center_tfgs_validation_error' announ_id=announ.id id=tfg.id validate=1 %}">
                 <i class="fas fa-times text-danger"></i>
               </a>
+              {% endif %}
             </div>
           </td>
         </tr>

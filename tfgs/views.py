@@ -14,7 +14,7 @@ from login.forms import CreateStudentForm
 from login.models import Students
 from login.decorators import is_teacher, is_from_group, is_departaments, is_center
 from core.forms import CreateTutor2Form
-from announcements.models import Announcements
+from announcements.models import AnnouncementsTfg
 from .forms import FilterPublicTfgForm, FilterTeacherTfgForm, CreateTfgForm, FilterDepartamentTfgForm, FilterCenterTfgForm
 from .models import Tfgs
 
@@ -24,7 +24,7 @@ class TfgListView(ListView):
     paginate_by = PAGINATION
 
     def get_queryset(self):
-        queryset = super().get_queryset().filter(departament_validation=True, center_validation=True)
+        queryset = super().get_queryset().filter(departament_validation=True, center_validation=True, announcements__status=AnnouncementsTfg.STATUS_PUBLIC)
         name = self.request.GET.get("name_project", "")
         carrer = self.request.GET.get("formation_project", "")
         if name:
@@ -94,6 +94,10 @@ class TeacherTfgListView(ListView):
         context['is_filtering'] = self.__check_filters_is_applied(self.request.GET.dict())
         context['form_filter'] = FilterTeacherTfgForm(initial=self.request.GET.dict(), user=self.request.user)
         context['nbar'] = "tfg"
+        if AnnouncementsTfg.objects.filter(status=AnnouncementsTfg.STATUS_OPEN):
+            context['has_announ'] = True
+        else:
+            context['has_announ'] = False
         return context
 
     @staticmethod
@@ -255,7 +259,7 @@ class TeacherTfgCreateView(CreateView):
         self.object = form.save(commit=False)
         self.object.tutor1 = self.request.user
         self.object.tutor2 = tutor2
-        announcement_open = self.object.carrers.centers.announcements.filter(status=Announcements.STATUS_OPEN)
+        announcement_open = self.object.carrers.centers.announcementstfg.filter(status=AnnouncementsTfg.STATUS_OPEN)
         if announcement_open:
             self.object.announcements = announcement_open[0]
             self.object.draft = False
@@ -414,6 +418,23 @@ class TfgUpdateView(UpdateView):
     form_class = CreateTfgForm
     template_name = "tfgs/tfgs_update_form.html"
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.request.user.groups.filter(name="Teachers").exists() and self.object.draft == False:
+            if self.object.departament_validation is not None:
+                messages.warning(self.request, "No es posible editar proyectos ya validados", "warning")
+                return HttpResponseRedirect(reverse('teacher_tfgs_list'))
+        elif self.request.user.groups.filter(name="Departaments").exists():
+            if self.object.departament_validation is not None:
+                messages.warning(self.request, "No es posible editar proyectos ya validados", "warning")
+                return HttpResponseRedirect(reverse('departament_tfgs_list'))
+        elif self.request.user.groups.filter(name="Centers").exists():
+            if self.object.announcements.status == AnnouncementsTfg.STATUS_CLOSE:
+                messages.warning(self.request, "No es posible editar proyectos de una convocatoria cerrada", "warning")
+                announ_id = kwargs['announ_id']
+                return HttpResponseRedirect(reverse('center_tfgs_list', kwargs={'announ_id': announ_id}))
+        return super().get(request, *args, **kwargs)
+
     def get_form_kwargs(self):
         kwargs = super(TfgUpdateView, self).get_form_kwargs()
         if self.request.user.groups.filter(name="Teachers").exists():
@@ -424,11 +445,15 @@ class TfgUpdateView(UpdateView):
 
     def get_success_url(self):
         if self.request.user.groups.filter(name="Teachers").exists():
-            return reverse('teacher_tfgs_list')
+            if self.object.draft == True:
+                return reverse('teacher_draft_tfgs_list')
+            else:
+                return reverse('teacher_tfgs_list')
         elif self.request.user.groups.filter(name="Departaments").exists():
             return reverse('departament_tfgs_list')
         elif self.request.user.groups.filter(name="Centers").exists():
-            return reverse('center_tfgs_list')
+            announ_id = self.kwargs['announ_id']
+            return reverse('center_tfgs_list', kwargs={"announ_id": announ_id})
 
     def get_queryset(self):
         queryset = super(TfgUpdateView, self).get_queryset()
@@ -436,14 +461,15 @@ class TfgUpdateView(UpdateView):
             queryset = queryset.filter(tutor1=self.request.user)
         if self.request.user.groups.filter(name="Departaments").exists():
             queryset = queryset.filter(
-                carrers__departament=self.request.user.userinfos.departaments,
-                departament_validation=None
+                tutor1__userinfos__departaments=self.request.user.userinfos.departaments,
+                draft=False
             )
+            queryset = queryset.exclude(announcements=None)
+
         if self.request.user.groups.filter(name="Centers").exists():
             queryset = queryset.filter(
                 carrers__centers=self.request.user.userinfos.centers,
                 departament_validation=True,
-                center_validation=None
             )
         return queryset
 
@@ -456,11 +482,16 @@ class TfgUpdateView(UpdateView):
         context["number_students"] = tfg.students.all().count()
         context["tutor2_form"] = CreateTutor2Form(prefix="tutor2", instance=tfg.tutor2)
         if self.request.user.groups.filter(name="Teachers").exists():
-            context["back_url"] = "teacher_tfgs_list"
+            if self.object.draft == True:
+                context["back_url"] = "teacher_draft_tfgs_list"
+            else:
+                context["back_url"] = "teacher_tfgs_list"
+
         elif self.request.user.groups.filter(name="Departaments").exists():
             context["back_url"] = "departament_tfgs_list"
         elif self.request.user.groups.filter(name="Centers").exists():
             context["back_url"] = "center_tfgs_list"
+            context["announ_id"] = self.kwargs["announ_id"]
         return context
     
     def post(self, request, *args, **kwargs):
@@ -549,6 +580,19 @@ class TfgUpdateView(UpdateView):
     def __createTfg(self, form, tutor2=None):
         self.object = form.save(commit=False)
         self.object.tutor2 = tutor2
+        if self.request.user.groups.filter(name="Teachers").exists():
+            if not self.object.draft:
+                announcement_open = self.object.carrers.centers.announcementstfg.filter(status=AnnouncementsTfg.STATUS_OPEN)
+                if announcement_open:
+                    self.object.announcements = announcement_open[0]
+                    self.object.draft = False
+                else:
+                    self.object.draft = True
+                    messages.warning(self.request, "No Existe convocatoria de publicación, con lo que se ha enviado a Borradores", 'warning')
+            else:
+                self.object.announcements = None
+        else:
+            self.draft = False
         self.object.save()
         form.save_m2m()
 
@@ -590,7 +634,12 @@ class TeacherTfgDeleteView(RedirectView):
     pattern_name = 'delete_Tfm'
     
     def get_redirect_url(self, *args, **kwargs):
-        Tfgs.objects.filter(id=kwargs['id'], tutor1=self.request.user).delete()
+        tfg = Tfgs.objects.get(id=kwargs['id'], tutor1=self.request.user)
+        if tfg.departament_validation is None and tfg.departament_validation is None:
+            tfg.delete()
+            messages.success(self.request, "El proyecto se ha borrado correctamente", "success")
+        else:
+            messages.warning(self.request, "No se pueden eliminar proyectos validados", "warning")
         url = reverse(super().get_redirect_url(*args, **kwargs))
         return url
     
@@ -602,7 +651,11 @@ class DepartamentTfgListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(tutor1__userinfos__departaments=self.request.user.userinfos.departaments, departament_validation=None)
+        queryset = queryset.filter(
+            tutor1__userinfos__departaments=self.request.user.userinfos.departaments,
+            draft=False
+        )
+        queryset = queryset.exclude(announcements=None)
         name = self.request.GET.get("search_text", "")
         carrer = self.request.GET.get("formation_project", "")
         area = self.request.GET.get("area", "")
@@ -640,8 +693,9 @@ class DepartamentTfgDetailView(DetailView):
     def get_queryset(self):
         queryset = super().get_queryset().filter(
             tutor1__userinfos__departaments=self.request.user.userinfos.departaments,
-            departament_validation=None
+            draft=False
         )
+        queryset = queryset.exclude(announcements=None)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -649,7 +703,8 @@ class DepartamentTfgDetailView(DetailView):
         context["students"] = Students.objects.filter(tfgs_id=context['tfgs'].id)
         context["back_url"] = "departament_tfgs_list"
         context["can_validate"] = True
-        context["validation_url"] = "departament_tfgs_validation"
+        context["validation_url_ok"] = "departament_tfgs_validation_ok"
+        context["validation_url_error"] = "departament_tfgs_validation_error"
         return context
     def get(self, request, *args, **kwargs):
         if request.GET.get("format") == "pdf":
@@ -659,21 +714,45 @@ class DepartamentTfgDetailView(DetailView):
             return super().get(request, *args, **kwargs)
 
 @method_decorator(user_passes_test(is_departaments), name="dispatch")
-class DepartamentValidation(RedirectView):
+class DepartamentValidationOk(RedirectView):
     url = "departament_tfgs_list"
-    pattern_name = 'validation'
+    pattern_name = 'validation_ok'
     
     def get_redirect_url(self, *args, **kwargs):
-        tfg = Tfgs.objects.get(
-            id=kwargs['id'],
-            tutor1__userinfos__departaments=self.request.user.userinfos.departaments,
-            departament_validation=None
-        )
-        tfg.departament_validation = True if kwargs['validate'] == 1 else False
-        tfg.save()
+        try:
+            tfg = Tfgs.objects.get(
+                id=kwargs['id'],
+                tutor1__userinfos__departaments=self.request.user.userinfos.departaments,
+                center_validation=None
+            )
+            tfg.departament_validation = True if kwargs['validate'] == 1 else None
+            tfg.save()
+            messages.success(self.request, "Validación realizada correctamente", "success")
+        except:
+            messages.warning(self.request, "No se puede modificar la validación una vez que el centro ha validado", "warning")
         url = reverse(super().get_redirect_url(*args, **kwargs))
         return url
 
+@method_decorator(user_passes_test(is_departaments), name="dispatch")
+class DepartamentValidationError(RedirectView):
+    url = "departament_tfgs_list"
+    pattern_name = 'validation_error'
+    
+    def get_redirect_url(self, *args, **kwargs):
+        try:
+            tfg = Tfgs.objects.get(
+                id=kwargs['id'],
+                tutor1__userinfos__departaments=self.request.user.userinfos.departaments,
+                center_validation=None
+            )
+            tfg.departament_validation = False if kwargs['validate'] == 1 else None
+            tfg.save()
+            messages.success(self.request, "Validación realizada correctamente", "success")
+        except:
+            messages.warning(self.request, "No se puede modificar la validación una vez que el centro ha validado", "warning")
+
+        url = reverse(super().get_redirect_url(*args, **kwargs))
+        return url
 @method_decorator(user_passes_test(is_center), name="dispatch")
 class CenterTfgListView(ListView):
     model = Tfgs
@@ -682,7 +761,12 @@ class CenterTfgListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(carrers__centers=self.request.user.userinfos.centers, departament_validation=True, center_validation=None)
+        queryset = queryset.filter(
+            announcements_id = self.kwargs['announ_id'],
+            carrers__centers=self.request.user.userinfos.centers, 
+            departament_validation=True,
+            draft=False
+        )
         name = self.request.GET.get("search_text", "")
         carrer = self.request.GET.get("formation_project", "")
         departament = self.request.GET.get("departament", "")
@@ -703,6 +787,7 @@ class CenterTfgListView(ListView):
         context['is_filtering'] = self.__check_filters_is_applied(self.request.GET.dict())
         context['form_filter'] = FilterCenterTfgForm(initial=self.request.GET.dict(), user=self.request.user)
         context['nbar'] = "tfg"
+        context['announ'] = AnnouncementsTfg.objects.get(id=self.kwargs['announ_id'])
         return context
     
     @staticmethod
@@ -720,8 +805,7 @@ class CenterTfgDetailView(DetailView):
     def get_queryset(self):
         queryset = super().get_queryset().filter(
             carrers__centers=self.request.user.userinfos.centers,
-            departament_validation=True,
-            center_validation=None
+            departament_validation=True
         )
         return queryset
 
@@ -730,7 +814,9 @@ class CenterTfgDetailView(DetailView):
         context["students"] = Students.objects.filter(tfgs_id=context['tfgs'].id)
         context["back_url"] = "center_tfgs_list"
         context["can_validate"] = True
-        context["validation_url"] = "center_tfgs_validation"
+        context["validation_url_ok"] = "center_tfgs_validation_ok"
+        context["validation_url_error"] = "center_tfgs_validation_error"
+        context["announ_id"] = self.kwargs["announ_id"]
         return context
     def get(self, request, *args, **kwargs):
         if request.GET.get("format") == "pdf":
@@ -740,18 +826,54 @@ class CenterTfgDetailView(DetailView):
             return super().get(request, *args, **kwargs)
 
 @method_decorator(user_passes_test(is_center), name="dispatch")
-class CenterValidation(RedirectView):
+class CenterValidationOk(RedirectView):
     url = "center_tfgs_list"
     pattern_name = 'validation'
     
     def get_redirect_url(self, *args, **kwargs):
-        tfg = Tfgs.objects.get(
-            id=kwargs['id'],
-            carrers__centers=self.request.user.userinfos.centers,
-            departament_validation=True,
-            center_validation=None
+        try:
+            tfg = Tfgs.objects.get(
+                id=kwargs['id'],
+                carrers__centers=self.request.user.userinfos.centers,
+                departament_validation=True,
+                announcements__status=AnnouncementsTfg.STATUS_OPEN
+            )
+            tfg.center_validation = True if kwargs['validate'] == 1 else None
+            tfg.save()
+            messages.success(self.request, "Validación realizada correctamente", "success")
+        except:
+            messages.warning(self.request, "No se puede modificar la validación una vez que la convocatoria deja de estar abierta a propuestas", "warning")
+
+        announ_id = kwargs['announ_id']
+        url = reverse(
+            super().get_redirect_url(*args, **kwargs), 
+            kwargs={"announ_id": announ_id}
         )
-        tfg.center_validation = True if kwargs['validate'] == 1 else False
-        tfg.save()
-        url = reverse(super().get_redirect_url(*args, **kwargs))
+        return url
+
+@method_decorator(user_passes_test(is_center), name="dispatch")
+class CenterValidationError(RedirectView):
+    url = "center_tfgs_list"
+    pattern_name = 'validation'
+    
+    def get_redirect_url(self, *args, **kwargs):
+        try:
+            tfg = Tfgs.objects.get(
+                id=kwargs['id'],
+                carrers__centers=self.request.user.userinfos.centers,
+                departament_validation=True,
+                announcements__status=AnnouncementsTfg.STATUS_OPEN
+            )
+            tfg.center_validation = False if kwargs['validate'] == 1 else None
+            tfg.save()
+            messages.success(self.request, "Validación realizada correctamente", "success")
+
+        except:
+            messages.warning(self.request, "No se puede modificar la validación una vez que la convocatoria deja de estar abierta a propuestas", "warning")
+
+        announ_id = kwargs['announ_id']
+        url = reverse(
+            super().get_redirect_url(*args, **kwargs), 
+            kwargs={"announ_id": announ_id}
+        )
         return url

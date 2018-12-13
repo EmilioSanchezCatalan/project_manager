@@ -1,7 +1,7 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 from core.models import Tutor2, Masters
-from announcements.models import Announcements
+from announcements.models import AnnouncementsTfm
 # Create your models here.
 class Tfms(models.Model):
 
@@ -34,7 +34,7 @@ class Tfms(models.Model):
     tutor1 = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Tutor principal")
     tutor2 = models.ForeignKey(Tutor2, on_delete=models.CASCADE, null=True, verbose_name="Tutor de apoyo", blank=True)
     masters = models.ForeignKey(Masters, on_delete=models.CASCADE, verbose_name="Master")
-    announcements = models.ForeignKey(Announcements, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Convocatoria")
+    announcements = models.ForeignKey(AnnouncementsTfm, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Convocatoria")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 

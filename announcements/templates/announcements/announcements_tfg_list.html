@@ -2,21 +2,20 @@
 
 {% block title %}
 <header class="container px-3 px-sm-5 mt-0 mt-sm-4">
-    <h1 class="d-none d-sm-block">Borrador Tfgs</h1>
-    <h1 class="d-block d-sm-none">Borrador Tfgs</h1>
+    <h1 class="d-none d-sm-block">Convocatorias Tfg</h1>
+    <h1 class="d-block d-sm-none">Convocatorias Tfg</h1>
 </header>
 {% endblock title %}
 
-{% load tfgs_extras%}
 {% block content %}
 
+{% load announcements_extras %}
 <section class="container border bg-white p-3 p-sm-5 mt-0 mt-sm-4">
   <form action="">
     <div class="form-row justify-content-between">
-      <!-- Boton añadir nuevo tfg -->
       <div class="form-group mr-auto mr-md-100 fb-sm-100 mr-sm-auto">
-        <a class="btn btn-success btn-block" href="{% url 'teacher_draft_tfgs_create' %}">
-          <i class="fas fa-plus mr-2"></i>Añadir TFG
+        <a class="btn btn-success btn-block" href="{% url 'announ_tfgs_create' %}">
+          <i class="fas fa-plus mr-2"></i>Convocatoria
         </a>
       </div>
       <div class="form-group fb-sm-100 mr-lg-0 mr-auto">
@@ -25,19 +24,7 @@
         </button>
       </div>
       <div class="form-group mx-2 fb-60 fb-sm-85 fb-xs-80">
-        {{form_filter.search_text}}
-      </div>
-      <div class="form-group">
-        <div class="btn {% if is_filtering %}btn-warning{% else %}btn-light{% endif %} font-weight-bold" id="btn-extends-filter">
-          <i class="fas fa-angle-down" {% if is_filtering %}style="display: none"{% endif %}></i>
-          <i class="fas fa-angle-up" {% if not is_filtering %}style="display: none"{% endif %}></i>
-        </div>
-      </div>
-    </div>
-    <hr class="mt-0" {% if not is_filtering %}style="display:none"{% endif %}>
-    <div class="form-row" id="extends-filters" {% if not is_filtering %}style="display: none"{% endif %}>
-      <div class="form-group mr-lg-1 mr-auto fb-md-100">
-        {{form_filter.formation_project}}
+        {{form_filter.name}}
       </div>
     </div>
   </form>
@@ -45,30 +32,31 @@
     <table class="table table-crud border m-0">
       <thead>
         <tr class="thead-light">
-          <th>Título</th>
-          <th>Tipo de Proyecto</th>
-          <th>Modalidad</th>
+          <th>Nombre</th>
+          <th>Estado Actual</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        {% for tfg in tfgs_list %}
+        {% for announ in object_list  %}
         <tr>
-          <td>{{tfg.title}}</td>
-          <td>{{tfg.type|tfg_type}}</td>
-          <td>{{tfg.mode|tfg_mode}}</td>
+          <td>{{announ.name}}</td>
+          <td>{{announ.status|announ_tfg_status}}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <a class="btn btn-light" target="_blank" href="{% url 'teacher_tfgs_detail' tfg.id %}?format=pdf">
-                <i class="far fa-file-pdf"></i>              
+              <a class="btn btn-light" href="{% url 'center_tfgs_list' announ.id %}">
+                <i class="fas fa-sign-in-alt"></i>
               </a>
-              <a class="btn btn-light" href="{% url 'teacher_tfgs_detail' tfg.id %}">
-                <i class="far fa-eye"></i>
-              </a>
-              <a class="btn btn-light" href="{% url 'teacher_tfgs_update' tfg.id %}">
+              <a class="btn btn-light" href="{% url 'announ_tfgs_update' announ.id %}">
                 <i class="far fa-edit"></i>
               </a>
-              <a class="btn btn-light" onclick="return confirm('¿Estás seguro?');" href="{% url 'teacher_tfgs_delete' tfg.id %}">
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que lo deseas abrir al público?');" href="{% url 'announ_tfgs_status_public' announ.id %}">
+                <i class="fas fa-door-open"></i>
+              </a>
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que lo deseas cerrar?');" href="{% url 'announ_tfgs_status_close' announ.id %}">
+                <i class="fas fa-door-closed"></i>              
+              </a>
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que lo deseas eliminar?');" href="{% url 'announ_tfgs_delete' announ.id %}">
                 <i class="far fa-trash-alt"></i>
               </a>
             </div>
@@ -107,11 +95,3 @@
   {% endif %}
 </section>
 {% endblock content %}
-
-{% block scripts %}
-<script>
-  $("#btn-extends-filter").click(function() {
-    changeExtendsFiltersState($(this), $("#extends-filters"))
-  });
-</script>
-{% endblock scripts %}

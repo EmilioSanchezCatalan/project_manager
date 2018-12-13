@@ -45,7 +45,7 @@
             {% elif user|has_group:"Departaments"%}
             <a class="nav-link" href="{% url 'departament_tfgs_list' %}">TFG</a>
             {% elif user|has_group:"Centers"%}
-            <a class="nav-link" href="{% url 'center_tfgs_list' %}">TFG</a>
+            <a class="nav-link" href="{% url 'announ_tfgs_list' %}">TFG</a>
             {% endif %}
           </li>
           <li class="nav-item {% if nbar == 'tfm' %}active{% endif %}">
@@ -54,7 +54,7 @@
             {% elif user|has_group:"Departaments"%}
             <a class="nav-link" href="{% url 'departament_tfms_list' %}">TFM</a>
             {% elif user|has_group:"Centers"%}
-            <a class="nav-link" href="{% url 'center_tfms_list' %}">TFM</a>
+            <a class="nav-link" href="{% url 'announ_tfms_list' %}">TFM</a>
             {% endif %}
           </li>
           <li class="nav-item" id="logoutMenu">

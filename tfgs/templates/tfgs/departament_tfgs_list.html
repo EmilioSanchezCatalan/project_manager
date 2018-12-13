@@ -41,7 +41,7 @@
           <th>Título</th>
           <th>Titulación</th>
           <th>Tutor principal</th>
-          <th>Tutor secundario</th>
+          <th>Convocatoria</th>
           <th></th>
         </tr>
       </thead>
@@ -51,7 +51,7 @@
           <td>{{tfg.title}}</td>
           <td>{{tfg.carrers.name}}</td>
           <td>{{tfg.tutor1.first_name}} {{tfg.tutor1.last_name}}</td>
-          <td>{{tfg.tutor2.name|default:"Ninguno"}}</td>
+          <td>{{tfg.announcements.name|default:"Ninguno"}}</td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
               <a class="btn btn-light" target="_blank" href="{% url 'departament_tfgs_detail' tfg.id %}?format=pdf">
@@ -60,15 +60,27 @@
               <a class="btn btn-light" href="{% url 'departament_tfgs_detail' tfg.id %}">
                 <i class="far fa-eye"></i>
               </a>
-              <a class="btn btn-light" href="{% url 'tfgs_update' tfg.id %}">
+              <a class="btn btn-light" href="{% url 'departament_tfgs_update' tfg.id %}">
                 <i class="far fa-edit"></i>
               </a>
-              <a class="btn btn-light" onclick="return confirm('¿Estás seguro?');" href="{% url 'departament_tfgs_validation' id=tfg.id validate=1 %}">
+              {% if tfg.departament_validation%}
+              <a class="btn btn-success" onclick="return confirm('¿Estás seguro que deseas desvalidar?');" href="{% url 'departament_tfgs_validation_ok' id=tfg.id validate=0 %}">
+                <i class="fas fa-check text-light"></i>
+              </a>
+              {% else %}
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que deseas validar?');" href="{% url 'departament_tfgs_validation_ok' id=tfg.id validate=1 %}">
                 <i class="fas fa-check text-success"></i>
               </a>
-              <a class="btn btn-light" onclick="return confirm('¿Estás seguro?');" href="{% url 'departament_tfgs_validation' id=tfg.id validate=0 %}">
+              {% endif %}
+              {% if tfg.departament_validation == False %}
+              <a class="btn btn-danger" onclick="return confirm('¿Estás seguro que deseas desrechazar?');" href="{% url 'departament_tfgs_validation_error' id=tfg.id validate=0 %}">
+                <i class="fas fa-times text-light"></i>
+              </a>
+              {% else %}
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que deseas rechazar?');" href="{% url 'departament_tfgs_validation_error' id=tfg.id validate=1 %}">
                 <i class="fas fa-times text-danger"></i>
               </a>
+              {% endif %}
             </div>
           </td>
         </tr>

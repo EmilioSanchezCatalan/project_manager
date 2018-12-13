@@ -4,6 +4,9 @@
 <header class="container px-3 px-sm-5 mt-0 mt-sm-4">
     <h1 class="d-none d-sm-block">Publicaciones Tfgs</h1>
     <h1 class="d-block d-sm-none">Publicaciones Tfgs</h1>
+    {% if not has_announ %}
+    <h3 class="text-center">(Convocatoria cerrada)</h3>
+    {% endif %}
 </header>
 {% endblock title %}
 
@@ -80,10 +83,10 @@
               <a class="btn btn-light" href="{% url 'teacher_tfgs_detail' tfg.id %}">
                 <i class="far fa-eye"></i>
               </a>
-              <a class="btn btn-light" href="{% url 'tfgs_update' tfg.id %}">
+              <a class="btn btn-light" href="{% url 'teacher_tfgs_update' tfg.id %}">
                 <i class="far fa-edit"></i>
               </a>
-              <a class="btn btn-light" onclick="return confirm('¿Estás seguro?');" href="{% url 'teacher_tfgs_delete' tfg.id %}">
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que deseas borrar el proyecto?');" href="{% url 'teacher_tfgs_delete' tfg.id %}">
                 <i class="far fa-trash-alt"></i>
               </a>
             </div>
@@ -138,6 +141,7 @@
     </ul>
   </nav>
   {% endif %}
+
 </section>
 {% endblock content %}
 
