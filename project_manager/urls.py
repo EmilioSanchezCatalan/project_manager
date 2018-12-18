@@ -26,8 +26,8 @@ urlpatterns = [
     path('private/teacher/tfg/', include('tfgs.urls.urls_teacher')),
     path('private/departament/tfg/', include('tfgs.urls.urls_departament')),
     path('private/center/tfg/', include('tfgs.urls.urls_center')),
+    path('private/center/convocatoria/tfg/', include('announcements.urls.urls_tfgs')),
     path('projects/tfms/', include('tfms.urls')),
-    path('announ/', include('announcements.urls'))
 ]
 
 if settings.DEBUG:
