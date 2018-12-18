@@ -1,19 +1,54 @@
+<!--
+  Template donde se renderiza la el lista de TFGs del
+  departamento.
+
+  Autores:
+    - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+  Version: 1.0.
+-->
+
 {% extends "core/base.html" %}
 
+<!-- Carga de Modulos -->
 {% load tfgs_extras%}
-{% block content %}
 
+<!-- BLoque Título -->
+{% block title %}
+<header class="container px-3 px-sm-5 mt-0 mt-sm-4">
+  
+  <!-- Título -->
+  <h1 class="d-none d-sm-block">Listado TFGs</h1>
+  
+  <!-- TItulo Móvil -->
+  <h1 class="d-block d-sm-none">Listado TFGs</h1>
+  {% if not has_announ %}
+  <h3 class="text-center">(Convocatoria cerrada)</h3>
+  {% endif %}
+</header>
+{% endblock title %}
+
+<!-- Bloque de Contenido -->
+{% block content %}
 <section class="container border bg-white p-3 p-sm-5 mt-0 mt-sm-4">
+
+  <!-- Filtros-->
   <form action="">
     <div class="form-row justify-content-between">
+
+      <!-- Submit Filtrado -->
       <div class="form-group fb-sm-100 mr-auto">
         <button type="submit" for="titleProject" class="btn btn-light btn-block font-weight-bold">
           <i class="fas fa-search mr-2" style="font-size: 15px;"></i>Buscador
         </button>
       </div>
+
+      <!-- Filtrado de texto -->
       <div class="form-group mx-2 fb-60 fb-sm-85 fb-xs-80">
         {{form_filter.search_text}}
       </div>
+
+      <!-- Boton Desplegar extra filtrado -->
       <div class="form-group">
         <div class="btn {% if is_filtering %}btn-warning{% else %}btn-light{% endif %} font-weight-bold" id="btn-extends-filter">
           <i class="fas fa-angle-down" {% if is_filtering %}style="display: none"{% endif %}></i>
@@ -21,19 +56,29 @@
         </div>
       </div>
     </div>
+  
+    <!-- Extra filtrado -->
     <hr class="mt-0" {% if not is_filtering %}style="display:none"{% endif %}>
     <div class="form-row" id="extends-filters" {% if not is_filtering %}style="display: none"{% endif %}>
+      
+      <!-- Filtro por titulación-->
       <div class="form-group mr-lg-1 mr-auto fb-md-100">
         {{form_filter.formation_project}}
       </div>
+    
+      <!-- Filtro por area del tutor -->
       <div class="form-group mr-lg-1 mr-auto fb-md-100">
         {{form_filter.area}}
       </div>
+
+      <!-- Filtro por tutor -->
       <div class="form-group fb-md-100">
         {{form_filter.tutor}}
       </div>
     </div>
   </form>
+
+  <!-- Listados de TFGs -->
   <article style="overflow-x: scroll">
     <table class="table table-crud border m-0">
       <thead>
@@ -48,10 +93,20 @@
       <tbody>
         {% for tfg in tfgs_list %}
         <tr>
+
+          <!-- Información Título -->
           <td>{{tfg.title}}</td>
+
+          <!-- Información Titulación -->
           <td>{{tfg.carrers.name}}</td>
+
+          <!-- Información Tutor principal -->
           <td>{{tfg.tutor1.first_name}} {{tfg.tutor1.last_name}}</td>
+
+          <!-- Información Convocatoria -->
           <td>{{tfg.announcements.name|default:"Ninguno"}}</td>
+
+          <!-- Funcionalidades -->
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
               <a class="btn btn-light" target="_blank" href="{% url 'departament_tfgs_detail' tfg.id %}?format=pdf">
@@ -88,38 +143,18 @@
       </tbody>
     </table>
   </article>
-  {% if is_paginated %}
-  <nav>
-    <ul class="pagination justify-content-center mb-0 mt-4">
-      {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-          <span class="sr-only">Previous</span>
-        </a>
-      </li>
-      {% endif %}
-      {% for i in paginator.page_range %}
-      <li class="page-item {% if page_obj.number == i %}active{% endif %}">
-        <a class="page-link" href="?page={{i}}">{{ i }}</a>
-      </li>
-      {% endfor %}
-      {% if page_obj.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-          <span class="sr-only">Next</span>
-        </a>
-      </li>
-      {% endif %}
-    </ul>
-  </nav>
-  {% endif %}
+
+  <!-- Paginación -->
+  {% include "core/pagination.html" %}
 </section>
 {% endblock content %}
 
+<!-- Bloque Scripts -->
 {% block scripts %}
 <script>
+
+  // Añadiendo evento changeExtendsFiltersState al 
+  // boton desplegar extra filtrado 
   $("#btn-extends-filter").click(function() {
     changeExtendsFiltersState($(this), $("#extends-filters"))
   });

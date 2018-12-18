@@ -1,3 +1,12 @@
+<!--
+  Template base donde se renderizará todo el contenido.
+
+  Autores:
+    - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+  Version: 1.0.
+-->
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -5,12 +14,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
+    <!-- Estilos CSS -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'core/vendor/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'core/vendor/fontawesome/css/all.min.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
-    <link href="{% static 'core/css/custom_ckeditor.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/custom_ckeditor.css' %}">
     <title>Projectos Uja</title>
 
     <!-- Optional JavaScript -->
@@ -23,17 +32,29 @@
   <body>
     <!-- Navbar -->
     {% load login_extras %}
+    
+    <!-- Navbar cuando se esta autenticado -->
     {% if user.is_authenticated %}
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+
+      <!-- Logo -->
       <a class="navbar-brand" href="{% url 'home' %}">
         <img class="logo-img" src="{% static 'core/img/logo_uja_negativo.png' %}" alt="logo ujaen">
       </a>
+      
+      <!-- Boton Menu Responsive -->
       <button class="navbar-toggler btn btn-outline-light" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-expanded="false">
         <i class="fas fa-bars"></i>
       </button>
+
+      <!-- Items del Navbar -->
       <div class="collapse navbar-collapse" id="navbarToggler">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+          <!-- Enlace al TFG -->
           <li class="nav-item {% if nbar == 'tfg' %}active{% endif %}">
+
+            <!-- TFG para Profesores -->
             {% if user|has_group:"Teachers"%}
             <a class="nav-link dropdown-toggle" id="navbarTfgDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
               TFG
@@ -42,29 +63,47 @@
               <a class="dropdown-item" href="{% url 'teacher_tfgs_list' %}">Publicados</a>
               <a class="dropdown-item" href="{% url 'teacher_draft_tfgs_list' %}">Borrador</a>
             </div>
+
+            <!-- TFG para Departamento -->
             {% elif user|has_group:"Departaments"%}
             <a class="nav-link" href="{% url 'departament_tfgs_list' %}">TFG</a>
+
+            <!-- TFG para Centros -->
             {% elif user|has_group:"Centers"%}
             <a class="nav-link" href="{% url 'announ_tfgs_list' %}">TFG</a>
             {% endif %}
           </li>
+
+          <!-- Enlace al TFM -->
           <li class="nav-item {% if nbar == 'tfm' %}active{% endif %}">
+
+            <!-- TFM para Profesores -->
             {% if user|has_group:"Teachers"%}
             <a class="nav-link" href="{% url 'teacher_tfms_list' %}">TFM</a>
+  
+            <!-- TFM para Departamentos -->
             {% elif user|has_group:"Departaments"%}
             <a class="nav-link" href="{% url 'departament_tfms_list' %}">TFM</a>
+            
+            <!-- TFM para Centros -->
             {% elif user|has_group:"Centers"%}
             <a class="nav-link" href="{% url 'announ_tfms_list' %}">TFM</a>
             {% endif %}
           </li>
+
+          <!-- Boton de cierre de sesión -->
           <li class="nav-item" id="logoutMenu">
             <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a>
           </li>
         </ul>
+
+        <!-- Boton de configuración -->
         <div class="btn-group ml-auto" id="logoutButton">
           <button type="button" class="btn btn-outline-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-cogs"></i>
           </button>
+          
+          <!-- Boton de cerrar sesión -->
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item text-danger" href="{% url 'logout' %}">Cerrar sesión</a>
           </div>
@@ -72,15 +111,21 @@
       </div>
     </nav>
     {% else %}
+
+    <!-- Navbar cunado no estas autenticado -->
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+
+      <!-- Logo -->
       <a class="navbar-brand" href="{% url 'home' %}">
         <img class="logo-img" src="{% static 'core/img/logo_uja_negativo.png' %}" alt="logo ujaen">
       </a>
+
+      <!-- Boton de incio de sesión -->
       <a class="btn btn-outline-light ml-auto" href="{% url 'login' %}">Login</a>
     </nav>
     {% endif %}
 
-    <!-- Messages -->
+    <!-- Messages de Alerta -->
     {% if messages %}
     {% for message in messages %}
     <div class="container my-1 alert alert-{% if message.tags %}{{ message.tags }}{% endif %} fade show" role="alert">
@@ -92,10 +137,10 @@
     {% endfor %}
     {% endif %}
 
-    <!-- Title -->
+    <!-- Titulo -->
     {% block title %}{% endblock title %}
     
-    <!-- Content -->
+    <!-- Contenido -->
     {% block content %}{% endblock content %}
 
     <!-- Scripts -->
@@ -103,10 +148,8 @@
 
     <script>
       $(document).ready(function() {
-        {% comment %} setTimeout(() => {
-          $(".alert").alert("close")
-        }, 3000); {% endcomment %}
-
+        
+        // Inicialización de popover
         $('[data-toggle="popover"]').popover()
 
       });

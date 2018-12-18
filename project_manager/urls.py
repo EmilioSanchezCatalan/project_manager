@@ -22,7 +22,10 @@ urlpatterns = [
     path('', include('core.urls')),
     path('api/', include('api.urls')),
     path('login/', include('login.urls')),
-    path('projects/tfgs/', include('tfgs.urls')),
+    path('public/tfg/', include('tfgs.urls.urls_public')),
+    path('private/teacher/tfg/', include('tfgs.urls.urls_teacher')),
+    path('private/departament/tfg/', include('tfgs.urls.urls_departament')),
+    path('private/center/tfg/', include('tfgs.urls.urls_center')),
     path('projects/tfms/', include('tfms.urls')),
     path('announ/', include('announcements.urls'))
 ]

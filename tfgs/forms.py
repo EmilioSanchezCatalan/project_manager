@@ -1,32 +1,59 @@
+"""
+    Formularios para la manipulación de TFGs.
+
+    Autores:
+        - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+  Version: 1.0.
+"""
+
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.admin.widgets import AdminFileWidget
 from ckeditor.widgets import CKEditorWidget
-from core.models import Carrers, Departaments, Skills, Areas
-from .models import Tfgs
-from login.models import Userinfos
+from core.models import Carrers, Departaments, Areas
+from tfgs.models import Tfgs
 
 class FilterPublicTfgForm(forms.Form):
+
+    """
+        Filtros para el listado de TFGs público.
+
+        Atributos:
+            name_proyect(forms.CharField): Input tipo Text para el titulo dle TFG.
+            formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+    """
     name_project = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
     formation_project = forms.ModelChoiceField(
         queryset=Carrers.objects.all(),
         empty_label="Titulación",
-        required=False, 
+        required=False,
         widget=forms.Select(
             attrs={'class': 'form-control'}
         )
     )
 
 class FilterTeacherTfgForm(forms.Form):
+
+    """
+        Filtros para el listado de TFGs para profesores.
+
+        Atributos:
+            search_text(forms.CharField): Input tipo Text para el titulo dle TFG.
+            formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+            validation_state(forms.ChoiceField): Selector para elección del estado de la validación.
+
+    """
+
     search_text = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
     formation_project = forms.ModelChoiceField(
         queryset=Carrers.objects.all(),
         empty_label="Titulación",
-        required=False, 
+        required=False,
         widget=forms.Select(
             attrs={'class': 'form-control'}
         )
@@ -50,6 +77,19 @@ class FilterTeacherTfgForm(forms.Form):
         self.fields["formation_project"].queryset = self.user.userinfos.departaments.carrers.all()
 
 class FilterDepartamentTfgForm(forms.Form):
+
+    """
+        Filtros para el listado de TFGs para departamentos.
+
+        Atributos:
+            search_text(forms.CharField): Input tipo Text para el titulo dle TFG.
+            formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+            area(forms.ModelChoiceField): Selector para elección del area del tutor que
+                                          ha creado el TFG.
+            tutor(forms.ModelChoiceField): Selector para la elección dle tutor que ha creado el TFG.
+
+    """
+
     search_text = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
@@ -80,11 +120,29 @@ class FilterDepartamentTfgForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         super(FilterDepartamentTfgForm, self).__init__(*args, **kwargs)
-        self.fields["formation_project"].queryset = Carrers.objects.filter(tfgs__tutor1__userinfos__departaments=self.user.userinfos.departaments).distinct()
+        self.fields["formation_project"].queryset = Carrers.objects.filter(
+            tfgs__tutor1__userinfos__departaments=self.user.userinfos.departaments
+        ).distinct()
         self.fields["area"].queryset = self.user.userinfos.departaments.areas.all()
-        self.fields["tutor"].queryset = User.objects.filter(userinfos__departaments = self.user.userinfos.departaments, groups__name="Teachers")
+        self.fields["tutor"].queryset = User.objects.filter(
+            userinfos__departaments=self.user.userinfos.departaments,
+            groups__name="Teachers"
+        )
 
 class FilterCenterTfgForm(forms.Form):
+
+    """
+        Filtros para el listado de TFGs para centros.
+
+        Atributos:
+            search_text(forms.CharField): Input tipo Text para el titulo dle TFG.
+            formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+            departament(forms.ModelChoiceField): Selector para elección del departamento del tutor
+                                                 que ha creado el TFG.
+            tutor(forms.ModelChoiceField): Selector para la elección dle tutor que ha creado el TFG.
+
+    """
+
     search_text = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
@@ -120,6 +178,9 @@ class FilterCenterTfgForm(forms.Form):
 
 class CreateTfgForm(forms.ModelForm):
 
+    """
+        Formulario para la creación y edición de los TFGs.
+    """
     class Meta:
         model = Tfgs
         fields = [
@@ -180,45 +241,45 @@ class CreateTfgForm(forms.ModelForm):
         self.user = user
         super(CreateTfgForm, self).__init__(*args, **kwargs)
         self.fields["tutor1"].required = False
-        self.__customCarrer(user)
-        self.__customItinerarie()
-        self.__customMention()
-        self.__customType()
-        self.__customMode()
-        self.__customSkills()
+        self.__custom_carrer(user)
+        self.__custom_itinerarie()
+        self.__custom_mention()
+        self.__custom_type()
+        self.__custom_mode()
+        self.__custom_skills()
 
-    def __customCarrer(self, user=None):
+    def __custom_carrer(self, user=None):
         self.fields['carrers'].empty_label = "Selecciona la titulación"
         if user is not None:
             self.fields['carrers'].queryset = user.userinfos.departaments.carrers.all()
 
-    def __customItinerarie(self):
+    def __custom_itinerarie(self):
         self.fields['itineraries'].empty_label = "Selecciona el itinerario"
 
-    def __customMention(self):
+    def __custom_mention(self):
         self.fields['mentions'].empty_label = "Selecciona la mención"
 
-    def __customType(self):
-        CHOICES = (
+    def __custom_type(self):
+        choices = (
             ("", "Selecciona el tipo"),
-            (Tfgs.TYPE_GENERAL, 'General'),
-            (Tfgs.TYPE_ESPECIFIC, 'Específico'),
+            (Tfgs.TYPE_GENERAL, Tfgs.TYPE_TEXT_GENERAL),
+            (Tfgs.TYPE_ESPECIFIC, Tfgs.TYPE_TEXT_ESPECIFIC),
         )
         self.fields['type'] = forms.ChoiceField(
             widget=forms.Select(attrs={'class': 'form-control'}),
-            choices=CHOICES
+            choices=choices
         )
-    
-    def __customMode(self):
-        CHOICES = (
+
+    def __custom_mode(self):
+        choices = (
             ("", "Selecciona la modalidad"),
-            (Tfgs.MODE_EXP_THEORETICAL, 'Trabajo teórico/experimental'),
-            (Tfgs.MODE_ING_PROYECT, 'Proyecto de Ingeniería'),
-            (Tfgs.MODE_TECHNICAL_STUDY, 'Estudio técnico')
+            (Tfgs.MODE_EXP_THEORETICAL, Tfgs.MODE_TEXT_EXP_THEORETICAL),
+            (Tfgs.MODE_ING_PROYECT, Tfgs.MODE_TEXT_ING_PROYECT),
+            (Tfgs.MODE_TECHNICAL_STUDY, Tfgs.MODE_TEXT_TECHNICAL_STUDY)
         )
         self.fields['mode'] = forms.ChoiceField(
             widget=forms.Select(attrs={'class': 'form-control'}),
-            choices=CHOICES
+            choices=choices
         )
-    def __customSkills(self):
+    def __custom_skills(self):
         self.fields['skills'].required = False

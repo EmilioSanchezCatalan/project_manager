@@ -1,3 +1,9 @@
+/**
+ * Fichero de funciónes javascript
+ * @author Emilio Sánchez Catalán <esc00019@gmail.com>
+ * @version 1.0
+ */
+
 "use strict";
 
 /**

@@ -1,3 +1,12 @@
+"""
+    Configuración de las urls de la api
+
+    Autores:
+        - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+    Version: 1.0.
+"""
+
 from django.urls import path
 from api.views import ListItineraries, ListMentions, ListSkills, ListAreas
 

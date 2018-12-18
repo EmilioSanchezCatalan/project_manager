@@ -1,8 +1,21 @@
+"""
+    Formularios para la manipulación de los modelos de la
+    app.
+
+    Autores:
+        - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+    Version: 1.0.
+"""
+
 from django import forms
-from .models import Students
+from login.models import Students
 
 class CreateStudentForm(forms.ModelForm):
-    
+
+    """
+        Formulario de creación de estudiantes
+    """
     class Meta:
         model = Students
         fields = [

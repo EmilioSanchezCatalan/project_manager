@@ -1,10 +1,24 @@
+<!--
+    Template donde se renderizará la vista detalle del 
+    TFG.
+
+    Autores:
+        - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+    Version: 1.0.
+-->
+
 {% extends "core/base.html" %}
 
+<!-- Carga de modulos -->
 {% load login_extras tfgs_extras%}
 
+<!-- Bloque contenido -->
 {% block content %}
 <section class="container border bg-white p-4 position-relative">
+
     {% if can_validate %}
+    <!-- Botones superiores de validación -->
     <div class="row button-validate-abs d-none d-sm-flex">
         <div class="col-sm-12 text-right">
             {% if announ_id %}
@@ -17,12 +31,16 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- Titulo -->
     <div class="row {%if can_validate %}w-75 w-xs-100 {% endif%}">
         <div class="col-md-12">
             <strong>Título:</strong>
             <p>{{tfgs.title}}</p>
         </div>
     </div>
+
+    <!-- Titulación -->
     <div class="row">
         <div class="col-md-12">
             <p>
@@ -31,6 +49,8 @@
         </div>
     </div>
     {% if tfgs.itineraries %}
+
+    <!-- Itinerario -->
     <div class="row">
         <div class="col-md-12">
             <p>
@@ -40,6 +60,8 @@
     </div>
     {% endif %}
     {% if  tfgs.mentions %}
+    
+    <!-- Mención -->
     <div class="row">
         <div class="col-md-12">
             <p>
@@ -48,6 +70,8 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- Tipo de Proyecto-->
     <div class="row">
         <div class="col-md-12">
             <p>
@@ -55,6 +79,8 @@
             </p>
         </div>
     </div>
+
+    <!-- Modalidad -->
     <div class="row">
         <div class="col-md-12">
             <p>
@@ -63,6 +89,7 @@
         </div>
     </div>
 
+    <!-- Tutor Principal -->
     <div class="row">
         <div class="col-md-12">
                 <strong>Tutor principal:</strong>
@@ -74,6 +101,7 @@
         </div>
     </div>
     {% if tfgs.tutor2 %}
+    <!-- Tutor Secundario -->
     <div class="row">
         <div class="col-md-12">
                 <strong>Segundo tutor:</strong>
@@ -88,6 +116,7 @@
         </div>
     </div>
     {% endif %}
+    <!-- Trabajo en Equipo -->
     <div class="row">
         <div class="col-md-12">
             <p>
@@ -96,6 +125,7 @@
         </div>
     </div>
     {% if tfgs.team_memory %}
+    <!-- Memoria de trabajo en equipo -->
     <div class="row">
         <div class="col-md-12">
             <p>
@@ -106,6 +136,8 @@
     {% endif %}
     {% if not tfgs.is_team and students%}
     {% for student in students %}
+    
+    <!-- Alumno asignado -->
     <div class="row">
         <div class="col-md-12">
                 <strong>Alumno</strong>
@@ -120,6 +152,8 @@
     {% endfor %}
     {% else %}
     {% for student in students %}
+    
+    <!-- Alumnos asignados -->
     <div class="row">
         <div class="col-md-12">
                 <strong>Alumno {{forloop.counter}}</strong>
@@ -133,24 +167,32 @@
     </div>
     {% endfor %}
     {% endif %}
+    
+    <!-- Objectivos -->
     <div class="row">
         <div class="col-md-12">
             <strong>Objetivos:</strong>
             <p class="pl-4 mt-1">{{tfgs.objectives|safe}}</p>
         </div>
     </div>
+
+    <!-- Metodologías -->
     <div class="row">
         <div class="col-md-12">
             <strong>Metodología:</strong>
             <p class="pl-4 mt-1">{{tfgs.methodology|safe}}</p>
         </div>
     </div>
+
+    <!-- Documentos y formatos -->
     <div class="row">
         <div class="col-md-12">
             <strong>Documentos y formatos:</strong>
             <p class="pl-4 mt-1">{{tfgs.docs_and_forms|safe}}</p>
         </div>
     </div>
+
+    <!-- Competencias -->
     <div class="row">
         <div class="col-md-12">
             <strong>Competencias:</strong>
@@ -165,6 +207,8 @@
             </ul>
         </div>
     </div>
+
+    <!-- Boton volver atras -->
     <div class="row w-50 d-inline-flex mb-sm-0 {% if can_validate == True %}mb-5{% endif %}">
         <div class="col-sm-12">
             {% if announ_id %}
@@ -179,6 +223,8 @@
         </div>
     </div>
     {% if can_validate %}
+
+    <!-- Botones de valiación inferiores -->
     <div class="row w-50 d-none d-sm-inline-flex">
         <div class="col-sm-12 mt-3 text-right">
             {% if announ_id %}
@@ -190,6 +236,8 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- Botones para la validación Móvil -->
     <div class="fixed-bottom bar-validator d-sm-none border p-2">
         {% if announ_id %}
         <a class="btn btn-danger" onclick="return confirm('¿Estás seguro?');" href="{% url validation_url_error announ_id=announ_id id=tfgs.id validate=1 %}">Rechazar</a>

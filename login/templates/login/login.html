@@ -1,16 +1,33 @@
+<!-- 
+    Template para la autenticación
+
+    Autores:
+        - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+    Version: 1.0.
+-->
+
 {% extends "core/base.html" %}
 
+<!-- Carga de Modulos-->
 {% load static %}
 
+<!-- Bloque de Contenido -->
 {% block content %}
 <div class="d-flex form-signin text-center">
     <form action="" method="POST">
         {% csrf_token %}
         <img class="logo-img-singnin mb-5" src="{% static 'core/img/logo_universidad.png' %}">
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="text" id="inputEmail" name="username" class="form-control" placeholder="Email address" required autofocus>
+        
+        <!-- Nombre de usuario -->
+        <label for="inputEmail" class="sr-only">Nombre de usuario</label>
+        <input type="text" id="inputEmail" name="username" class="form-control" placeholder="username" required autofocus>
+        
+        <!-- Password -->
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+        
+        <!-- Boton Submit -->
         <button class="btn btn-lg btn-secondary btn-block mt-4" type="submit">Entrar</button>
         <p class="mt-5 mb-3 text-muted">&copy; 2018-2019</p>
     </form>
