@@ -1,6 +1,6 @@
 """
     Controladores destinados a las funcionalidades de los Centros
-    sobre los TFGs.
+    sobre los tfms.
 
     Autores:
         - Emilio Sánchez Catalán <esc00019@gmail.com>.
@@ -14,14 +14,14 @@ from django.views.generic.detail import DetailView
 from project_manager.utils import render_to_pdf
 from project_manager.settings import PAGINATION
 from login.models import Students
-from announcements.models import AnnouncementsTfg
-from tfgs.forms import FilterPublicTfgForm
-from tfgs.models import Tfgs
+from announcements.models import AnnouncementsTfm
+from tfms.forms import FilterPublicTfmForm
+from tfms.models import Tfms
 
-class TfgListView(ListView):
+class TfmListView(ListView):
 
     """
-        Controlador encargado de mostrar el listado público de los TFGs
+        Controlador encargado de mostrar el listado público de los TFMs
 
         Atributos:
             model(model.Model): Modelo que se va a listar en la vista.
@@ -29,43 +29,44 @@ class TfgListView(ListView):
             paginate_by(int): Número de items por página.
     """
 
-    model = Tfgs
-    template_name = "tfgs/public_tfgs_list.html"
+    model = Tfms
+    template_name = "tfms/public_tfms_list.html"
     paginate_by = PAGINATION
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(
             departament_validation=True,
             center_validation=True,
-            announcements__status=AnnouncementsTfg.STATUS_PUBLIC
+            announcements__status=AnnouncementsTfm.STATUS_PUBLIC
         )
 
-        # Opciones de filtrado de TFG (Titulo, Titulación)
+        # Opciones de filtrado de TFM (Titulo, Titulación)
         name = self.request.GET.get("name_project", "")
-        carrer = self.request.GET.get("formation_project", "")
+        master = self.request.GET.get("formation_project", "")
         if name:
             queryset = queryset.filter(title__contains=name)
-        if carrer:
-            queryset = queryset.filter(carrers_id=carrer)
+        if master:
+            queryset = queryset.filter(masters_id=master)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form_filter'] = FilterPublicTfgForm(initial=self.request.GET.dict())
+        context['title'] = "Tfms"
+        context['form_filter'] = FilterPublicTfmForm(initial=self.request.GET.dict())
         return context
 
-class TfgDetailView(DetailView):
+class TfmDetailView(DetailView):
 
     """
-        Controlador para mostrar un TFG en detalle.
+        Controlador para mostrar un TFM en detalle.
 
         Atributos:
             model(model.Model): Modelo que se va a mostrar en la vista.
             template_name(str): Nombre del template donde se va a renderizar la vista.
     """
 
-    model = Tfgs
-    teamplate_name = "tfgs/tfgs_detail"
+    model = Tfms
+    teamplate_name = "tfms/tfms_detail"
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(
@@ -76,12 +77,12 @@ class TfgDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["students"] = Students.objects.filter(tfgs_id=context['tfgs'].id)
-        context["back_url"] = "public_tfgs_list"
+        context["students"] = Students.objects.filter(tfms_id=context['tfms'].id)
+        context["back_url"] = "public_tfms_list"
         return context
 
     def get(self, request, *args, **kwargs):
         if request.GET.get("format") == "pdf":
-            pdf = render_to_pdf("tfgs/tfgs_format_pdf.html", { "tfg": self.get_object() })
+            pdf = render_to_pdf("tfms/tfms_format_pdf.html", { "tfm": self.get_object() })
             return HttpResponse(pdf, content_type="application/pdf")
         return super().get(request, *args, **kwargs)

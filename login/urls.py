@@ -8,9 +8,15 @@
 """
 
 from django.urls import path
-from .views import LoginPageView, Logout
+from login.views import LoginPageView, Logout
+from login.views import PasswordResetForm, PasswordResetDone
+from login.views import PasswordResetConfirm, PasswordResetComplete
 
 urlpatterns = [
     path('', LoginPageView.as_view(), name="login"),
-    path('logout/', Logout.as_view(), name="logout")
+    path('logout/', Logout.as_view(), name="logout"),
+    path('reset_email/', PasswordResetForm.as_view(), name="reset_email"),
+    path('reset_done/', PasswordResetDone.as_view(), name="reset_done"),
+    path('reset_confirm/<slug:uidb64>/<slug:token>', PasswordResetConfirm.as_view(), name="reset_confirm"),
+    path('reset_complete/', PasswordResetComplete.as_view(), name="reset_complete")
 ]

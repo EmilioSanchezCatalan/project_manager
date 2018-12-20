@@ -1,20 +1,37 @@
+<!--
+  Template donde se renderiza la el lista de TFMs del
+  departamento.
+
+  Autores:
+    - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+  Version: 1.0.
+-->
+
 {% extends "core/base.html" %}
 
+<!-- Bloque de Contenido -->
 {% block content %}
 <section class="container bg-white border p-4">
     <form method="post">
         {% csrf_token %}
+
+        <!-- Nombre de la convocatoria -->
         <div class="form-group row">
             <label for="id_title" class="col-sm-12 col-form-label">Nombre*</label>
             <div class="col-sm-12">
                 {{form.name}}
             </div>
         </div>
+
+        <!-- Submit Guardar -->
         <div class="form-group row">
             <div class="col-sm-12">
                 <input type="submit" class="btn btn-success" value="Guardar">
             </div>
         </div>
+
+        <!-- Boton Volver Atras -->
         <div class="form-group row">
             <div class="col-sm-12">
                 <a class="btn btn-light" href="{% url back_url %}">Atras</a>

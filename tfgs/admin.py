@@ -11,9 +11,11 @@ from django.contrib import admin
 from .models import Tfgs
 
 class TfgsAdmin(admin.ModelAdmin):
+
     """
         Clase destinada a la configuración del modelo Tfgs.
     """
+
     pass
 
 

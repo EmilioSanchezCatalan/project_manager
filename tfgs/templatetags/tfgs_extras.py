@@ -27,12 +27,13 @@ def tfg_mode(value):
                     seleccionada.
     """
 
-    mode_texts = [
-        Tfgs.MODE_TEXT_ING_PROYECT,
-        Tfgs.MODE_TEXT_TECHNICAL_STUDY,
-        Tfgs.MODE_TEXT_EXP_THEORETICAL
-    ]
-    return mode_texts[value]
+    if value == Tfgs.MODE_ING_PROYECT:
+        return Tfgs.MODE_TEXT_ING_PROYECT
+    if value == Tfgs.MODE_EXP_THEORETICAL:
+        return Tfgs.MODE_TEXT_EXP_THEORETICAL
+    if value == Tfgs.MODE_TECHNICAL_STUDY:
+        return Tfgs.MODE_TEXT_TECHNICAL_STUDY
+    return "Nan"
 
 @register.filter(name="tfg_type")
 def tfg_type(value):
@@ -43,14 +44,14 @@ def tfg_type(value):
 
         Parametro:
             value(int): identificador del valor de la modalidad
-        
+
         Returns:
             String: devuelve el texto correspondiente a al
                     tipo de TFG.
     """
 
-    type_texts = [
-        Tfgs.TYPE_TEXT_GENERAL,
-        Tfgs.TYPE_TEXT_ESPECIFIC
-    ]
-    return type_texts[value]
+    if value == Tfgs.TYPE_GENERAL:
+        return Tfgs.TYPE_TEXT_GENERAL
+    if value == Tfgs.TYPE_ESPECIFIC:
+        return Tfgs.TYPE_TEXT_ESPECIFIC
+    return "Nan"

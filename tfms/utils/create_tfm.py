@@ -13,10 +13,10 @@ from django.views.generic.edit import CreateView
 from login.forms import CreateStudentForm
 from login.models import Students
 from core.forms import CreateTutor2Form
-from tfgs.forms import CreateTfgForm
-from tfgs.models import Tfgs
+from tfms.forms import CreateTfmForm
+from tfms.models import Tfms
 
-class TfgCreateView(CreateView):
+class TfmCreateView(CreateView):
 
     """
         Controlador de la vista update generica para todos los usuarios.
@@ -26,37 +26,36 @@ class TfgCreateView(CreateView):
             form_class(CreateTfgForm): formulario del Modelo TFG
     """
 
-    model = Tfgs
-    form_class = CreateTfgForm
+    model = Tfms
+    form_class = CreateTfmForm
 
     def get_form_kwargs(self):
-        kwargs = super(TfgCreateView, self).get_form_kwargs()
+        kwargs = super(TfmCreateView, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["student_form1"] = CreateStudentForm(prefix="student1")
-        context["student_form2"] = CreateStudentForm(prefix="student2")
+        context["student_form"] = CreateStudentForm(prefix="student")
         context["tutor2_form"] = CreateTutor2Form(prefix="tutor2")
-        context["back_url"] = "teacher_tfgs_list"
+        context["back_url"] = "teacher_tfms_list"
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
-        student1_form, student2_form, tutor2_form = None, None, None
+        student_form, tutor2_form = None, None
         if self.request.POST.get('has_student') == 'on':
-            student1_form = CreateStudentForm(
+            student_form = CreateStudentForm(
                 self.request.POST,
-                prefix="student1",
+                prefix="student",
                 instance=self._get_student(
-                    self.request.POST.get('student1-dni')
+                    self.request.POST.get('student-dni')
                 )
             )
-            student1_val = student1_form.is_valid()
+            student_val = student_form.is_valid()
         else:
-            student1_val = True
+            student_val = True
         if self.request.POST.get('has_tutor2') == 'on':
             tutor2_form = CreateTutor2Form(
                 self.request.POST,
@@ -66,51 +65,35 @@ class TfgCreateView(CreateView):
             tutor2_val = tutor2_form.is_valid()
         else:
             tutor2_val = True
-        if (self.request.POST.get('has_student') == 'on' and
-                self.request.POST.get('is_team') == 'on'):
-            student2_form = CreateStudentForm(
-                self.request.POST,
-                prefix="student2",
-                instance=self._get_student(
-                    self.request.POST.get('student2-dni')
-                )
-            )
-            student2_val = student2_form.is_valid()
+        if form.is_valid() and student_val and tutor2_val:
+            return self.form_valid(form, student_form, tutor2_form)
         else:
-            student2_val = True
-        if form.is_valid() and student1_val and tutor2_val and student2_val:
-            return self.form_valid(form, student1_form, student2_form, tutor2_form)
-        return self.form_invalid(form, student1_form, student2_form, tutor2_form)
+            return self.form_invalid(form, student_form, tutor2_form)
 
-    def form_valid(self, form, student1_form=None, student2_form=None, tutor2_form=None):
+    def form_valid(self, form, student_form=None, tutor2_form=None):
         tutor2 = self._create_tutor2(tutor2_form)
-        self._create_tfg(form, tutor2)
-        self._create_student(self.object, student1_form)
-        self._create_student(self.object, student2_form)
+        self._create_tfm(form, tutor2)
+        self._create_student(self.object, student_form)
         messages.success(
             self.request,
-            "Creado correctamente nuevo trabajo fin de grado con titulo: \""
+            "Creado correctamente nuevo trabajo final de master con titulo: \""
             + self.object.title + "\"",
             'success'
         )
         return HttpResponseRedirect(self.get_success_url())
 
-    def form_invalid(self, form, student1_form=None, student2_form=None, tutor2_form=None):
-        if student1_form is None:
-            student1_form = CreateStudentForm(prefix="student1")
-        if student2_form is None:
-            student2_form = CreateStudentForm(prefix="student2")
+    def form_invalid(self, form, student_form=None, tutor2_form=None):
+        if student_form is None:
+            student_form = CreateStudentForm(prefix="student")
         if tutor2_form is None:
             tutor2_form = CreateTutor2Form(prefix="tutor2")
 
         self._errors_form(form)
-        self._errors_form(student1_form)
-        self._errors_form(student2_form)
+        self._errors_form(student_form)
         self._errors_form(tutor2_form)
         return self.render_to_response(self.get_context_data(
             form=form,
-            student1_form=student1_form,
-            student2_form=student2_form,
+            student_form=student_form,
             tutor2_form=tutor2_form
         ))
 
@@ -128,10 +111,10 @@ class TfgCreateView(CreateView):
             for error in form_errors[fields_error]:
                 messages.error(self.request, fields_error + ": " + error, 'danger')
 
-    def _create_tfg(self, form, tutor2=None):
+    def _create_tfm(self, form, tutor2=None):
 
         """
-            Función encargada de crear un TFG dado su formulario y un tutor
+            Función encargada de crear un TFM dado su formulario y un tutor
             de forma opcional.
 
             Parametros:
@@ -157,25 +140,26 @@ class TfgCreateView(CreateView):
 
         try:
             return Students.objects.get(dni=dni)
+
         # TODO Exception especific
         except:
             return None
 
     @staticmethod
-    def _create_student(tfg, form=None):
+    def _create_student(tfm, form=None):
 
         """
             Función que crear un nuevo estudiante en base de datos, asociandolo a un
-            TFG.
+            TFM.
 
             Parametros:
-                tfg(Tfgs): modelo del TFG que se quiere asociar al estudiante.
+                tfm(Tfms): modelo del TFM que se quiere asociar al estudiante.
                 form(CreateStudentForm): formulario para la creación de un estudiante
         """
 
         if form is not None:
             student = form.save(commit=False)
-            student.tfgs = tfg
+            student.tfms = tfm
             student.save()
 
     @staticmethod

@@ -1,5 +1,5 @@
 <!--
-  Template donde se renderiza el lista de TFGs del
+  Template donde se renderiza el lista de TFMs del
   profesor en el borrador.
 
   Autores:
@@ -11,17 +11,17 @@
 {% extends "core/base.html" %}
 
 <!-- Carga de Modulos -->
-{% load tfgs_extras%}
+{% load tfms_extras%}
 
 <!-- BLoque Título -->
 {% block title %}
 <header class="container px-3 px-sm-5 mt-0 mt-sm-4">
-
+  
   <!-- Título -->
-  <h1 class="d-none d-sm-block">Borrador TFGs</h1>
-
+  <h1 class="d-none d-sm-block">Borrador TFMs</h1>
+  
   <!-- TItulo Móvil -->
-  <h1 class="d-block d-sm-none">Borrador TFGs</h1>
+  <h1 class="d-block d-sm-none">Borrador TFMs</h1>
 </header>
 {% endblock title %}
 
@@ -35,8 +35,8 @@
 
       <!-- Boton añadir nuevo tfg -->
       <div class="form-group mr-auto mr-md-100 fb-sm-100 mr-sm-auto">
-        <a class="btn btn-success btn-block" href="{% url 'teacher_draft_tfgs_create' %}">
-          <i class="fas fa-plus mr-2"></i>Añadir TFG
+        <a class="btn btn-success btn-block" href="{% url 'teacher_draft_tfms_create' %}">
+          <i class="fas fa-plus mr-2"></i>Añadir TFM
         </a>
       </div>
 
@@ -65,14 +65,15 @@
     <hr class="mt-0" {% if not is_filtering %}style="display:none"{% endif %}>
     <div class="form-row" id="extends-filters" {% if not is_filtering %}style="display: none"{% endif %}>
 
-      <!-- Filtro por titulación -->
-      <div class="form-group mr-lg-1 mr-auto fb-md-100">
+      <!-- Filtro por titulación-->
+      <div class="form-group  mr-lg-1 mr-auto fb-md-100">
         {{form_filter.formation_project}}
       </div>
+
     </div>
   </form>
 
-  <!-- Listados de TFGs -->
+  <!-- Listados de TFMs -->
   <article style="overflow-x: scroll">
     <table class="table table-crud border m-0">
       <thead>
@@ -84,31 +85,28 @@
         </tr>
       </thead>
       <tbody>
-        {% for tfg in tfgs_list %}
+        {% for tfm in tfms_list %}
         <tr>
 
           <!-- Información Título -->
-          <td>{{tfg.title}}</td>
+          <td>{{tfm.title}}</td>
 
-          <!-- Información Tipo de TFG -->
-          <td>{{tfg.type|tfg_type}}</td>
-
-          <!-- Información Modalidad -->
-          <td>{{tfg.mode|tfg_mode}}</td>
+          <!-- Información Tipo de TFM -->
+          <td>{{tfm.type|tfm_type}}</td>
 
           <!-- Funcionalidades -->
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <a class="btn btn-light" target="_blank" href="{% url 'teacher_tfgs_detail' tfg.id %}?format=pdf">
+              <a class="btn btn-light" target="_blank" href="{% url 'teacher_tfms_detail' tfm.id %}?format=pdf">
                 <i class="far fa-file-pdf"></i>              
               </a>
-              <a class="btn btn-light" href="{% url 'teacher_tfgs_detail' tfg.id %}">
+              <a class="btn btn-light" href="{% url 'teacher_tfms_detail' tfm.id %}">
                 <i class="far fa-eye"></i>
               </a>
-              <a class="btn btn-light" href="{% url 'teacher_tfgs_update' tfg.id %}">
+              <a class="btn btn-light" href="{% url 'teacher_tfms_update' tfm.id %}">
                 <i class="far fa-edit"></i>
               </a>
-              <a class="btn btn-light" onclick="return confirm('¿Estás seguro?');" href="{% url 'teacher_tfgs_delete' tfg.id %}">
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que deseas borrar el proyecto?');" href="{% url 'teacher_tfms_delete' tfm.id %}">
                 <i class="far fa-trash-alt"></i>
               </a>
             </div>
@@ -121,6 +119,7 @@
 
   <!-- Paginación -->
   {% include "core/pagination.html" %}
+
 </section>
 {% endblock content %}
 

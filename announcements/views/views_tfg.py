@@ -21,7 +21,7 @@ from project_manager.settings import PAGINATION
 from login.decorators import is_center
 from tfgs.models import Tfgs
 from announcements.models import AnnouncementsTfg
-from announcements.forms import FilterAnnouncementsForm, CreateAnnouncementsForm
+from announcements.forms import FilterAnnouncementsForm, CreateAnnouncementsTfgForm
 
 @method_decorator(user_passes_test(is_center), name="dispatch")
 class AnnounTfgListView(ListView):
@@ -70,7 +70,7 @@ class AnnounTfgCreateView(CreateView):
 
     model = AnnouncementsTfg
     template_name = "announcements/announcements_form.html"
-    form_class = CreateAnnouncementsForm
+    form_class = CreateAnnouncementsTfgForm
     success_url = reverse_lazy("announ_tfgs_list")
 
     def get(self, request, *args, **kwargs):
@@ -108,7 +108,7 @@ class AnnounTfgUpdateView(UpdateView):
 
     model = AnnouncementsTfg
     template_name = "announcements/announcements_form.html"
-    form_class = CreateAnnouncementsForm
+    form_class = CreateAnnouncementsTfgForm
     success_url = reverse_lazy("announ_tfgs_list")
 
     def get_context_data(self, **kwargs):

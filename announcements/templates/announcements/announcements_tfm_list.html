@@ -1,5 +1,5 @@
 <!--
-  Template donde se renderiza la el lista de convocatorias de TFGs
+  Template donde se renderiza la el lista de convocatorias de tfms
 
   Autores:
     - Emilio Sánchez Catalán <esc00019@gmail.com>.
@@ -17,10 +17,10 @@
 <header class="container px-3 px-sm-5 mt-0 mt-sm-4">
 
   <!-- Título -->
-  <h1 class="d-none d-sm-block">Convocatorias TFGs</h1>
+  <h1 class="d-none d-sm-block">Convocatorias TFMs</h1>
 
   <!-- TItulo Móvil -->
-  <h1 class="d-block d-sm-none">Convocatorias TFGs</h1>
+  <h1 class="d-block d-sm-none">Convocatorias TFMs</h1>
 </header>
 {% endblock title %}
 
@@ -34,7 +34,7 @@
 
       <!-- Boton añadir nueva convocatoria -->  
       <div class="form-group mr-auto mr-md-100 fb-sm-100 mr-sm-auto">
-        <a class="btn btn-success btn-block" href="{% url 'announ_tfgs_create' %}">
+        <a class="btn btn-success btn-block" href="{% url 'announ_tfms_create' %}">
           <i class="fas fa-plus mr-2"></i>Convocatoria
         </a>
       </div>
@@ -71,24 +71,24 @@
           <td>{{announ.name}}</td>
 
           <!-- Información del Estado -->
-          <td>{{announ.status|announ_tfg_status}}</td>
+          <td>{{announ.status|announ_tfm_status}}</td>
 
           <!-- Funcionalidades -->
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <a class="btn btn-light" href="{% url 'center_tfgs_list' announ.id %}">
+              <a class="btn btn-light" href="{% url 'center_tfms_list' announ.id %}">
                 <i class="fas fa-sign-in-alt"></i>
               </a>
-              <a class="btn btn-light" href="{% url 'announ_tfgs_update' announ.id %}">
+              <a class="btn btn-light" href="{% url 'announ_tfms_update' announ.id %}">
                 <i class="far fa-edit"></i>
               </a>
-              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que lo deseas abrir al público?');" href="{% url 'announ_tfgs_status_public' announ.id %}">
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que lo deseas abrir al público?');" href="{% url 'announ_tfms_status_public' announ.id %}">
                 <i class="fas fa-door-open"></i>
               </a>
-              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que lo deseas cerrar?');" href="{% url 'announ_tfgs_status_close' announ.id %}">
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que lo deseas cerrar?');" href="{% url 'announ_tfms_status_close' announ.id %}">
                 <i class="fas fa-door-closed"></i>              
               </a>
-              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que lo deseas eliminar?');" href="{% url 'announ_tfgs_delete' announ.id %}">
+              <a class="btn btn-light" onclick="return confirm('¿Estás seguro que lo deseas eliminar?');" href="{% url 'announ_tfms_delete' announ.id %}">
                 <i class="far fa-trash-alt"></i>
               </a>
             </div>

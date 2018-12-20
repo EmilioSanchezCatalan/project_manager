@@ -38,3 +38,42 @@ class CreateStudentForm(forms.ModelForm):
                 attrs={'class': 'form-control'}
             )
         }
+
+class ResetEmailForm(forms.Form):
+
+    """
+        Formulario para resetear la contraseña a traves de un correo
+        electrónico.
+        
+        Atributos:
+            email(forms.EmailField): correo electronico donde enviar
+                                     el correo de restauración
+    """
+
+    email = forms.EmailField(widget=forms.EmailInput(
+        attrs={
+            'class': 'form-control',
+            'placeholder': "email@example.com"
+        }
+    ))
+
+class ResetPasswordForm(forms.Form):
+
+    """
+        Formulario para establecer la nueva contraseña.
+    """
+
+    new_password1 = forms.CharField(required=True, widget=forms.PasswordInput(
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'Nueva Contraseña'
+        }
+    ))
+
+    new_password2 = forms.CharField(required=True, widget=forms.PasswordInput(
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'Repite Contraseña'
+        }
+    ))
+ 

@@ -27,7 +27,11 @@ urlpatterns = [
     path('private/departament/tfg/', include('tfgs.urls.urls_departament')),
     path('private/center/tfg/', include('tfgs.urls.urls_center')),
     path('private/center/convocatoria/tfg/', include('announcements.urls.urls_tfgs')),
-    path('projects/tfms/', include('tfms.urls')),
+    path('public/tfm/', include('tfms.urls.urls_public')),
+    path('private/teacher/tfm/', include('tfms.urls.urls_teacher')),
+    path('private/departament/tfm/', include('tfms.urls.urls_departament')),
+    path('private/center/tfm/', include('tfms.urls.urls_center')),
+    path('private/center/convocatoria/tfm/', include('announcements.urls.urls_tfms')),
 ]
 
 if settings.DEBUG:

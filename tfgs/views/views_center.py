@@ -196,6 +196,7 @@ class CenterTfgUpdateView(UpdateTfg):
         context["number_students"] = tfg.students.all().count()
         context["tutor2_form"] = CreateTutor2Form(prefix="tutor2", instance=tfg.tutor2)
         context["back_url"] = "center_tfgs_list"
+        context["edit"] = True
         context["announ_id"] = self.kwargs["announ_id"]
         return context
 
@@ -325,7 +326,7 @@ class CenterValidationOk(RedirectView):
             messages.warning(
                 self.request,
                 "No se puede modificar la validación una vez que la "
-                + "convocatoria deja de estar abierta a propuestas", 
+                + "convocatoria deja de estar abierta a propuestas",
                 "warning"
             )
 

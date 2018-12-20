@@ -10,9 +10,12 @@
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
+from django.contrib.auth.views import PasswordResetDoneView, PasswordResetCompleteView
 from django.views.generic.base import RedirectView
 from django.utils.decorators import method_decorator
 from django.urls import reverse, reverse_lazy
+from login.forms import ResetEmailForm, ResetPasswordForm
 
 class LoginPageView(LoginView):
 
@@ -56,4 +59,42 @@ class Logout(RedirectView):
         logout(self.request)
         url = super().get_redirect_url(*args, **kwargs)
         return url
-            
+
+class PasswordResetForm(PasswordResetView):
+
+    """
+        Controlador para resetear la contraseña a traves del correo
+        electrónico
+    """
+
+    template_name = "login/password_reset_form.html"
+    email_template_name = "login/password_reset_email.html"
+    success_url = reverse_lazy("reset_done")
+    extra_context = {'form': ResetEmailForm}
+
+class PasswordResetDone(PasswordResetDoneView):
+
+    """
+        Controlador que confirma el inicio del reseteo de contraseña
+    """
+
+    template_name = "login/password_reset_done.html"
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+
+    """
+        Controlador donde se establece la nueva contraseña del usuario.
+    """
+
+    template_name = "login/password_reset_confirm.html"
+    success_url = reverse_lazy("reset_complete")
+    extra_context = {'form': ResetPasswordForm}
+
+class PasswordResetComplete(PasswordResetCompleteView):
+
+    """
+        Controlador que confirma que la contraseña a sido modificada
+        correctamente.
+    """
+
+    template_name = "login/password_reset_complete.html"

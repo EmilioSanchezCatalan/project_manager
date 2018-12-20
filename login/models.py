@@ -52,7 +52,7 @@ class Userinfos(models.Model):
 
     def __str__(self):
         return u'{0}'.format(self.auth)
-    
+
     class Meta:
         verbose_name = 'Información de usuario'
         verbose_name_plural = 'Informaciones de usuario'

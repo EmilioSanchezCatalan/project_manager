@@ -43,6 +43,13 @@ class AnnouncementsTfg(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
+    def __str__(self):
+        return u'{0}'.format(self.name)
+
+    class Meta:
+        verbose_name = 'Convocatoria de TFGs'
+        verbose_name_plural = 'Convocatorias de TFGs'
+
 class AnnouncementsTfm(models.Model):
 
     """
@@ -75,3 +82,10 @@ class AnnouncementsTfm(models.Model):
     )
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
+
+    def __str__(self):
+        return u'{0}'.format(self.name)
+
+    class Meta:
+        verbose_name = 'Convocatoria de TFMs'
+        verbose_name_plural = 'Convocatorias de TFMs'

@@ -8,9 +8,15 @@
 """
 
 from django.contrib import admin
-from .models import AnnouncementsTfg
+from announcements.models import AnnouncementsTfg, AnnouncementsTfm
 
-class AnnouncementsAdmin(admin.ModelAdmin):
+class AnnouncementsTfgAdmin(admin.ModelAdmin):
+    """
+        Configuración especifica de las convocotorias.
+    """
+    pass
+
+class AnnouncementsTfmAdmin(admin.ModelAdmin):
     """
         Configuración especifica de las convocotorias.
     """
@@ -18,4 +24,5 @@ class AnnouncementsAdmin(admin.ModelAdmin):
 
 
 # Registro de los modelos en el panel administración.
-admin.site.register(AnnouncementsTfg, AnnouncementsAdmin)
+admin.site.register(AnnouncementsTfg, AnnouncementsTfgAdmin)
+admin.site.register(AnnouncementsTfm, AnnouncementsTfmAdmin)

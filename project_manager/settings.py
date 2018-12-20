@@ -129,21 +129,40 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+# Pagination ListItems.
 PAGINATION = 10
 
+
+# Statics Configurations
 STATIC_URL = '/static/'
 
+# Media Configurations
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+
+# Ckeditor Configuration
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'Custom',
         'toolbar_Custom': [
             ['Bold', 'Italic', 'Underline'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            [
+                'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft',
+                'JustifyCenter', 'JustifyRight', 'JustifyBlock'
+            ],
             ['Link', 'Unlink'],
             ['RemoveFormat', 'Source']
         ]
     }
 }
+
+# Email Configuration
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "ujaprojects@gmail.com"
+EMAIL_HOST_PASSWORD = "prueba123?"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+DEFAULT_FROM_EMAIL = "ujaprojects@gmail.com"

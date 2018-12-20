@@ -7,7 +7,7 @@
       Version: 1.0.
 """
 from django import forms
-from .models import AnnouncementsTfg
+from announcements.models import AnnouncementsTfg, AnnouncementsTfm
 
 class FilterAnnouncementsForm(forms.Form):
 
@@ -20,7 +20,7 @@ class FilterAnnouncementsForm(forms.Form):
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
 
-class CreateAnnouncementsForm(forms.ModelForm):
+class CreateAnnouncementsTfgForm(forms.ModelForm):
 
     """
         Formulario para la creación de convocatorias.
@@ -28,6 +28,26 @@ class CreateAnnouncementsForm(forms.ModelForm):
 
     class Meta:
         model = AnnouncementsTfg
+        fields = [
+            'name'
+        ]
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Nombre de la convocatoria'
+                }
+            )
+        }
+
+class CreateAnnouncementsTfmForm(forms.ModelForm):
+
+    """
+        Formulario para la creación de convocatorias.
+    """
+
+    class Meta:
+        model = AnnouncementsTfm
         fields = [
             'name'
         ]

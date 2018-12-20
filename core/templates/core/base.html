@@ -79,7 +79,14 @@
 
             <!-- TFM para Profesores -->
             {% if user|has_group:"Teachers"%}
-            <a class="nav-link" href="{% url 'teacher_tfms_list' %}">TFM</a>
+            <a class="nav-link dropdown-toggle" id="navbarTfmDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+              TFM
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarTfmDropdown">
+              <a class="dropdown-item" href="{% url 'teacher_tfms_list' %}">Publicados</a>
+              <a class="dropdown-item" href="{% url 'teacher_draft_tfms_list' %}">Borrador</a>
+            </div>
+
   
             <!-- TFM para Departamentos -->
             {% elif user|has_group:"Departaments"%}

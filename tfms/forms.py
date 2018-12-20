@@ -1,3 +1,12 @@
+"""
+    Formularios para la manipulación de TFGs.
+
+    Autores:
+        - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+    Version: 1.0.
+"""
+
 from django import forms
 from django.contrib.auth.models import User
 from ckeditor.widgets import CKEditorWidget
@@ -5,6 +14,16 @@ from core.models import Masters, Areas, Departaments
 from .models import Tfms
 
 class FilterPublicTfmForm(forms.Form):
+
+    """
+        Filtros para el listado de TFMs público.
+
+        Atributos:
+            name_proyect(forms.CharField): Input tipo Text para el titulo dle TFM.
+            formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+
+    """
+
     name_project = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
@@ -18,6 +37,17 @@ class FilterPublicTfmForm(forms.Form):
     )
 
 class FilterTeacherTfmForm(forms.Form):
+
+    """
+        Filtros para el listado de TFMs para profesores.
+
+        Atributos:
+            search_text(forms.CharField): Input tipo Text para el titulo dle TFM.
+            formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+            validation_state(forms.ChoiceField): Selector para elección del estado de la validación.
+
+    """
+
     search_text = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
@@ -48,6 +78,19 @@ class FilterTeacherTfmForm(forms.Form):
         self.fields["formation_project"].queryset = self.user.userinfos.departaments.masters.all()
 
 class FilterDepartamentTfmForm(forms.Form):
+
+    """
+        Filtros para el listado de TFMs para departamentos.
+
+        Atributos:
+            search_text(forms.CharField): Input tipo Text para el titulo dle TFM.
+            formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+            area(forms.ModelChoiceField): Selector para elección del area del tutor que
+                                          ha creado el TFM.
+            tutor(forms.ModelChoiceField): Selector para la elección dle tutor que ha creado el TFM.
+
+    """
+
     search_text = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
@@ -78,11 +121,29 @@ class FilterDepartamentTfmForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         super(FilterDepartamentTfmForm, self).__init__(*args, **kwargs)
-        self.fields["formation_project"].queryset = Masters.objects.filter(tfms__tutor1__userinfos__departaments=self.user.userinfos.departaments).distinct()
+        self.fields["formation_project"].queryset = Masters.objects.filter(
+            tfms__tutor1__userinfos__departaments=self.user.userinfos.departaments
+        ).distinct()
         self.fields["area"].queryset = self.user.userinfos.departaments.areas.all()
-        self.fields["tutor"].queryset = User.objects.filter(userinfos__departaments = self.user.userinfos.departaments, groups__name="Teachers")
+        self.fields["tutor"].queryset = User.objects.filter(
+            userinfos__departaments=self.user.userinfos.departaments,
+            groups__name="Teachers"
+        )
 
 class FilterCenterTfmForm(forms.Form):
+
+    """
+        Filtros para el listado de TFMs para centros.
+
+        Atributos:
+            search_text(forms.CharField): Input tipo Text para el titulo dle TFM.
+            formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+            departament(forms.ModelChoiceField): Selector para elección del departamento del tutor
+                                                 que ha creado el TFM.
+            tutor(forms.ModelChoiceField): Selector para la elección dle tutor que ha creado el TFM.
+
+    """
+
     search_text = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
     ))
@@ -118,6 +179,10 @@ class FilterCenterTfmForm(forms.Form):
 
 class CreateTfmForm(forms.ModelForm):
 
+    """
+        Formulario para la creación y edición de los TFMs.
+    """
+
     class Meta:
         model = Tfms
         fields = [
@@ -129,7 +194,8 @@ class CreateTfmForm(forms.ModelForm):
             'language',
             'knowledge',
             'docs_and_forms',
-            'tutor1'
+            'tutor1',
+            'draft'
         ]
         widgets = {
             'title': forms.TextInput(
@@ -140,6 +206,9 @@ class CreateTfmForm(forms.ModelForm):
             ),
             'masters': forms.Select(
                 attrs={'class': 'form-control'}
+            ),
+            'draft': forms.CheckboxInput(
+                attrs={'class': 'switch'}
             ),
             'type': forms.Select(
                 attrs={'class': 'form-control'}
@@ -162,21 +231,21 @@ class CreateTfmForm(forms.ModelForm):
         self.user = user
         super(CreateTfmForm, self).__init__(*args, **kwargs)
         self.fields['tutor1'].required = False
-        self.__customMasters(user)
-        self.__customType()
+        self.__custom_masters(user)
+        self.__custom_type()
 
-    def __customMasters(self, user=None):
+    def __custom_masters(self, user=None):
         self.fields['masters'].empty_label = "Selecciona la titulación"
         if user is not None:
             self.fields['masters'].queryset = user.userinfos.departaments.masters.all()
 
-    def __customType(self):
-        CHOICES = (
+    def __custom_type(self):
+        choices = (
             ("", "Selecciona el tipo"),
-            (Tfms.TYPE_BUSINESS, 'Empresa'),
-            (Tfms.TYPE_UNI, 'Universidad'),
+            (Tfms.TYPE_BUSINESS, Tfms.TYPE_TEXT_BUSINESS),
+            (Tfms.TYPE_UNI, Tfms.TYPE_TEXT_UNI),
         )
         self.fields['type'] = forms.ChoiceField(
             widget=forms.Select(attrs={'class': 'form-control'}),
-            choices=CHOICES
+            choices=choices
         )

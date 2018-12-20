@@ -4,7 +4,7 @@
     Autores:
         - Emilio Sánchez Catalán <esc00019@gmail.com>.
 
-  Version: 1.0.
+    Version: 1.0.
 """
 
 from django import forms
@@ -22,6 +22,7 @@ class FilterPublicTfgForm(forms.Form):
         Atributos:
             name_proyect(forms.CharField): Input tipo Text para el titulo dle TFG.
             formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+
     """
     name_project = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Título'}
@@ -181,6 +182,7 @@ class CreateTfgForm(forms.ModelForm):
     """
         Formulario para la creación y edición de los TFGs.
     """
+
     class Meta:
         model = Tfgs
         fields = [
