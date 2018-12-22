@@ -98,7 +98,14 @@
             {% endif %}
           </li>
 
+          {% if user|has_group:"Centers"%}
           <!-- Boton de cierre de sesión -->
+          <li class="nav-item" id="logoutMenu">
+            <a class="nav-link" href="{% url 'userinfo_edit' user.userinfos.centers.id %}">Info Centro</a>
+          </li>
+          {% endif %}
+
+          <!-- Información de centro -->
           <li class="nav-item" id="logoutMenu">
             <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a>
           </li>
@@ -112,6 +119,9 @@
           
           <!-- Boton de cerrar sesión -->
           <div class="dropdown-menu dropdown-menu-right">
+            {% if user|has_group:"Centers"%}
+            <a class="dropdown-item" href="{% url 'userinfo_edit' user.userinfos.centers.id %}">Info Centro</a>
+            {% endif %}
             <a class="dropdown-item text-danger" href="{% url 'logout' %}">Cerrar sesión</a>
           </div>
         </div>

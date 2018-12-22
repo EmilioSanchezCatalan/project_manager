@@ -1,0 +1,49 @@
+<!-- 
+    Template para editar el logo de un centro
+
+    Autores:
+        - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+    Version: 1.0.
+-->
+
+{% extends "core/base.html" %}
+
+<!-- Blque Contenido -->
+{% block content %}
+<section class="container bg-white border p-4">
+
+    <!-- Formulario Multipart -->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Memoria Justificando Trabajo en Equipo -->
+        <div class="row block">
+            <div class="col-sm-12">
+                Logo del Centro*:
+            </div>
+            <div class="pl-3 pl-sm-5 col-sm-12 mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        {{form.logo}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boton Submit -->
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-success" value="Guardar">
+            </div>
+        </div>
+
+        <!-- Boton Atras -->
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <a class="btn btn-light" href="{% url 'announ_tfgs_list' %}">Atras</a>
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock content %}

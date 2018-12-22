@@ -17,6 +17,7 @@ class Centers(models.Model):
     """
 
     # Campos del modelo
+    logo = models.ImageField(verbose_name="Logo", upload_to="center_logos", null=True, blank=True)
     name = models.CharField(max_length=150, verbose_name="Nombre")
     createdAt = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")

@@ -13,14 +13,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth.views import PasswordResetDoneView, PasswordResetCompleteView
 from django.views.generic.base import RedirectView
+from django.views.generic.edit import UpdateView
 from django.utils.decorators import method_decorator
 from django.urls import reverse, reverse_lazy
-from login.forms import ResetEmailForm, ResetPasswordForm
+from django.contrib import messages
+from login.forms import ResetEmailForm, ResetPasswordForm, CenterLogoForm
+from core.models import Centers
 
 class LoginPageView(LoginView):
 
     """
-        Controlador de la vista principal
+        Controlador destinado al inicio de sesión de los usuarios.
 
         Atributos:
             template_name(str): template donde renderizar la vista login
@@ -40,6 +43,9 @@ class LoginPageView(LoginView):
         if self.request.user.groups.filter(name="Centers").exists():
             return reverse('announ_tfgs_list')
         return reverse('home')
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 @method_decorator(login_required, name='dispatch')
 class Logout(RedirectView):
@@ -98,3 +104,24 @@ class PasswordResetComplete(PasswordResetCompleteView):
     """
 
     template_name = "login/password_reset_complete.html"
+
+
+class UserInfoUpdate(UpdateView):
+
+    """
+        Controlador que permite modificar el perfil del usuario.
+        (solo la imagen del centro)
+    """
+
+    model = Centers
+    form_class = CenterLogoForm
+    template_name = "login/logo_center_form.html"
+    success_url = reverse_lazy("announ_tfgs_list")
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "Logo del centro: " + self.request.user.userinfos.centers.name
+            + " modificado correctamente"
+        )
+        return super().form_valid(form)

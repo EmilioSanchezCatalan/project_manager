@@ -10,6 +10,7 @@
 
 from django import forms
 from login.models import Students
+from core.models import Centers
 
 class CreateStudentForm(forms.ModelForm):
 
@@ -44,7 +45,7 @@ class ResetEmailForm(forms.Form):
     """
         Formulario para resetear la contraseña a traves de un correo
         electrónico.
-        
+
         Atributos:
             email(forms.EmailField): correo electronico donde enviar
                                      el correo de restauración
@@ -76,4 +77,13 @@ class ResetPasswordForm(forms.Form):
             'placeholder': 'Repite Contraseña'
         }
     ))
- 
+
+class CenterLogoForm(forms.ModelForm):
+
+    """
+        Formulario para establecer una imagen de logo a un centro
+    """
+
+    class Meta():
+        model = Centers
+        fields = ['logo']
