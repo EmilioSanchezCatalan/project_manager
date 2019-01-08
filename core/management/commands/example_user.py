@@ -17,8 +17,8 @@ class Command(BaseCommand):
                 "password": "prueba123?",
                 "first_name": "Juan Carlos",
                 "last_name": "Cuevas",
-                "departament": "Telecomunicaciones",
-                "area": "Telemática"
+                "departament": "Ingeniería de Telecomunicación",
+                "area": "Ingeniería Telemática"
             },
             {
                 "username": "fnavarro",
@@ -26,8 +26,8 @@ class Command(BaseCommand):
                 "password": "prueba123?",
                 "first_name": "Francisco Javier",
                 "last_name": "Sanchez-Roselly",
-                "departament": "Telecomunicaciones",
-                "area": "Telemática"
+                "departament": "Ingeniería de Telecomunicación",
+                "area": "Ingeniería Telemática"
             },
             {
                 "username": "ajyuste",
@@ -35,8 +35,17 @@ class Command(BaseCommand):
                 "password": "prueba123?",
                 "first_name": "Antonio Jesús",
                 "last_name": "Yuste",
-                "departament": "Telecomunicaciones",
-                "area": "Tecnologías de Telecomunicación"
+                "departament": "Ingeniería de Telecomunicación",
+                "area": "Teoría de la Señal y Comunicaciones"
+            },
+            {
+                "username": "loli",
+                "email": "loli@ujaen.es",
+                "password": "prueba123?",
+                "first_name": "Yolanda",
+                "last_name": "Catalán",
+                "departament": "Enfermería",
+                "area": "Enfermería"
             }
         ],
         "Departaments": [
@@ -44,21 +53,33 @@ class Command(BaseCommand):
                 "username": "teleco",
                 "email": "teleco@ujaen.es",
                 "password": "prueba123?",
-                "departament": "Telecomunicaciones"
+                "departament": "Ingeniería de Telecomunicación"
             },
+            {
+                "username": "enfermera",
+                "email": "enfermera@ujaen.es",
+                "password": "prueba123?",
+                "departament": "Enfermería"
+            }
         ],
         "Centers": [
             {
                 "username": "epsl",
                 "email": "epsl@ujaen.es",
                 "password": "prueba123?",
-                "center": "EPSL",
+                "center": "Escuela Politécnica Superior de Linares",
             },
             {
                 "username": "cateleco",
                 "email": "cateleco@ujaen.es",
                 "password": "prueba123?",
-                "center": "CA Telecomunicaciones",
+                "center": "Comisión Academica del Máster de Ingeniería de Telecomunicación",
+            },
+            {
+                "username": "fcsalud",
+                "email": "fcsalud@ujaen.es",
+                "password": "prueba123?",
+                "center": "Facultad de Ciencias de la Salud",
             }
         ]
     }

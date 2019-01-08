@@ -16,37 +16,519 @@ class Command(BaseCommand):
     ]
 
     CENTERS = [
-        "EPSL",
-        "CA Telecomunicaciones"
+        "Facultad de Ciencias de la Salud",
+        "Facultad de Ciencias Experimentales",
+        "Facultad de Ciencias Sociales y Jurídicas",
+        "Facultad de Humanidades y Ciencias de la Educación",
+        "Facultad de Trabajo Social",
+        "Escuela Politécnica Superior de Jaén",
+        "Escuela Politécnica Superior de Linares",
+        "Comisión Academica del Máster de Ingeniería de Telecomunicación"
     ]
 
     DEPARTAMENTS = [
-        "Telecomunicaciones",
-        "Electrónica",
-        "Informatica",
+        "Antropología, Geografía e Historia",
+        "Biología Animal, Biología Vegetal y Ecología",
+        "Biología Experimental",
+        "Ciencias de la Salud",
+        "Derecho Civil, Derecho Financiero y Tributario",
+        "Derecho Penal, Filosofía del Derecho, Filosofía Moral y Filosofía",
+        "Derecho Público",
+        "Derecho Público y Común Europeo",
+        "Derecho Público y Derecho Privado Especial",
+        "Didáctica de la Expresión Musical, Plástica y Corporal",
+        "Didáctica de las Ciencias",
+        "Economía",
+        "Economía Financiera y Contabilidad",
+        "Enfermería",
+        "Estadística e Investigación Operativa",
+        "Filología Española",
+        "Filología Inglesa",
+        "Física",
+        "Geología",
+        "Informática",
+        "Ingeniería Cartográfica, Geodésica y Fotogrametría",
+        "Ingeniería de Telecomunicación",
+        "Ingeniería Eléctrica",
+        "Ingeniería Electrónica y Automática",
+        "Ingeniería Gráfica, Diseño y Proyectos",
+        "Ingeniería Mecánica y Minera",
+        "Ingeniería Química, Ambiental y de los Materiales",
+        "Lenguas y Culturas Mediterráneas",
+        "Matemáticas",
+        "Organización de Empresas, Marketing y Sociología",
+        "Patrimonio Histórico",
+        "Pedagogía",
+        "Psicología",
+        "Química Física y Analítica",
+        "Química Inorgánica y Orgánica",
         "Otro",
     ]
 
     AREAS = [
         {
-            "name": "Tecnologías de Telecomunicación",
-            "departament": "Telecomunicaciones"
+            "name": "Antropología Social",
+            "departament": "Antropología, Geografía e Historia"
         },
         {
-            "name": "Telemática",
-            "departament": "Telecomunicaciones"
+            "name": "Análisis Geográfico Regional",
+            "departament": "Antropología, Geografía e Historia"
         },
         {
-            "name": "Otra (Telecomunicaciones)",
-            "departament": "Telecomunicaciones"
+            "name": "Geografía Física",
+            "departament": "Antropología, Geografía e Historia"
         },
         {
-            "name": "Otra (Electronica)",
-            "departament": "Electrónica"
+            "name": "Geografía Humana",
+            "departament": "Antropología, Geografía e Historia"
         },
         {
-            "name": "Otra (Informatica)",
-            "departament": "Informatica"
+            "name": "Historia Antigua",
+            "departament": "Antropología, Geografía e Historia"
+        },
+        {
+            "name": "Historia Moderna",
+            "departament": "Antropología, Geografía e Historia"
+        },
+        {
+            "name": "Historia Contemporánea",
+            "departament": "Antropología, Geografía e Historia"
+        },
+        {
+            "name": "Botánica",
+            "departament": "Biología Animal, Biología Vegetal y Ecología"
+        },
+        {
+            "name": "Ecología",
+            "departament": "Biología Animal, Biología Vegetal y Ecología"
+        },
+        {
+            "name": "Fisiología Vegetal",
+            "departament": "Biología Animal, Biología Vegetal y Ecología"
+        },
+        {
+            "name": "Zoología",
+            "departament": "Biología Animal, Biología Vegetal y Ecología"
+        },
+        {
+            "name": "Biología Celular",
+            "departament": "Biología Experimental"
+        },
+        {
+            "name": "Bioquímica y Biología Molecular",
+            "departament": "Biología Experimental"
+        },
+        {
+            "name": "Genética",
+            "departament": "Biología Experimental"
+        },
+        {
+            "name": "Anatomía y Embrología Humana",
+            "departament": "Ciencias de la Salud"
+        },
+        {
+            "name": "Cirugía",
+            "departament": "Ciencias de la Salud"
+        },
+        {
+            "name": "Fisiología",
+            "departament": "Ciencias de la Salud"
+        },
+        {
+            "name": "Medecina Preventiva y Salud Pública",
+            "departament": "Ciencias de la Salud"
+        },
+        {
+            "name": "Inmunología",
+            "departament": "Ciencias de la Salud"
+        },
+        {
+            "name": "Microbiología",
+            "departament": "Ciencias de la Salud"
+        },
+        {
+            "name": "Fisioterapia",
+            "departament": "Ciencias de la Salud"
+        },
+        {
+            "name": "Derecho Civil",
+            "departament": "Derecho Civil, Derecho Financiero y Tributario"
+        },
+        {
+            "name": "Derecho Financiero y Tributario",
+            "departament": "Derecho Civil, Derecho Financiero y Tributario"
+        },
+        {
+            "name": "Derecho Penal",
+            "departament": "Derecho Penal, Filosofía del Derecho, Filosofía Moral y Filosofía"
+        },
+        {
+            "name": "Filosofía del Derecho",
+            "departament": "Derecho Penal, Filosofía del Derecho, Filosofía Moral y Filosofía"
+        },
+        {
+            "name": "Filosofía Moral",
+            "departament": "Derecho Penal, Filosofía del Derecho, Filosofía Moral y Filosofía"
+        },
+        {
+            "name": "Filosofía",
+            "departament": "Derecho Penal, Filosofía del Derecho, Filosofía Moral y Filosofía"
+        },
+        {
+            "name": "Derecho Administrativo",
+            "departament": "Derecho Público"
+        },
+        {
+            "name": "Derecho Constitucional",
+            "departament": "Derecho Público"
+        },
+        {
+            "name": "Derecho Eclesiástico del Estado",
+            "departament": "Derecho Público y Común Europeo"
+        },
+        {
+            "name": "Derecho Internacional Público y Relaciones Internacionales",
+            "departament": "Derecho Público y Común Europeo"
+        },
+        {
+            "name": "Derecho Procesal",
+            "departament": "Derecho Público y Común Europeo"
+        },
+        {
+            "name": "Derecho Romano",
+            "departament": "Derecho Público y Común Europeo"
+        },
+        {
+            "name": "Ciencia Política y de la Administración",
+            "departament": "Derecho Público y Derecho Privado Especial"
+        },
+        {
+            "name": "Derecho Internacional Privado",
+            "departament": "Derecho Público y Derecho Privado Especial"
+        },
+        {
+            "name": "Derecho Mercantil",
+            "departament": "Derecho Público y Derecho Privado Especial"
+        },
+        {
+            "name": "Derecho del Trabajo y de la Seguridad Social",
+            "departament": "Derecho Público y Derecho Privado Especial"
+        },
+        {
+            "name": "Historia del Derecho y de las Instituciones",
+            "departament": "Derecho Público y Derecho Privado Especial"
+        },
+        {
+            "name": "Dibujo",
+            "departament": "Didáctica de la Expresión Musical, Plástica y Corporal"
+        },
+        {
+            "name": "Didáctica de la Expresión Corporal",
+            "departament": "Didáctica de la Expresión Musical, Plástica y Corporal"
+        },
+        {
+            "name": "Didáctica de la Expresión Musical",
+            "departament": "Didáctica de la Expresión Musical, Plástica y Corporal"
+        },
+        {
+            "name": "Educación Física y Deportiva",
+            "departament": "Didáctica de la Expresión Musical, Plástica y Corporal"
+        },
+        {
+            "name": "Música",
+            "departament": "Didáctica de la Expresión Musical, Plástica y Corporal"
+        },
+        {
+            "name": "Didáctica de la Expresión Plástica",
+            "departament": "Didáctica de la Expresión Musical, Plástica y Corporal"
+        },
+        {
+            "name": "Didáctica de las Matemáticas",
+            "departament": "Didáctica de las Ciencias"
+        },
+        {
+            "name": "Didáctica de las Ciencias Experimentales",
+            "departament": "Didáctica de las Ciencias"
+        },
+        {
+            "name": "Didáctica de las Ciencias Sociales",
+            "departament": "Didáctica de las Ciencias"
+        },
+        {
+            "name": "Economía Aplicada",
+            "departament": "Economía"
+        },
+        {
+            "name": "Fundamentos del Análisis Económico",
+            "departament": "Economía"
+        },
+        {
+            "name": "Historia e Instituciones Económicas",
+            "departament": "Economía"
+        },
+        {
+            "name": "Economía Financiera y Contabilidad",
+            "departament": "Economía Financiera y Contabilidad"
+        },
+        {
+            "name": "Enfermería",
+            "departament": "Enfermería"
+        },
+        {
+            "name": "Estadística e Investigación Operativa",
+            "departament": "Estadística e Investigación Operativa"
+        },
+        {
+            "name": "Didáctica de la Lengua y la Literatura",
+            "departament": "Filología Española"
+        },
+        {
+            "name": "Lengua Española",
+            "departament": "Filología Española"
+        },
+        {
+            "name": "Lingüística General",
+            "departament": "Filología Española"
+        },
+        {
+            "name": "Literatura Española",
+            "departament": "Filología Española"
+        },
+        {
+            "name": "Filología Inglesa",
+            "departament": "Filología Inglesa"
+        },
+        {
+            "name": "Astronomía y Astrofísica",
+            "departament": "Física"
+        },
+        {
+            "name": "Física Aplicada",
+            "departament": "Física"
+        },
+        {
+            "name": "Física de la Tierra",
+            "departament": "Física"
+        },
+        {
+            "name": "Cristalografía y Mineralogía",
+            "departament": "Geología"
+        },
+        {
+            "name": "Edafología y Química Agrícola",
+            "departament": "Geología"
+        },
+        {
+            "name": "Estratigrafía",
+            "departament": "Geología"
+        },
+        {
+            "name": "Geodinámica Externa",
+            "departament": "Geología"
+        },
+        {
+            "name": "Geodinámica Interna",
+            "departament": "Geología"
+        },
+        {
+            "name": "Arquitectura y tecnología de computadores",
+            "departament": "Informática"
+        },
+        {
+            "name": "Ciencias de la computación e Inteligencia artificial",
+            "departament": "Informática"
+        },
+        {
+            "name": "Lenguajes y sistemas informáticos",
+            "departament": "Informática"
+        },
+        {
+            "name": "Ingeniería Cartográfica, Geodésica y Fotogrametría",
+            "departament": "Ingeniería Cartográfica, Geodésica y Fotogrametría"
+        },
+        {
+            "name": "Ingeniería Telemática",
+            "departament": "Ingeniería de Telecomunicación"
+        },
+        {
+            "name": "Teoría de la Señal y Comunicaciones",
+            "departament": "Ingeniería de Telecomunicación"
+        },
+        {
+            "name": "Ingeniería Eléctrica",
+            "departament": "Ingeniería Eléctrica"
+        },
+        {
+            "name": "Ingeniería Electrónica y Automática",
+            "departament": "Ingeniería Electrónica y Automática"
+        },
+        {
+            "name": "Expresión Gráfica en la Ingeniería",
+            "departament": "Ingeniería Gráfica, Diseño y Proyectos"
+        },
+        {
+            "name": "Proyectos de Ingeniería",
+            "departament": "Ingeniería Gráfica, Diseño y Proyectos"
+        },
+        {
+            "name": "Explotación de Minas",
+            "departament": "Ingeniería Mecánica y Minera"
+        },
+        {
+            "name": "Ingeniería de la Construcción",
+            "departament": "Ingeniería Mecánica y Minera"
+        },
+        {
+            "name": "Ingeniería de los Procesos de Fabricación",
+            "departament": "Ingeniería Mecánica y Minera"
+        },
+        {
+            "name": "Ingeniería Mecánica",
+            "departament": "Ingeniería Mecánica y Minera"
+        },
+        {
+            "name": "Máquinas y Motores Térmicos ",
+            "departament": "Ingeniería Mecánica y Minera"
+        },
+        {
+            "name": "Mecánica de Fluidos",
+            "departament": "Ingeniería Mecánica y Minera"
+        },
+        {
+            "name": "Mecánica de los Medios Continuos y Teoría de Estructuras",
+            "departament": "Ingeniería Mecánica y Minera"
+        },
+        {
+            "name": "Prospección e Investigación Minera",
+            "departament": "Ingeniería Mecánica y Minera"
+        },
+        {
+            "name": "Ciencia de Materiales e Ingeniería Metalúrgica",
+            "departament": "Ingeniería Química, Ambiental y de los Materiales"
+        },
+        {
+            "name": "Ciencia DE Ingeniería Química",
+            "departament": "Ingeniería Química, Ambiental y de los Materiales"
+        },
+        {
+            "name": "Tecnologías del Medio Ambiente",
+            "departament": "Ingeniería Química, Ambiental y de los Materiales"
+        },
+        {
+            "name": "Estudios Árabes e Islámicos",
+            "departament": "Lenguas y Culturas Mediterráneas"
+        },
+        {
+            "name": "Filología Francesa",
+            "departament": "Lenguas y Culturas Mediterráneas"
+        },
+        {
+            "name": "Filología Griega",
+            "departament": "Lenguas y Culturas Mediterráneas"
+        },
+        {
+            "name": "Filología Latina",
+            "departament": "Lenguas y Culturas Mediterráneas"
+        },
+        {
+            "name": "Teoría de la Literatura y Literatura Comparada",
+            "departament": "Lenguas y Culturas Mediterráneas"
+        },
+        {
+            "name": "Álgebra",
+            "departament": "Matemáticas"
+        },
+        {
+            "name": "Análisis Matemático",
+            "departament": "Matemáticas"
+        },
+        {
+            "name": "Geometría y Topología",
+            "departament": "Matemáticas"
+        },
+        {
+            "name": "Matemática Aplicada",
+            "departament": "Matemáticas"
+        },
+        {
+            "name": "Sociología",
+            "departament": "Organización de Empresas, Marketing y Sociología"
+        },
+        {
+            "name": "Organización de Empresas",
+            "departament": "Organización de Empresas, Marketing y Sociología"
+        },
+        {
+            "name": "Comercialización e Investigación de Mercados",
+            "departament": "Organización de Empresas, Marketing y Sociología"
+        },
+        {
+            "name": "Arqueología",
+            "departament": "Patrimonio Histórico"
+        },
+        {
+            "name": "Historia del arte",
+            "departament": "Patrimonio Histórico"
+        },
+        {
+            "name": "Historia medieval",
+            "departament": "Patrimonio Histórico"
+        },
+        {
+            "name": "Prehistoria",
+            "departament": "Patrimonio Histórico"
+        },
+        {
+            "name": "Didáctica y Organización Escolar",
+            "departament": "Pedagogía"
+        },
+        {
+            "name": "Métododos de Investigación y Diagnóstico en Educación",
+            "departament": "Pedagogía"
+        },
+        {
+            "name": "Teoría e Historia de la Educación",
+            "departament": "Pedagogía"
+        },
+        {
+            "name": "Metodología de las Ciencias del Comportamiento",
+            "departament": "Psicología"
+        },
+        {
+            "name": "Personalidad, Evaluación y Tratamiento Psicológico",
+            "departament": "Psicología"
+        },
+        {
+            "name": "Psicobiología",
+            "departament": "Psicología"
+        },
+        {
+            "name": "Psicología Básica",
+            "departament": "Psicología"
+        },
+        {
+            "name": "Psicología Evolutiva y de la Educación",
+            "departament": "Psicología"
+        },
+        {
+            "name": "Psicología Social",
+            "departament": "Psicología"
+        },
+        {
+            "name": "Trabajo Social y Servicios Sociales",
+            "departament": "Psicología"
+        },
+        {
+            "name": "Química Analítica",
+            "departament": "Química Física y Analítica"
+        },
+        {
+            "name": "Química Física",
+            "departament": "Química Física y Analítica"
+        },
+        {
+            "name": "Química Inorgánica y Orgánica",
+            "departament": "Química Inorgánica y Orgánica"
         },
         {
             "name": "Otra",
@@ -57,10 +539,12 @@ class Command(BaseCommand):
     MASTERS = [
         {
             "name": "Máster Universitario en Ingeniería de Telecomunicación",
-            "center": "CA Telecomunicaciones",
+            "center": "Comisión Academica del Máster de Ingeniería de Telecomunicación",
             "departaments": [
-                "Telecomunicaciones",
-                "Electrónica"
+                "Ingeniería de Telecomunicación",
+                "Ingeniería Eléctrica",
+                "Ingeniería Electrónica y Automática",
+                "Informática"
             ]
         },
     ]
@@ -68,11 +552,15 @@ class Command(BaseCommand):
     CARRERS = [
         {
             "name": "Grado en Ingeniería de Tecnologías de Telecomunicación",
-            "center": "EPSL",
+            "center": "Escuela Politécnica Superior de Linares",
             "departaments": [
-                "Telecomunicaciones",
-                "Electrónica",
-                "Informatica",
+                "Ingeniería de Telecomunicación",
+                "Ingeniería Eléctrica",
+                "Informática",
+                "Matemáticas",
+                "Organización de Empresas, Marketing y Sociología",
+                "Estadística e Investigación Operativa",
+                "Física"
             ],
             "itineraries": {
                 "Sistemas de telecomunicación": [
@@ -156,11 +644,15 @@ class Command(BaseCommand):
         },
         {
             "name": "Grado en Ingeniería Telemática",
-            "center": "EPSL",
+            "center": "Escuela Politécnica Superior de Linares",
             "departaments": [
-                "Telecomunicaciones",
-                "Electrónica",
-                "Informatica",
+                "Ingeniería de Telecomunicación",
+                "Ingeniería Eléctrica",
+                "Informática",
+                "Matemáticas",
+                "Organización de Empresas, Marketing y Sociología",
+                "Estadística e Investigación Operativa",
+                "Física"
             ],
             "itineraries": {
                 "General (Telematica)": [
@@ -213,6 +705,107 @@ class Command(BaseCommand):
                         "name": "TEL7",
                         "description": "Capacidad de programación de servicios y aplicaciones"
                                        + " telemáticas, en red y distribuidas."
+                    }
+                ]
+            },
+            "mentions": []
+        },
+        {
+            "name": "Grado en Ingeniería Química Industrial",
+            "center": "Escuela Politécnica Superior de Linares",
+            "departaments": [
+                "Química Física y Analítica",
+                "Química Inorgánica y Orgánica",
+                "Informática",
+                "Matemáticas",
+                "Ingeniería Química, Ambiental y de los Materiales",
+                "Estadística e Investigación Operativa",
+                "Organización de Empresas, Marketing y Sociología",
+                "Física"
+            ],
+            "itineraries": {
+                "General (Química Industrial)": [
+                    {
+                        "name": "CEQ1",
+                        "description": "Conocimientos sobre balances de materia "
+                                       + "y energía, biotecnología, "
+                                       + "transferencia de materia, operaciones de separación, "
+                                       + ", entendidas éstas como sistemas de captación, transporte"
+                                       + ", ingeniería de la reacción química, diseño de reactores,"
+                                       + " y valorización y transformación de materias "
+                                       + "primas y recursos energéticos."
+                    },
+                    {
+                        "name": "CEQ2",
+                        "description": "Capacidad para el análisis, diseño, simulación y "
+                                       + "optimización de procesos y productos."
+                    },
+                    {
+                        "name": "CEQ3",
+                        "description": "Capacidad para el diseño y gestión de procedimientos de "
+                                       + "experimentación aplicada, especialmente para la "
+                                       + "determinación de propiedades termodinámicas y de transporte, "
+                                       + "y modelado de fenómenos y sistemas en el ámbito "
+                                       + "de la ingeniería química, sistemas con flujo de fluidos, "
+                                       + "transmisión de calor, operaciones de transferencia de materia, "
+                                       + "cinética de las reacciones químicas y reactores."
+                    },
+                    {
+                        "name": "CEQ4",
+                        "description": "Capacidad para diseñar, gestionar y operar "
+                                       + "procedimientos de simulación, control e "
+                                       + "instrumentación de procesos químicos."
+                    }
+                ]
+            },
+            "mentions": [
+                "Meción en Tecnología Industrial y Agroalimentaria",
+                "Meción en Medioambiente y Materiales",
+                "Sin mención"
+            ]
+        },
+        {
+            "name": "Grado Enfermería",
+            "center": "Facultad de Ciencias de la Salud",
+            "departaments": [
+                "Enfermería",
+                "Ciencias de la Salud",
+                "Biología Experimental",
+                "Psicología",
+                "Estadística e Investigación Operativa"
+            ],
+            "itineraries": {
+                "General (Enfermería)": [
+                    {
+                        "name": "EN1",
+                        "description": "Conocimientos sobre balances de materia "
+                                       + "y energía, biotecnología, "
+                                       + "transferencia de materia, operaciones de separación, "
+                                       + ", entendidas éstas como sistemas de captación, transporte"
+                                       + ", ingeniería de la reacción química, diseño de reactores,"
+                                       + " y valorización y transformación de materias "
+                                       + "primas y recursos energéticos."
+                    },
+                    {
+                        "name": "EN2",
+                        "description": "Capacidad para el análisis, diseño, simulación y "
+                                       + "optimización de procesos y productos."
+                    },
+                    {
+                        "name": "EN3",
+                        "description": "Capacidad para el diseño y gestión de procedimientos de "
+                                       + "experimentación aplicada, especialmente para la "
+                                       + "determinación de propiedades termodinámicas y de transporte, "
+                                       + "y modelado de fenómenos y sistemas en el ámbito "
+                                       + "de la ingeniería química, sistemas con flujo de fluidos, "
+                                       + "transmisión de calor, operaciones de transferencia de materia, "
+                                       + "cinética de las reacciones químicas y reactores."
+                    },
+                    {
+                        "name": "EN4",
+                        "description": "Capacidad para diseñar, gestionar y operar "
+                                       + "procedimientos de simulación, control e "
+                                       + "instrumentación de procesos químicos."
                     }
                 ]
             },
