@@ -1,0 +1,83 @@
+<!--
+  Template donde se renderiza la lista de centros de TFGs
+
+  Autores:
+    - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+  Version: 1.0.
+-->
+
+{% extends "core/base.html" %}
+
+<!-- Carga de Modulos -->
+{% load static%}
+
+<!-- BLoque Título -->
+{% block title %}
+<header class="container px-3 px-sm-5 mt-0 mt-sm-4">
+
+    <!-- Título -->
+    <h1 class="d-none d-sm-block">Listado de Centros</h1>
+    
+    <!-- TItulo Móvil -->
+    <h1 class="d-block d-sm-none">Centros</h1>
+</header>
+{% endblock title %}
+
+<!-- Bloque de Contenido -->
+{% block content %}
+<section class="container border bg-white p-3 p-sm-5 mt-0 mt-sm-4">
+    <header>
+
+        <!-- Filtros-->
+        <form action="" class="d-flex flex-wrap flex-sm-wrap justify-content-between">
+    
+            <!-- Submit Filtrado -->
+            <div class="form-group mx-2 flex-grow-1 flex-sm-grow-0">
+                <button for="titleProject" class="btn btn-light btn-block font-weight-bold">
+                    <i class="fas fa-search mr-2" style="font-size: 15px;"></i>Buscador
+                </button>
+            </div>
+
+            <!-- Filtrado de texto -->
+            <div class="form-group mx-2 flex-grow-1">
+                {{form_filter.center_name}}
+            </div>
+
+        </form>
+    </header>
+
+    <!-- Listados de Centros -->
+    <article style="overflow-x: scroll">
+        <table class="table table-hover border m-0">
+            <tbody>
+                {% for center in object_list %}
+                <tr>
+
+                    <!-- Logo del Centro -->
+                    <td>
+                        {% if center.logo %}
+                        <img class="logo-centro" src="{{center.logo.url}}" alt="logo ujaen">
+                        {% else %}
+                        <img class="logo-centro" src="{% static 'core/img/logo_centro_default.png' %}" alt="logo ujaen">
+                        {% endif %}
+                    </td>
+
+                    <!-- Nombre del Centro -->
+                    <td>{{center.name}}</td>
+
+                    <!-- Acceder a los TFGs del centro -->
+                    <td style="text-align: center">
+                        <a href="{% url url_list_tfg center.id %}">Acceder</a>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </article>
+    
+    <!-- Paginación -->
+    {% include "core/pagination.html" %}
+</section>
+{% endblock content %}

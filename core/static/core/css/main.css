@@ -23,14 +23,33 @@ html, body {
   justify-content: space-around;
   flex-wrap: wrap;
 }
-#tfg-button, #tfm-button {
-  padding: 0;
+#tfg-button, #tfm-button, #history-button {
   flex-basis: 300px;
   padding: 50px;
   color: white;
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer
+}
+
+#history-button {
+  flex-basis: 80%;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 50px;
+  justify-content: center;
+}
+
+#history-button a {
+  flex-basis: 350px;
+  padding: 50px;
+  background-color: #808080;
+  text-align: center;
+  color: white;
+}
+#history-button a:hover {
+  background-color: #5f5e5e
 }
 #tfg-button { background-color: #ae1a34e0; }
 #tfg-button:hover { background-color: #ae1a34; }
@@ -85,7 +104,9 @@ a.btn.btn-success, a.btn.btn-success:hover, a.btn.btn-danger, a.btn.btn-danger:h
 .logo-img {
     max-width: 200px;
 }
-
+.logo-centro {
+  max-width: 150px;
+}
 
 /* Ajustes Form */
 .form-check-label-custom label{

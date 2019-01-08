@@ -118,6 +118,11 @@ class UserInfoUpdate(UpdateView):
     template_name = "login/logo_center_form.html"
     success_url = reverse_lazy("announ_tfgs_list")
 
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            id=self.request.user.userinfos.centers_id
+        )
+
     def form_valid(self, form):
         messages.success(
             self.request,

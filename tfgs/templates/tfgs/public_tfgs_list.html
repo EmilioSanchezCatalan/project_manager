@@ -14,10 +14,20 @@
 <header class="container px-3 px-sm-5 mt-0 mt-sm-4">
 
     <!-- Título -->
-    <h1 class="d-none d-sm-block">Listado de Tfgs</h1>
+    <h1 class="d-none d-sm-block">Listado de TFGs ({{center.name}})</h1>
     
     <!-- TItulo Móvil -->
-    <h1 class="d-block d-sm-none">Projectos</h1>
+    <h1 class="d-block d-sm-none">TFGs ({{center.name}})</h1>
+
+    <h3 class="text-center">
+        {% if announs %}
+        {% for announ in announs %}
+            ({{announ.name}})
+        {% endfor %}
+        {% else %}
+        (sin convocatoria)
+        {% endif %}
+    </h3>
 </header>
 {% endblock title %}
 
@@ -75,12 +85,12 @@
 
                     <!-- Acceder al TFG -->
                     <td>
-                        <a href="{% url 'public_tfgs_detail' project.id %}">Visualizar</a>
+                        <a href="{% url 'public_tfgs_detail' center_id=center.id pk=project.id %}">Visualizar</a>
                     </td>
 
                     <!-- Imprimir TFG -->
                     <td>
-                        <a target="_blank" href="{% url 'public_tfgs_detail' project.id %}?format=pdf">Imprimir</a>
+                        <a target="_blank" href="{% url 'public_tfgs_detail' center_id=center.id pk=project.id %}?format=pdf">Imprimir</a>
                     </td>
                 </tr>
                 {% endfor %}

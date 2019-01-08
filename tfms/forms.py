@@ -1,5 +1,5 @@
 """
-    Formularios para la manipulación de TFGs.
+    Formularios para la manipulación de TFMs.
 
     Autores:
         - Emilio Sánchez Catalán <esc00019@gmail.com>.
@@ -7,11 +7,26 @@
     Version: 1.0.
 """
 
+import datetime
 from django import forms
 from django.contrib.auth.models import User
 from ckeditor.widgets import CKEditorWidget
 from core.models import Masters, Areas, Departaments
-from .models import Tfms
+from announcements.models import AnnouncementsTfm
+from tfms.models import Tfms
+
+class FilterPublicCenterForm(forms.Form):
+
+    """
+        Filtros para el listado de Centros
+
+        Atributos:
+            center_name(forms.CharField): Input tipo Text para el nombre del Centro.
+
+    """
+    center_name = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Título'}
+    ))
 
 class FilterPublicTfmForm(forms.Form):
 
@@ -30,11 +45,58 @@ class FilterPublicTfmForm(forms.Form):
     formation_project = forms.ModelChoiceField(
         queryset=Masters.objects.all(),
         empty_label="Master",
-        required=False, 
+        required=False,
         widget=forms.Select(
             attrs={'class': 'form-control'}
         )
     )
+
+    def __init__(self, *args, **kwargs):
+        self.center = kwargs.pop("center")
+        super(FilterPublicTfmForm, self).__init__(*args, **kwargs)
+        self.fields["formation_project"].queryset = self.center.masters.all()
+
+class FilterPublicHistoryTfmForm(forms.Form):
+
+    """
+        Filtros para el historico de TFMs.
+
+        Atributos:
+            name_proyect(forms.CharField): Input tipo Text para el titulo dle TFM.
+            formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+
+    """
+    name_project = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Título'}
+    ))
+    formation_project = forms.ModelChoiceField(
+        queryset=Masters.objects.all(),
+        empty_label="Titulación",
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+
+    announcements = forms.ModelChoiceField(
+        queryset=AnnouncementsTfm.objects.all(),
+        empty_label="Convocatorias",
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.center = kwargs.pop("center")
+        super(FilterPublicHistoryTfmForm, self).__init__(*args, **kwargs)
+        self.fields["formation_project"].queryset = self.center.masters.all()
+        now = datetime.datetime.now()
+        earlier = now - datetime.timedelta(days=730)
+        self.fields["announcements"].queryset = AnnouncementsTfm.objects.filter(
+            updatedAt__range=(earlier, now),
+            centers_id=self.center.id
+        )
 
 class FilterTeacherTfmForm(forms.Form):
 

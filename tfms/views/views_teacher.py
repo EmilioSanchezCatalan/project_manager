@@ -80,10 +80,6 @@ class TeacherTfmListView(ListView):
             user=self.request.user
         )
         context['nbar'] = "tfm"
-        if AnnouncementsTfm.objects.filter(status=AnnouncementsTfm.STATUS_OPEN):
-            context['has_announ'] = True
-        else:
-            context['has_announ'] = False
         return context
 
     @staticmethod

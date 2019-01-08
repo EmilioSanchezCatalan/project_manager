@@ -1,0 +1,133 @@
+<!--
+  Template donde se renderiza el lista de TFGs públicos
+
+  Autores:
+    - Emilio Sánchez Catalán <esc00019@gmail.com>.
+
+  Version: 1.0.
+-->
+
+{% extends "core/base.html" %}
+
+<!-- BLoque Título -->
+{% block title %}
+<header class="container px-3 px-sm-5 mt-0 mt-sm-4">
+
+    <!-- Título -->
+    <h1 class="d-none d-sm-block">Listado de TFGs ({{center.name}})</h1>
+    
+    <!-- TItulo Móvil -->
+    <h1 class="d-block d-sm-none">TFGs ({{center.name}})</h1>
+
+</header>
+{% endblock title %}
+
+<!-- Bloque de Contenido -->
+{% block content %}
+<section class="container border bg-white p-3 p-sm-5 mt-0 mt-sm-4">
+    <header>
+
+        <!-- Filtros-->
+        <form action="">
+            <div class="form-row justify-content-between">
+
+                <!-- Submit Filtrado -->
+                <div class="form-group fb-sm-100 mr-auto">
+                    <button for="titleProject" class="btn btn-light btn-block font-weight-bold">
+                        <i class="fas fa-search mr-2" style="font-size: 15px;"></i>Buscador
+                    </button>
+                </div>
+
+                <!-- Filtrado de texto -->
+                <div class="form-group mx-2 fb-60 fb-sm-85 fb-xs-80">
+                    {{form_filter.name_project}}
+                </div>
+
+                <!-- Boton Desplegar extra filtrado -->
+                <div class="form-group">
+                    <div class="btn {% if is_filtering %}btn-warning{% else %}btn-light{% endif %} font-weight-bold" id="btn-extends-filter">
+                        <i class="fas fa-angle-down" {% if is_filtering %}style="display: none"{% endif %}></i>
+                        <i class="fas fa-angle-up" {% if not is_filtering %}style="display: none"{% endif %}></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Extra filtrado -->
+            <hr class="mt-0" {% if not is_filtering %}style="display:none"{% endif %}>
+            <div class="form-row" id="extends-filters" {% if not is_filtering %}style="display: none"{% endif %}>
+            
+                <!-- Filtro por titulación-->
+                <div class="form-group mr-lg-1 mr-auto fb-md-100">
+                    {{form_filter.formation_project}}
+                </div>
+                
+                <!-- Filtro por convocatoria -->
+                <div class="form-group mr-lg-1 mr-auto fb-md-100">
+                    {{form_filter.announcements}}
+                </div>
+
+            </div>
+
+        </form>
+    </header>
+
+    <!-- Listados de TFGs -->
+    <article style="overflow-x: scroll">
+        <table class="table table-hover border m-0">
+            <thead>
+                <tr class="thead-light">
+                    <th>Título</th>
+                    <th>Títulación</th>
+                    <th>Tutor1</th>
+                    <th>Convocatoria</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in object_list %}
+                <tr>
+
+                    <!-- Información Título -->
+                    <td>{{project.title}}</td>
+
+                    <!-- Información Titulación -->
+                    <td>{{project.carrers.name}}</td>
+
+                    <!-- Información Tutor principal -->
+                    <td>{{project.tutor1.first_name}}</td>
+
+                    <!-- Información de la Convocatoria-->
+                    <td>{{project.announcements.name}}</td>
+
+                    <!-- Acceder al TFG -->
+                    <td>
+                        <a href="{% url 'public_history_tfgs_detail' center_id=center.id pk=project.id %}">Visualizar</a>
+                    </td>
+
+                    <!-- Imprimir TFG -->
+                    <td>
+                        <a target="_blank" href="{% url 'public_history_tfgs_detail' center_id=center.id pk=project.id %}?format=pdf">Imprimir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </article>
+    
+    <!-- Paginación -->
+    {% include "core/pagination.html" %}
+</section>
+{% endblock content %}
+
+<!-- Bloque Scripts -->
+{% block scripts %}
+<script>
+
+  // Añadiendo evento changeExtendsFiltersState al 
+  // boton desplegar extra filtrado 
+  $("#btn-extends-filter").click(function() {
+    changeExtendsFiltersState($(this), $("#extends-filters"))
+  });
+</script>
+{% endblock scripts %}

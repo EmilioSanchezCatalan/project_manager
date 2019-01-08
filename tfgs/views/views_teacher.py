@@ -81,10 +81,6 @@ class TeacherTfgListView(ListView):
             user=self.request.user
         )
         context['nbar'] = "tfg"
-        if AnnouncementsTfg.objects.filter(status=AnnouncementsTfg.STATUS_OPEN):
-            context['has_announ'] = True
-        else:
-            context['has_announ'] = False
         return context
 
     @staticmethod

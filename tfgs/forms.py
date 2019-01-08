@@ -6,13 +6,28 @@
 
     Version: 1.0.
 """
-
+import datetime
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.admin.widgets import AdminFileWidget
 from ckeditor.widgets import CKEditorWidget
 from core.models import Carrers, Departaments, Areas
+from announcements.models import AnnouncementsTfg
 from tfgs.models import Tfgs
+
+class FilterPublicCenterForm(forms.Form):
+
+    """
+        Filtros para el listado de Centros
+
+        Atributos:
+            center_name(forms.CharField): Input tipo Text para el nombre del Centro.
+
+    """
+    center_name = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Título'}
+    ))
+
 
 class FilterPublicTfgForm(forms.Form):
 
@@ -35,6 +50,53 @@ class FilterPublicTfgForm(forms.Form):
             attrs={'class': 'form-control'}
         )
     )
+
+    def __init__(self, *args, **kwargs):
+        self.center = kwargs.pop("center")
+        super(FilterPublicTfgForm, self).__init__(*args, **kwargs)
+        self.fields["formation_project"].queryset = self.center.carrers.all()
+
+class FilterPublicHistoryTfgForm(forms.Form):
+
+    """
+        Filtros para el histórico de TFGs.
+
+        Atributos:
+            name_proyect(forms.CharField): Input tipo Text para el titulo dle TFG.
+            formation_project(forms.ModelChoiceField): Selector para la elección de la titulación.
+
+    """
+    name_project = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Título'}
+    ))
+    formation_project = forms.ModelChoiceField(
+        queryset=Carrers.objects.all(),
+        empty_label="Titulación",
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+
+    announcements = forms.ModelChoiceField(
+        queryset=AnnouncementsTfg.objects.all(),
+        empty_label="Convocatorias",
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.center = kwargs.pop("center")
+        super(FilterPublicHistoryTfgForm, self).__init__(*args, **kwargs)
+        self.fields["formation_project"].queryset = self.center.carrers.all()
+        now = datetime.datetime.now()
+        earlier = now - datetime.timedelta(days=730)
+        self.fields["announcements"].queryset = AnnouncementsTfg.objects.filter(
+            updatedAt__range=(earlier, now),
+            centers_id=self.center.id
+        )
 
 class FilterTeacherTfgForm(forms.Form):
 
