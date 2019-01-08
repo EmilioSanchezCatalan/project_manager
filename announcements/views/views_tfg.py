@@ -74,7 +74,9 @@ class AnnounTfgCreateView(CreateView):
     success_url = reverse_lazy("announ_tfgs_list")
 
     def get(self, request, *args, **kwargs):
-        if AnnouncementsTfg.objects.exclude(status=AnnouncementsTfg.STATUS_CLOSE):
+        announ = AnnouncementsTfg.objects.filter(centers_id=self.request.user.userinfos.centers.id)
+        announ = announ.exclude(status=AnnouncementsTfg.STATUS_CLOSE)
+        if announ:
             messages.warning(self.request, "Ya tiene una convocatoria abierta en curso", 'warning')
             return HttpResponseRedirect(reverse("announ_tfgs_list"))
         else:

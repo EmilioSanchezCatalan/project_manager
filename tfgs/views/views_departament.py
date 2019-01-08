@@ -213,7 +213,7 @@ class DepartamentTfgUpdateView(UpdateTfg):
             tutor2_val = tutor2_form.is_valid()
         else:
             tutor2_val = True
-        if (self.request.POST.get('has_student') == 'on' and 
+        if (self.request.POST.get('has_student') == 'on' and
                 self.request.POST.get('is_team') == 'on'):
             student2_form = CreateStudentForm(
                 self.request.POST,

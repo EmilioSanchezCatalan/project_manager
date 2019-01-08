@@ -74,6 +74,8 @@ class AnnounTfmCreateView(CreateView):
     success_url = reverse_lazy("announ_tfms_list")
 
     def get(self, request, *args, **kwargs):
+        announ = AnnouncementsTfm.objects.filter(centers_id=self.request.user.userinfos.centers.id)
+        announ = announ.exclude(status=AnnouncementsTfm.STATUS_CLOSE)
         if AnnouncementsTfm.objects.exclude(status=AnnouncementsTfm.STATUS_CLOSE):
             messages.warning(self.request, "Ya tiene una convocatoria abierta en curso", 'warning')
             return HttpResponseRedirect(reverse("announ_tfms_list"))
