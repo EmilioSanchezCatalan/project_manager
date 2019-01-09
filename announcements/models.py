@@ -47,6 +47,7 @@ class AnnouncementsTfg(models.Model):
         return u'{0}'.format(self.name)
 
     class Meta:
+        ordering = ['-updatedAt']
         verbose_name = 'Convocatoria de TFGs'
         verbose_name_plural = 'Convocatorias de TFGs'
 
@@ -87,5 +88,6 @@ class AnnouncementsTfm(models.Model):
         return u'{0}'.format(self.name)
 
     class Meta:
+        ordering = ['-updatedAt']
         verbose_name = 'Convocatoria de TFMs'
         verbose_name_plural = 'Convocatorias de TFMs'
