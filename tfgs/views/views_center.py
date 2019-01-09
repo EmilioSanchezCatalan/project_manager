@@ -63,15 +63,26 @@ class CenterTfgListView(ListView):
         carrer = self.request.GET.get("formation_project", "")
         departament = self.request.GET.get("departament", "")
         tutor = self.request.GET.get("tutor", "")
+        status = self.request.GET.get("status", "")
+
         if name:
             queryset = queryset.filter(title__contains=name)
         if carrer:
             queryset = queryset.filter(carrers_id=carrer)
         if departament:
-            # TODO Revisar despues de borrar la ralción departamento
-            queryset = queryset.filter(carrers__departament_id=departament)
+            queryset = queryset.filter(tutor1__userinfos__departaments__id=departament)
         if tutor:
             queryset = queryset.filter(tutor1_id=tutor)
+        if status:
+            status = int(status)
+            if status == Tfgs.NOT_VALIDATED:
+                queryset = queryset.filter(center_validation=None)
+            elif status == Tfgs.DEPARTAMENT_VALIDATION:
+                queryset = queryset.filter(center_validation=True)
+            elif status == Tfgs.FAIL_VALIDATION:
+                queryset = queryset.filter(
+                    center_validation=False
+                )
         return queryset
 
     def get_context_data(self, **kwargs):

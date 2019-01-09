@@ -49,11 +49,13 @@ class DepartamentTfgListView(ListView):
         )
         queryset = queryset.exclude(announcements=None)
 
-        # Opciones de filtrado de TFG (Titulo, Titulación, Area, Tutor)
+        # Opciones de filtrado de TFG (Titulo, Titulación, Area, Tutor, Estado)
         name = self.request.GET.get("search_text", "")
         carrer = self.request.GET.get("formation_project", "")
         area = self.request.GET.get("area", "")
         tutor = self.request.GET.get("tutor", "")
+        status = self.request.GET.get("status", "")
+
         if name:
             queryset = queryset.filter(title__contains=name)
         if carrer:
@@ -62,6 +64,16 @@ class DepartamentTfgListView(ListView):
             queryset = queryset.filter(tutor1__userinfos__areas_id=area)
         if tutor:
             queryset = queryset.filter(tutor1_id=tutor)
+        if status:
+            status = int(status)
+            if status == Tfgs.NOT_VALIDATED:
+                queryset = queryset.filter(departament_validation=None)
+            elif status == Tfgs.DEPARTAMENT_VALIDATION:
+                queryset = queryset.filter(departament_validation=True)
+            elif status == Tfgs.FAIL_VALIDATION:
+                queryset = queryset.filter(
+                    departament_validation=False
+                )
         return queryset
 
     def get_context_data(self, **kwargs):

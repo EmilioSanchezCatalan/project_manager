@@ -180,6 +180,20 @@ class FilterDepartamentTfgForm(forms.Form):
             attrs={'class': 'form-control'}
         )
     )
+
+    status = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        ),
+        required=False,
+        choices=(
+            ("", "Selecciona el estado de la validación"),
+            (Tfgs.NOT_VALIDATED, "❔ No validado"),
+            (Tfgs.DEPARTAMENT_VALIDATION, "✔️ Validado"),
+            (Tfgs.FAIL_VALIDATION, "❌ Rechazado")
+        )
+    )
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         super(FilterDepartamentTfgForm, self).__init__(*args, **kwargs)
@@ -233,11 +247,33 @@ class FilterCenterTfgForm(forms.Form):
             attrs={'class': 'form-control'}
         )
     )
+
+
+    status = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        ),
+        required=False,
+        choices=(
+            ("", "Selecciona el estado de la validación"),
+            (Tfgs.NOT_VALIDATED, "❔ No validado"),
+            (Tfgs.DEPARTAMENT_VALIDATION, "✔️ Validado"),
+            (Tfgs.FAIL_VALIDATION, "❌ Rechazado")
+        )
+    )
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         super(FilterCenterTfgForm, self).__init__(*args, **kwargs)
+        self.fields["departament"].queryset = Departaments.objects.filter(
+            carrers__in=self.user.userinfos.centers.carrers.all()
+        ).distinct()
         self.fields["formation_project"].queryset = self.user.userinfos.centers.carrers.all()
-        self.fields["tutor"].queryset = User.objects.filter(groups__name="Teachers")
+        self.fields["tutor"].queryset = User.objects.filter(
+            groups__name="Teachers",
+            tutor1__carrers__in=self.user.userinfos.centers.carrers.all(),
+            tutor1__departament_validation=True,
+        ).distinct()
 
 class CreateTfgForm(forms.ModelForm):
 

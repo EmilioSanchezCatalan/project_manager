@@ -54,7 +54,8 @@ class Tfms(models.Model):
     tutor1 = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
-        verbose_name="Tutor principal"
+        verbose_name="Tutor principal",
+        related_name="tfms"
     )
     tutor2 = models.ForeignKey(
         Tutor2,
