@@ -78,6 +78,6 @@ class Tfms(models.Model):
         return u'{0}'.format(self.title)
 
     class Meta:
-        ordering = ['-createdAt']
+        ordering = ['-updatedAt']
         verbose_name = 'Trabajo final de master'
         verbose_name_plural = 'Trabajos finales de master'

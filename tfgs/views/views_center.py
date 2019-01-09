@@ -332,7 +332,7 @@ class CenterValidationOk(RedirectView):
 
         announ_id = kwargs['announ_id']
         url = reverse(
-            super().get_redirect_url(*args, **kwargs), 
+            super().get_redirect_url(*args, **kwargs),
             kwargs={"announ_id": announ_id}
         )
         return url

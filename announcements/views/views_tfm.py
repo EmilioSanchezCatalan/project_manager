@@ -51,6 +51,7 @@ class AnnounTfmListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form_filter'] = FilterAnnouncementsForm(initial=self.request.GET.dict())
+        context['nbar'] = "tfm"
         return context
 
 @method_decorator(user_passes_test(is_center), name="dispatch")

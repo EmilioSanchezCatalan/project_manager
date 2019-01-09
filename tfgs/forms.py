@@ -159,7 +159,7 @@ class FilterDepartamentTfgForm(forms.Form):
     formation_project = forms.ModelChoiceField(
         queryset=Carrers.objects.all(),
         empty_label="Titulación",
-        required=False, 
+        required=False,
         widget=forms.Select(
             attrs={'class': 'form-control'}
         )

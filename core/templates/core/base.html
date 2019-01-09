@@ -18,6 +18,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'core/vendor/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'core/vendor/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/ujaen.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/custom_ckeditor.css' %}">
     <title>Projectos Uja</title>
@@ -160,6 +161,9 @@
     <!-- Contenido -->
     {% block content %}{% endblock content %}
 
+    <!-- Footer -->
+    {% include "core/footer_ujaen.html" %}
+
     <!-- Scripts -->
     {% block scripts %}{% endblock scripts %}
 
@@ -171,5 +175,9 @@
 
       });
     </script>
+
+    <!-- Cookies Polify -->
+    {% include "core/cookie_policy.html" %}
+
   </body>
 </html>

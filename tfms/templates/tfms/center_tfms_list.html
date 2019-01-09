@@ -106,13 +106,13 @@
           <!-- Funcionalidad -->
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
-              <a class="btn btn-light" target="_blank" href="{% url 'center_tfms_detail' tfm.id %}?format=pdf">
+              <a class="btn btn-light" target="_blank" href="{% url 'center_tfms_detail' announ_id=announ.id pk=tfm.id %}?format=pdf">
                 <i class="far fa-file-pdf"></i>              
               </a>
-              <a class="btn btn-light" href="{% url 'center_tfms_detail' tfm.id %}">
+              <a class="btn btn-light" href="{% url 'center_tfms_detail' announ_id=announ.id pk=tfm.id %}">
                 <i class="far fa-eye"></i>
               </a>
-              <a class="btn btn-light" href="{% url 'center_tfms_update' tfm.id %}">
+              <a class="btn btn-light" href="{% url 'center_tfms_update' announ_id=announ.id pk=tfm.id %}">
                 <i class="far fa-edit"></i>
               </a>
               {% if tfm.center_validation %}

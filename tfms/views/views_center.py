@@ -303,7 +303,11 @@ class CenterValidationOk(RedirectView):
                 "warning"
             )
 
-        url = reverse(super().get_redirect_url(*args, **kwargs))
+        announ_id = kwargs['announ_id']
+        url = reverse(
+            super().get_redirect_url(*args, **kwargs),
+            kwargs={"announ_id": announ_id}       
+        )
         return url
 
 @method_decorator(user_passes_test(is_center), name="dispatch")
@@ -350,5 +354,9 @@ class CenterValidationError(RedirectView):
                 "warning"
             )
 
-        url = reverse(super().get_redirect_url(*args, **kwargs))
+        announ_id = kwargs['announ_id']
+        url = reverse(
+            super().get_redirect_url(*args, **kwargs),
+            kwargs={"announ_id": announ_id}
+        )
         return url

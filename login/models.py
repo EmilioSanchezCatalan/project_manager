@@ -8,6 +8,7 @@
 """
 
 from django.db import models
+from django.contrib.auth.models import User
 from core.models import Centers, Departaments, Areas
 from tfgs.models import Tfgs
 from tfms.models import Tfms
@@ -92,3 +93,10 @@ class Students(models.Model):
     class Meta:
         verbose_name = 'Alumno'
         verbose_name_plural = 'Alumnos'
+
+
+# Modificación del metodo __str__
+def get_name(self):
+    return '{} {}'.format(self.first_name, self.last_name)
+
+User.add_to_class("__str__", get_name)
