@@ -153,7 +153,10 @@ if not DEBUG:
 
 # Media Configurations
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+if DEBUG:
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+else:
+    MEDIA_ROOT = '/var/www/html/media'
 
 
 # Ckeditor Configuration
