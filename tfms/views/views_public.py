@@ -41,7 +41,7 @@ class CentersListView(ListView):
         # Opciones de filtrado de TFM (Titulo, Titulación)
         name = self.request.GET.get("center_name", "")
         if name:
-            queryset = queryset.filter(name__contains=name)
+            queryset = queryset.filter(name__icontains=name)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -76,7 +76,7 @@ class TfmListView(ListView):
         name = self.request.GET.get("name_project", "")
         master = self.request.GET.get("formation_project", "")
         if name:
-            queryset = queryset.filter(title__contains=name)
+            queryset = queryset.filter(title__icontains=name)
         if master:
             queryset = queryset.filter(masters_id=master)
         return queryset
@@ -146,7 +146,7 @@ class CentersHistoryListView(ListView):
         # Opciones de filtrado de TFM (Titulo, Titulación)
         name = self.request.GET.get("center_name", "")
         if name:
-            queryset = queryset.filter(name__contains=name)
+            queryset = queryset.filter(name__icontains=name)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -186,7 +186,7 @@ class TfmHistoryListView(ListView):
         master = self.request.GET.get("formation_project", "")
         announ = self.request.GET.get("announcements", "")
         if name:
-            queryset = queryset.filter(title__contains=name)
+            queryset = queryset.filter(title__icontains=name)
         if master:
             queryset = queryset.filter(masters_id=master)
         if announ:

@@ -44,7 +44,7 @@ class AnnounTfmListView(ListView):
         queryset = super().get_queryset().filter(centers=self.request.user.userinfos.centers)
         name = self.request.GET.get("name", "")
         if name:
-            queryset = queryset.filter(name__contains=name)
+            queryset = queryset.filter(name__icontains=name)
         print(queryset)
         return queryset
 

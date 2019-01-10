@@ -57,7 +57,7 @@ class DepartamentTfmListView(ListView):
         status = self.request.GET.get("status", "")
 
         if name:
-            queryset = queryset.filter(title__contains=name)
+            queryset = queryset.filter(title__icontains=name)
         if master:
             queryset = queryset.filter(masters_id=master)
         if area:

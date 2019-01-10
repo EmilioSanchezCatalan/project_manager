@@ -70,7 +70,11 @@ class Tfgs(models.Model):
     )
     center_validation = models.BooleanField(null=True, verbose_name="Validación del centro")
     draft = models.BooleanField(verbose_name="Borrador")
-    date_assignment = models.DateTimeField(verbose_name="Fecha de asignación", null=True)
+    date_assignment = models.DateTimeField(
+        verbose_name="Fecha de asignación",
+        null=True,
+        blank=True
+    )
     tutor1 = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,

@@ -57,7 +57,7 @@ class DepartamentTfgListView(ListView):
         status = self.request.GET.get("status", "")
 
         if name:
-            queryset = queryset.filter(title__contains=name)
+            queryset = queryset.filter(title__icontains=name)
         if carrer:
             queryset = queryset.filter(carrers_id=carrer)
         if area:

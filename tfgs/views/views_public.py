@@ -42,7 +42,7 @@ class CentersListView(ListView):
         # Opciones de filtrado de TFG (Titulo, Titulación)
         name = self.request.GET.get("center_name", "")
         if name:
-            queryset = queryset.filter(name__contains=name)
+            queryset = queryset.filter(name__icontains=name)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -77,7 +77,7 @@ class TfgListView(ListView):
         name = self.request.GET.get("name_project", "")
         carrer = self.request.GET.get("formation_project", "")
         if name:
-            queryset = queryset.filter(title__contains=name)
+            queryset = queryset.filter(title__icontains=name)
         if carrer:
             queryset = queryset.filter(carrers_id=carrer)
         return queryset
@@ -147,7 +147,7 @@ class CentersHistoryListView(ListView):
         # Opciones de filtrado de TFG (Titulo, Titulación)
         name = self.request.GET.get("center_name", "")
         if name:
-            queryset = queryset.filter(name__contains=name)
+            queryset = queryset.filter(name__icontains=name)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -187,7 +187,7 @@ class TfgHistoryListView(ListView):
         carrer = self.request.GET.get("formation_project", "")
         announ = self.request.GET.get("announcements", "")
         if name:
-            queryset = queryset.filter(title__contains=name)
+            queryset = queryset.filter(title__icontains=name)
         if carrer:
             queryset = queryset.filter(carrers_id=carrer)
         if announ:

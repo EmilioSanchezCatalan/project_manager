@@ -55,7 +55,7 @@ class TeacherTfgListView(ListView):
         carrer = self.request.GET.get("formation_project", "")
         validation = self.request.GET.get("validation_state", "")
         if name:
-            queryset = queryset.filter(title__contains=name)
+            queryset = queryset.filter(title__icontains=name)
         if carrer:
             queryset = queryset.filter(carrers_id=carrer)
         if validation:
@@ -125,7 +125,7 @@ class TeacherTfgDraftListView(ListView):
         name = self.request.GET.get("search_text", "")
         carrer = self.request.GET.get("formation_project", "")
         if name:
-            queryset = queryset.filter(title__contains=name)
+            queryset = queryset.filter(title__icontains=name)
         if carrer:
             queryset = queryset.filter(carrers_id=carrer)
         return queryset
