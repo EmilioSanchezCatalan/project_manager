@@ -83,15 +83,26 @@ WSGI_APPLICATION = 'project_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pm',
-        'USER': 'root',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'pm',
+            'USER': 'root',
 
+        }
     }
-}
 
+# Base de datos de producción
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'pm',
+            'USER': 'windic',
+            'PASSWORD': 'prueba123?',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -135,6 +146,10 @@ PAGINATION = 7
 
 # Statics Configurations
 STATIC_URL = '/static/'
+
+# Ubicación de los Ficheros staticos
+if not DEBUG:
+    STATIC_ROOT = '/var/www/html/static'
 
 # Media Configurations
 MEDIA_URL = '/media/'

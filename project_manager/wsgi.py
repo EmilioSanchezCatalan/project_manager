@@ -8,24 +8,19 @@ https://docs.djangoproject.com/en/2.1/howto/deployment/wsgi/
 """
 
 import os
-import time
-import traceback
-import signal
 import sys
 
 from django.core.wsgi import get_wsgi_application
 
-sys.path.append('/var/www/vhosts/mysite') 
-# adjust the Python version in the line below as needed
-sys.path.append('/var/www/vhosts/mysite/venv/lib/python3.5/site-packages') 
+# Ubicación del proyecto
+PROYECT_URL = '/var/www/html/project_manager'
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings") 
+# Entorno virtual o no de python y sus librerias
+VIRTUAL_ENV_URL = '/home/ubuntu/virtual_envs/env_project_manager/lib/python3.6/site-packages'
 
-try:
-    application = get_wsgi_application()
-except Exception:
-    # Error loading applications
-    if 'mod_wsgi' in sys.modules:
-        traceback.print_exc()
-        os.kill(os.getpid(), signal.SIGINT)
-        time.sleep(2.5)
+sys.path.append(PROYECT_URL)
+sys.path.append(VIRTUAL_ENV_URL)
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project_manager.settings")
+
+application = get_wsgi_application()
