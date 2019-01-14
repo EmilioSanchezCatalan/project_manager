@@ -228,6 +228,8 @@ class AnnounTfmCloseStatus(RedirectView):
             if len(query.students.all()) <= 0:
                 query.draft = True
                 query.announcements = None
+                query.departament_validation = None
+                query.center_validation = None
                 query.save()
             else:
                 query.date_assignment = datetime.datetime.now()
