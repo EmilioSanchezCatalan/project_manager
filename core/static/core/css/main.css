@@ -18,12 +18,20 @@ html, body {
 .fa-plus, .fa-search {
     font-size: 15px;
 }
-#container-button-init {
+.container-button-init {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
 }
-#tfg-button, #tfm-button, #history-button {
+@media (max-width: 767px) {
+  .container-button-init a:last-child {
+    margin-top: 20px;
+  }
+}
+.container-button-init:last-child {
+  margin-top: 20px;
+}
+#tfg-button, #tfm-button, .history-button {
   flex-basis: 300px;
   padding: 50px;
   color: white;
@@ -32,23 +40,11 @@ html, body {
   cursor: pointer
 }
 
-#history-button {
-  flex-basis: 80%;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 50px;
-  justify-content: center;
-}
-
-#history-button a {
-  flex-basis: 350px;
-  padding: 50px;
+.history-button {
   background-color: #808080;
-  text-align: center;
   color: white;
 }
-#history-button a:hover {
+.history-button:hover {
   background-color: #5f5e5e
 }
 #tfg-button { background-color: #ae1a34e0; }

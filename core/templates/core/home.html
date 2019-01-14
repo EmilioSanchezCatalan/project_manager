@@ -21,21 +21,22 @@
 <!-- Contenido -->
 {% block content %}
 <section class="container bg-white border p-3 p-sm-5 mt-0 mt-sm-4">
-    <article id="container-button-init">
+    <article class="container-button-init">
         <a id="tfg-button" href="{% url 'public_centers_tfgs_list' %}">
             Trabajos fin de grado (TFGs)
         </a>
         <a id="tfm-button" href="{% url 'public_centers_tfms_list' %}">
             Trabajos fin de master (TFMs)
         </a>
-        <div id="history-button">
-            <a href="{% url 'public_centers_history_tfgs_list' %}">
+
+    </article>
+    <article class="container-button-init">
+        <a class="history-button" href="{% url 'public_centers_history_tfgs_list' %}">
                 Histórico de TFGs
-            </a>
-            <a href="{% url 'public_centers_history_tfms_list' %}">
+        </a>
+        <a class="history-button" href="{% url 'public_centers_history_tfms_list' %}">
                 Histórico de TFMs
-            </a>
-        </div>
+        </a>
     </article>
 </section>
 {% endblock content %}
